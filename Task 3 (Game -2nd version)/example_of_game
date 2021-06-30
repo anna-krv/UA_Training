@@ -1,0 +1,16 @@
+Hello! Welcome to the game! Your aim is to guess the number X. The number X lies in (0, 100).
+When you make a guess n, I will tell you whether
+n is greater than X: n > X,
+n is less than X: n < X,
+or n = X, which means that you have won!
+
+Please, input your guess:       25
+Try lower: 25 > X. Your guesses: [25]
+X is from (0, 25)
+Please, input your guess:       12
+Try higher: 12 < X. Your guesses: [25, 12]
+X is from (12, 25)
+Please, input your guess:       18
+Congratulation! You have guessed the number!
+You have used 3 guesses. Here is the list of your guesses:
+[25, 12, 18]
