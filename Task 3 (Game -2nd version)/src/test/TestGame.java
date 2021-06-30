@@ -22,7 +22,7 @@ public class TestGame {
         Random rand = new Random();
 
         while (!model.isGameEnded()) {
-            int n = rand.nextInt(upperBound - lowerBound - 1) + lowerBound+1;
+            int n = rand.nextInt(upperBound - lowerBound - 1) + lowerBound + 1;
             model.processGuess(n);
             lowerBound = model.getLowerBound();
             upperBound = model.getUpperBound();
@@ -33,6 +33,17 @@ public class TestGame {
     @Test(timeout = 1000)
     public void testGameDoesEnd() {
         play();
+    }
+
+    @Test
+    public void testModelNumInBounds() {
+        int lower = 0, upper = 100;
+
+        for (int i = 0; i < 10000; i++) {
+            model.setUp(lower, upper);
+            int n = model.getCorrectNum();
+            Assert.assertTrue(n > lower && n < upper);
+        }
     }
 
 

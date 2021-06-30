@@ -13,13 +13,19 @@ public class Model {
     private int upperBound;
 
     /**
-     * Set up the game.
-     * Select random number in correct bounds.
-     * Initialize array with guesses.
+     * Init basic fields.
      */
     public Model() {
         gameEnded = false;
         nGuesses = 0;
+    }
+
+    /**
+     * Get number that user should guess.
+     * @return secret number
+     */
+    public int getCorrectNum(){
+        return correctNum;
     }
 
     /**
