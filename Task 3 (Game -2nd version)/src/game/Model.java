@@ -7,7 +7,7 @@ public class Model {
     private int correctNum;
     private int[] guessNums;
     private int nGuesses;
-    private boolean gameEnded;
+    private boolean gameOn;
     // non - inclusive bounds
     private int lowerBound;
     private int upperBound;
@@ -16,15 +16,16 @@ public class Model {
      * Init basic fields.
      */
     public Model() {
-        gameEnded = false;
+        gameOn = true;
         nGuesses = 0;
     }
 
     /**
      * Get number that user should guess.
+     *
      * @return secret number
      */
-    public int getCorrectNum(){
+    public int getCorrectNum() {
         return correctNum;
     }
 
@@ -32,11 +33,11 @@ public class Model {
      * Set bounds and the number that a user should guess.
      * Init array with user's guesses of appropriate size.
      */
-    public void setUp(int lowerBound, int upperBound){
+    public void setUp(int lowerBound, int upperBound) {
         setLowerBound(lowerBound);
         setUpperBound(upperBound);
-        correctNum = 1+lowerBound + new Random().nextInt(upperBound - lowerBound -1);
-        guessNums = new int[upperBound - lowerBound -1];
+        correctNum = 1 + lowerBound + new Random().nextInt(upperBound - lowerBound - 1);
+        guessNums = new int[upperBound - lowerBound - 1];
     }
 
     /**
@@ -58,12 +59,12 @@ public class Model {
     }
 
     /**
-     * Check if game has ended.
+     * Check if game has not ended.
      *
-     * @return true if number was guessed.
+     * @return true if number was not guessed.
      */
-    public boolean isGameEnded() {
-        return gameEnded;
+    public boolean isGameOn() {
+        return gameOn;
     }
 
     /**
@@ -78,13 +79,13 @@ public class Model {
     public String processGuess(int guess) {
         guessNums[nGuesses++] = guess;
         if (guess < correctNum) {
-            setLowerBound(guess );
+            setLowerBound(guess);
             return "<";
         } else if (guess > correctNum) {
-            setUpperBound(guess );
+            setUpperBound(guess);
             return ">";
         } else {
-            gameEnded = true;
+            gameOn = false;
             return "=";
         }
     }
@@ -100,6 +101,7 @@ public class Model {
 
     /**
      * Setter for lower bound
+     *
      * @param lowerBound non inclusive bound
      */
     public void setLowerBound(int lowerBound) {
@@ -108,6 +110,7 @@ public class Model {
 
     /**
      * Setter for upper bound
+     *
      * @param upperBound non inclusive bound
      */
     public void setUpperBound(int upperBound) {

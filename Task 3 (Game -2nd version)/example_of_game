@@ -1,16 +1,38 @@
-Hello! Welcome to the game! Your aim is to guess the number X. The number X lies in (0, 100).
-When you make a guess n, I will tell you whether
-n is greater than X: n > X,
-n is less than X: n < X,
-or n = X, which means that you have won!
+Hello!
+Welcome to the game "More or Less"!
+Your aim is to guess the number X. The number X lies in (0, 100).
+When you make a guess n, I will tell you if
+n > X, n < X or n = X, which means that you are the winner!
+
+Please, input your guess:       80
+Try lower: 80 > X. Your guesses: [80]
+X is from (0, 80)
+
+Please, input your guess:       40
+Try lower: 40 > X. Your guesses: [80, 40]
+X is from (0, 40)
+
+Please, input your guess:       20
+Try higher: 20 < X. Your guesses: [80, 40, 20]
+X is from (20, 40)
+
+Please, input your guess:       30
+Try lower: 30 > X. Your guesses: [80, 40, 20, 30]
+X is from (20, 30)
 
 Please, input your guess:       25
-Try lower: 25 > X. Your guesses: [25]
-X is from (0, 25)
-Please, input your guess:       12
-Try higher: 12 < X. Your guesses: [25, 12]
-X is from (12, 25)
-Please, input your guess:       18
-Congratulation! You have guessed the number!
-You have used 3 guesses. Here is the list of your guesses:
-[25, 12, 18]
+Try lower: 25 > X. Your guesses: [80, 40, 20, 30, 25]
+X is from (20, 25)
+
+Please, input your guess:       23
+Try lower: 23 > X. Your guesses: [80, 40, 20, 30, 25, 23]
+X is from (20, 23)
+
+Please, input your guess:       22
+Try lower: 22 > X. Your guesses: [80, 40, 20, 30, 25, 23, 22]
+X is from (20, 22)
+
+Please, input your guess:       21
+Congratulation! You have guessed the number: 21
+You have used 8 guesses. Here is the list of your guesses:
+[80, 40, 20, 30, 25, 23, 22, 21]

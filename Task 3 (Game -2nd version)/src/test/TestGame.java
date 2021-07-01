@@ -21,7 +21,7 @@ public class TestGame {
         int upperBound = model.getUpperBound();
         Random rand = new Random();
 
-        while (!model.isGameEnded()) {
+        while (model.isGameOn()) {
             int n = rand.nextInt(upperBound - lowerBound - 1) + lowerBound + 1;
             model.processGuess(n);
             lowerBound = model.getLowerBound();
@@ -37,7 +37,7 @@ public class TestGame {
 
     @Test
     public void testModelNumInBounds() {
-        int lower = 0, upper = 100;
+        int lower = 1, upper = 99;
 
         for (int i = 0; i < 10000; i++) {
             model.setUp(lower, upper);

@@ -3,44 +3,65 @@ package game;
 
 import java.util.Arrays;
 
+class Report {
+    private String result;
+    private int[] guesses;
+    private int lowerBound, upperBound;
+
+    public Report(String result, int[] guesses, int lowerBound, int upperBound) {
+        this.result = result;
+        this.guesses = guesses;
+        this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
+    }
+
+    public Report(int[] guesses) {
+        this.guesses = guesses;
+    }
+
+    /**
+     * Get analysis of user action.
+     *
+     * @return string with analysis of user's action and game state.
+     */
+    public String getReportOnUserAction() {
+        String recommendation = result == ">" ? "Try lower: " : "Try higher: ";
+        int n = guesses.length;
+
+        return recommendation + guesses[n - 1] + " " + result + " X. Your guesses: "
+                + Arrays.toString(guesses) + "\n" +
+                "X is from (" + lowerBound + ", " + upperBound + ")\n";
+    }
+
+    /**
+     * Get message with congratulation and game stats.
+     *
+     * @return string with info about game end.
+     */
+    public String getReportOnFinish() {
+        int n = guesses.length;
+
+        return "Congratulation! You have guessed the number: " + guesses[n - 1] + "\n" +
+                "You have used " + n + " guesses. Here is the list of your guesses:\n" +
+                Arrays.toString(guesses);
+    }
+}
+
 public class View {
     public final String WRONG_FORMAT_MESSAGE = "Your input is in wrong format. Expected and int number.\n";
-    public final String ASK_FOR_INPUT_MSG = "\nPlease, input your guess:\t";
+    public final String ASK_FOR_INPUT_MSG = "\nPlease, enter your guess:\t";
     public final String WRONG_VALUE_MESSAGE = "Your guess does not lie in the correct bounds.\n";
 
     /**
      * Print welcome message with rules of game.
      */
     void welcome(int lower, int upper) {
-        print("Hello! Welcome to the game! " +
+        print("Hello!\nWelcome to the game \"More or Less\"!\n" +
                 "Your aim is to guess the number X. " +
                 "The number X lies in (" + lower + ", " +
                 upper + ").\n" +
-                "When you make a guess n, I will tell you whether\n" +
-                "n is greater than X: n > X,\n" +
-                "n is less than X: n < X, \n" +
-                "or n = X, which means that you have won!\n\n");
-    }
-
-    /**
-     * Print congrats message and game statistics.
-     *
-     * @param nums array with numbers that were guessed by user.
-     */
-    void finish(int[] nums) {
-        print("Congratulation! You have guessed the number!\n" +
-                "You have used " + nums.length + " guesses. Here is the list of your guesses:\n");
-        print(Arrays.toString(nums));
-    }
-
-    /**
-     * Print analysis of user action and new bounds.
-     */
-    public void report(int guess, String res, int[] guessNums, int lowerBound, int upperBound) {
-        String recommendation = res == ">" ? "Try lower: " : "Try higher: ";
-        print(recommendation + guess + " " + res + " X. Your guesses: "
-                + Arrays.toString(guessNums) + "\n" +
-                "X is from (" + lowerBound + ", " + upperBound + ")\n");
+                "When you make a guess n, I will tell you if\n" +
+                "n > X, n < X or n = X, which means that you are the winner!\n");
     }
 
     /**

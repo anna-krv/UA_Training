@@ -1,6 +1,5 @@
 package game;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 interface ConstantsHolder {
@@ -25,25 +24,24 @@ public class Controller {
      * Cast it to int. And check that it lies in valid range.
      * In case of mistakes print message and try again.
      *
-     * @return number guessed
+     * @return number guessed that was verified
      */
-    public int getGuess() {
+    public int getValidGuess() {
         view.print(view.ASK_FOR_INPUT_MSG);
         String s = sc.next();
-        int guess;
+
         try {
-            guess = Integer.parseInt(s);
-            if (!inCorrectRange(guess)) {
-                view.print(view.WRONG_VALUE_MESSAGE);
-                return getGuess();
+            int guess = Integer.parseInt(s);
+            if (inCorrectRange(guess)) {
+                return guess;
             }
+            view.print(view.WRONG_VALUE_MESSAGE);
+            return getValidGuess();
         } catch (NumberFormatException e) {
             view.print(view.WRONG_FORMAT_MESSAGE);
-            return getGuess();
+            return getValidGuess();
         }
-        return guess;
     }
-
 
 
     /**
@@ -57,6 +55,17 @@ public class Controller {
     }
 
     /**
+     * Get a valid guess from user, process it by model and report the result.
+     */
+    public void getGuessAndReport() {
+        String result = model.processGuess(getValidGuess());
+        if (model.isGameOn()) {
+            Report report = new Report(result, model.getGuessNums(), model.getLowerBound(), model.getUpperBound());
+            view.print(report.getReportOnUserAction());
+        }
+    }
+
+    /**
      * Control game flow until user guesses the number.
      * Ask user for input and send it to the model if it is successful.
      * Then make report on user action and send it to view.
@@ -64,13 +73,9 @@ public class Controller {
     public void process() {
         model.setUp(ConstantsHolder.LOWER_BOUND, ConstantsHolder.UPPER_BOUND);
         view.welcome(model.getLowerBound(), model.getUpperBound());
-        while (!model.isGameEnded()) {
-            int guess = getGuess();
-            String res = model.processGuess(guess);
-            if (!model.isGameEnded()) {
-                view.report(guess, res, model.getGuessNums(), model.getLowerBound(), model.getUpperBound());
-            }
+        while (model.isGameOn()) {
+            getGuessAndReport();
         }
-        view.finish(model.getGuessNums());
+        view.print(new Report(model.getGuessNums()).getReportOnFinish());
     }
 }
