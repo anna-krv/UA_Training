@@ -19,45 +19,23 @@ public class Controller {
         sc = new Scanner(System.in);
     }
 
-    /**
-     * Read input with scanner.
-     * Cast it to int. And check that it lies in valid range.
-     * In case of mistakes print message and try again.
-     *
-     * @return number guessed that was verified
-     */
-    public int getValidGuess() {
-        view.print(view.ASK_FOR_INPUT_MSG);
-        String s = sc.next();
 
-        try {
-            int guess = Integer.parseInt(s);
-            if (inCorrectRange(guess)) {
-                return guess;
-            }
-            view.print(view.WRONG_VALUE_MESSAGE);
-            return getValidGuess();
-        } catch (NumberFormatException e) {
-            view.print(view.WRONG_FORMAT_MESSAGE);
-            return getValidGuess();
+    /**
+     * Set up the game and control game flow until user guesses the number.
+     */
+    public void processUser() {
+        model.setUp(ConstantsHolder.LOWER_BOUND, ConstantsHolder.UPPER_BOUND);
+        view.welcome(model.getLowerBound(), model.getUpperBound());
+        while (model.isGameOn()) {
+            processGuess();
         }
-    }
-
-
-    /**
-     * Check that user's guess lie in correct bounds
-     *
-     * @param guess user's guessed number
-     * @return true if the guess is in correct bounds
-     */
-    public boolean inCorrectRange(int guess) {
-        return guess > model.getLowerBound() && guess < model.getUpperBound();
+        view.print(new Report(model.getGuessNums()).getReportOnFinish());
     }
 
     /**
      * Get a valid guess from user, process it by model and report the result.
      */
-    public void getGuessAndReport() {
+    public void processGuess() {
         String result = model.processGuess(getValidGuess());
         if (model.isGameOn()) {
             Report report = new Report(result, model.getGuessNums(), model.getLowerBound(), model.getUpperBound());
@@ -66,16 +44,33 @@ public class Controller {
     }
 
     /**
-     * Control game flow until user guesses the number.
-     * Ask user for input and send it to the model if it is successful.
-     * Then make report on user action and send it to view.
+     * Read input with scanner until it gets in valid range.
+     *
+     * @return number guessed that was verified by range test.
      */
-    public void process() {
-        model.setUp(ConstantsHolder.LOWER_BOUND, ConstantsHolder.UPPER_BOUND);
-        view.welcome(model.getLowerBound(), model.getUpperBound());
-        while (model.isGameOn()) {
-            getGuessAndReport();
+    public int getValidGuess() {
+        Integer guess = null;
+
+        while (guess == null || !inCorrectRange(guess)) {
+            if (guess != null) {
+                view.print(view.WRONG_RANGE_MESSAGE);
+            }
+            view.print(view.ASK_FOR_INPUT);
+            skipScannerUntilNextInt();
+            guess = sc.nextInt();
         }
-        view.print(new Report(model.getGuessNums()).getReportOnFinish());
+        return guess;
+    }
+
+    private void skipScannerUntilNextInt() {
+        while (!sc.hasNextInt()) {
+            sc.next();
+            view.print(view.WRONG_FORMAT_MESSAGE);
+            view.print(view.ASK_FOR_INPUT);
+        }
+    }
+
+    public boolean inCorrectRange(int guess) {
+        return guess > model.getLowerBound() && guess < model.getUpperBound();
     }
 }

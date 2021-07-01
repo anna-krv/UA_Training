@@ -12,21 +12,9 @@ public class Model {
     private int lowerBound;
     private int upperBound;
 
-    /**
-     * Init basic fields.
-     */
     public Model() {
         gameOn = true;
         nGuesses = 0;
-    }
-
-    /**
-     * Get number that user should guess.
-     *
-     * @return secret number
-     */
-    public int getCorrectNum() {
-        return correctNum;
     }
 
     /**
@@ -38,33 +26,6 @@ public class Model {
         setUpperBound(upperBound);
         correctNum = 1 + lowerBound + new Random().nextInt(upperBound - lowerBound - 1);
         guessNums = new int[upperBound - lowerBound - 1];
-    }
-
-    /**
-     * Get lower bound for correct number.
-     *
-     * @return number that &le; correct number
-     */
-    public int getLowerBound() {
-        return lowerBound;
-    }
-
-    /**
-     * Get upper bound for correct number.
-     *
-     * @return number that &ge; correct number
-     */
-    public int getUpperBound() {
-        return upperBound;
-    }
-
-    /**
-     * Check if game has not ended.
-     *
-     * @return true if number was not guessed.
-     */
-    public boolean isGameOn() {
-        return gameOn;
     }
 
     /**
@@ -99,21 +60,28 @@ public class Model {
         return Arrays.copyOfRange(guessNums, 0, nGuesses);
     }
 
-    /**
-     * Setter for lower bound
-     *
-     * @param lowerBound non inclusive bound
-     */
     public void setLowerBound(int lowerBound) {
         this.lowerBound = lowerBound;
     }
 
-    /**
-     * Setter for upper bound
-     *
-     * @param upperBound non inclusive bound
-     */
     public void setUpperBound(int upperBound) {
         this.upperBound = upperBound;
     }
+
+    public int getLowerBound() {
+        return lowerBound;
+    }
+
+    public int getUpperBound() {
+        return upperBound;
+    }
+
+    public boolean isGameOn() {
+        return gameOn;
+    }
+
+    public int getCorrectNum() {
+        return correctNum;
+    }
+
 }

@@ -49,8 +49,8 @@ class Report {
 
 public class View {
     public final String WRONG_FORMAT_MESSAGE = "Your input is in wrong format. Expected and int number.\n";
-    public final String ASK_FOR_INPUT_MSG = "\nPlease, enter your guess:\t";
-    public final String WRONG_VALUE_MESSAGE = "Your guess does not lie in the correct bounds.\n";
+    public final String ASK_FOR_INPUT = "\nPlease, enter your guess:\t";
+    public final String WRONG_RANGE_MESSAGE = "Your guess does not lie in the correct bounds.\n";
 
     /**
      * Print welcome message with rules of game.
@@ -64,9 +64,6 @@ public class View {
                 "n > X, n < X or n = X, which means that you are the winner!\n");
     }
 
-    /**
-     * Print using System.out
-     */
     void print(String s) {
         System.out.print(s);
     }
