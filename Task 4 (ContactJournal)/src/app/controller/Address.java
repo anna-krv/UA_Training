@@ -1,4 +1,4 @@
-package contactJournal;
+package app.controller;
 
 
 public class Address {

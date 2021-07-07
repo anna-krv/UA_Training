@@ -1,7 +1,14 @@
-package contactJournal;
+package app.controller;
 
-public class Contact {
-    public enum Group {FAMILY, FRIENDS, COWORKERS, OTHER};
+public class Note {
+    public enum Group {
+        COWORKERS,
+        FAMILY,
+        FRIENDS,
+        OTHER
+    }
+
+    ;
     private String surname;
     private String name;
     private String middleName;
@@ -18,9 +25,9 @@ public class Contact {
     Address address;
 
 
-    public Contact(String surname, String name, String middleName, String nickname, String comment,
-                   String groupName, String homeNumber, String mobileNumber, String secondMobileNumber,
-                   String email, String skype, Address address) {
+    public Note(String surname, String name, String middleName, String nickname, String comment,
+                String groupName, String homeNumber, String mobileNumber, String secondMobileNumber,
+                String email, String skype, Address address) {
         this.surname = surname;
         this.name = name;
         this.middleName = middleName;
