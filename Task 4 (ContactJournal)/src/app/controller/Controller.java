@@ -1,15 +1,15 @@
 package app.controller;
 
 import app.model.Model;
+import app.model.entity.NotUniqueLoginException;
+import app.model.entity.Note;
 import app.view.View;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
  * Class for handling communication between view(user) and model(business logic).
- * Validate data and send it to model. Return results to view.
+ * Validates data and sends it to model. Returns results to view.
  */
 public class Controller {
     private Model model;
@@ -23,7 +23,22 @@ public class Controller {
     }
 
     public void processUser() {
-        InputNoteController noteController = new InputNoteController(view, sc);
-        noteController.getNote();
+        addNote();
+        view.finishInput();
+    }
+
+    private Note addNote() {
+        NoteBuilderFromInput noteBuilder = new NoteBuilderFromInput(view, sc);
+        noteBuilder.inputNote();
+        while (true) {
+            try {
+                Note note = noteBuilder.getNote();
+                model.addNote(note);
+                return note;
+            } catch (NotUniqueLoginException ex) {
+                view.print(ex.toString());
+                noteBuilder.inputLogin();
+            }
+        }
     }
 }

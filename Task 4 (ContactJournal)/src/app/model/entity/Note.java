@@ -1,4 +1,4 @@
-package app.controller;
+package app.model.entity;
 
 public class Note {
     public enum Group {
@@ -9,30 +9,29 @@ public class Note {
     }
 
     ;
-    private String surname;
-    private String name;
-    private String middleName;
-    private String compoundName;
-    private String nickname;
-    private String comment;
-    private String homeNumber;
-    private String mobileNumber;
-    private String secondMobileNumber;
-    private String email;
-    private String skype;
-    private String addressFull;
-    private Group group;
+    protected String surname;
+    protected String name;
+    protected String middleName;
+    protected String compoundName;
+    protected String login;
+    protected String comment;
+    protected String homeNumber;
+    protected String mobileNumber;
+    protected String secondMobileNumber;
+    protected String email;
+    protected String skype;
+    protected String addressFull;
+    protected Group group;
     Address address;
 
-
-    public Note(String surname, String name, String middleName, String nickname, String comment,
+    public Note(String surname, String name, String middleName, String login, String comment,
                 String groupName, String homeNumber, String mobileNumber, String secondMobileNumber,
                 String email, String skype, Address address) {
         this.surname = surname;
         this.name = name;
         this.middleName = middleName;
         this.compoundName = getCompoundName(surname, name);
-        this.nickname = nickname;
+        this.login = login;
         this.comment = comment;
         this.group = Group.valueOf(groupName.toUpperCase());
         this.homeNumber = homeNumber;
@@ -51,5 +50,9 @@ public class Note {
         compoundName.append(name.charAt(0));
         compoundName.append(".");
         return compoundName.toString();
+    }
+
+    public String getLogin(){
+        return login;
     }
 }

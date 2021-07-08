@@ -1,16 +1,18 @@
 package app.model;
 
-import app.controller.Note;
+import app.model.entity.NotUniqueLoginException;
+import app.model.entity.Note;
+import app.model.entity.DBNotebook;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Model {
-    private List<Note> notes;
-    public Model(){
-        notes = new ArrayList<>();
+    private DBNotebook dbNotebook;
+
+    public Model() {
+        dbNotebook = new DBNotebook();
     }
-    public void addNote(Note note){
-        notes.add(note);
+
+    public void addNote(Note note) throws NotUniqueLoginException {
+        dbNotebook.add(note);
     }
 }

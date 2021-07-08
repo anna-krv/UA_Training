@@ -6,12 +6,13 @@ import java.util.regex.Pattern;
 
 public class View implements TextConstant {
     static String MESSAGES_BUNDLE_NAME = "messages";
-    static Locale locale = new Locale("ua", "UA");
+    static Locale locale = new Locale("EN", "EN");
     public static final ResourceBundle bundle = ResourceBundle.getBundle(MESSAGES_BUNDLE_NAME,
             locale);
 
     /**
      * Print message asking for a field.
+     *
      * @param fieldToGet
      * @param patternForCheck is used to provide hint for input format
      */

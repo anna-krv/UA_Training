@@ -1,4 +1,4 @@
-package app.controller;
+package app.model.entity;
 
 
 public class Address {
@@ -7,6 +7,9 @@ public class Address {
     private String street;
     private int house;
     private int flat;
+
+    public Address() {
+    }
 
     public Address(String postalCode, String city, String street, int house, int flat) {
         this.postalCode = postalCode;
