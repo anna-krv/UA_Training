@@ -17,10 +17,10 @@ public class NoteBuilderFromInput implements TextConstant, PatternContainer {
     private View view;
     private Scanner sc;
     private UtilityController utilityController;
-    String surname, name, middleName, login, comment, groupName;
-    String homeNumber, mobileNumber, secondMobileNumber;
-    String email, skype;
-    Address address;
+    private String surname, name, middleName, login, comment, groupName;
+    private String homeNumber, mobileNumber, secondMobileNumber;
+    private String email, skype;
+    private Address address;
 
     public NoteBuilderFromInput(View view, Scanner sc) {
         this.view = view;
@@ -29,17 +29,22 @@ public class NoteBuilderFromInput implements TextConstant, PatternContainer {
         setUpForLocale();
     }
 
+    /**
+     * Select patterns that are suited for the locale defined in view.
+     */
     private void setUpForLocale() {
         boolean isEnLocale = view.getLocale().getLanguage().equals("en");
         WORD_PATTERN = isEnLocale ? WORD_PATTERN_EN : WORD_PATTERN_UA;
         WORD_COMBO_PATTERN = isEnLocale ? WORD_COMBO_PATTERN_EN : WORD_COMBO_PATTERN_UA;
     }
 
+    /**
+     * Input from user all info.
+     */
     public void inputNote() {
         inputFullName();
         inputLogin();
-        comment = utilityController.inputValue(COMMENT, COMMENT_PATTERN);
-        groupName = utilityController.inputValue(GROUP, GROUP_PATTERN);
+        inputAdditionalInfo();
         inputContactDetails();
         inputAddress();
     }
@@ -52,6 +57,11 @@ public class NoteBuilderFromInput implements TextConstant, PatternContainer {
 
     public void inputLogin() {
         login = utilityController.inputValue(LOGIN, NICKNAME_PATTERN);
+    }
+
+    public void inputAdditionalInfo() {
+        comment = utilityController.inputValue(COMMENT, COMMENT_PATTERN);
+        groupName = utilityController.inputValue(GROUP, GROUP_PATTERN);
     }
 
     public void inputContactDetails() {
@@ -73,7 +83,12 @@ public class NoteBuilderFromInput implements TextConstant, PatternContainer {
         address = new Address(postalCode, city, street, Integer.valueOf(house), Integer.valueOf(flat));
     }
 
-    public Note getNote() {
+    /**
+     * Build note using saved info from input.
+     *
+     * @return note
+     */
+    public Note buildNote() {
         return new Note(surname, name, middleName, login, comment,
                 groupName, homeNumber, mobileNumber, secondMobileNumber, email, skype,
                 address);

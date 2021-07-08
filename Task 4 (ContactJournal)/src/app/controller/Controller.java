@@ -32,7 +32,7 @@ public class Controller {
         noteBuilder.inputNote();
         while (true) {
             try {
-                Note note = noteBuilder.getNote();
+                Note note = noteBuilder.buildNote();
                 model.addNote(note);
                 return note;
             } catch (NotUniqueLoginException ex) {

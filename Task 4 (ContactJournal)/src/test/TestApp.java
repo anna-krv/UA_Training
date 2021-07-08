@@ -205,6 +205,6 @@ public class TestApp {
     @Test
     public void getNoteNotNullTest() {
         noteBuilder.inputNote();
-        Assert.assertNotNull(noteBuilder.getNote());
+        Assert.assertNotNull(noteBuilder.buildNote());
     }
 }
