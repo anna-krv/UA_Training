@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{title}"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+</head>
+<body>
+<h1 th:text="#{title}"></h1>
+<h2 th:text="#{welcome}"></h2>
+<button class="btn btn-default"
+        onclick="window.location.href='http://localhost:8080/?localeData=ua'">UA
+</button>
+<button class="btn btn-default"
+        onclick="window.location.href='http://localhost:8080/?localeData=en'">EN
+</button>
+<form th:action="@{/login}">
+    <input type="submit"
+           th:value="#{login.title}">
+</form>
+<form th:action="@{/register}">
+    <input type="submit"
+           th:value="#{register}">
+</form>
+</body>
+</html>
