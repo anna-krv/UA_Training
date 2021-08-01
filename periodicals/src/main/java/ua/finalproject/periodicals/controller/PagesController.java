@@ -11,16 +11,8 @@ public class PagesController {
         return "index.html";
     }
 
-    @GetMapping("/UA")
-    public String setUA() {
-        System.out.println("set language to UA");
-        return "index.html";
-    }
-
-    @GetMapping("/EN")
-    public String setEN() {
-
-        System.out.println("set language to EN");
-        return "index.html";
+    @GetMapping("/home")
+    public String homePage() {
+        return "home.html";
     }
 }

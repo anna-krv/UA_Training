@@ -11,7 +11,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -20,5 +20,9 @@ public class UserService {
 
     public Optional<User> findByLogin(User user) {
         return userRepository.findByLogin(user.getLogin());
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 }
