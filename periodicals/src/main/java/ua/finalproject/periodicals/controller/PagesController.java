@@ -8,13 +8,11 @@ public class PagesController {
 
     @GetMapping("/")
     public String mainPage() {
-        System.out.println("get index");
         return "index.html";
     }
 
     @GetMapping("/UA")
     public String setUA() {
-
         System.out.println("set language to UA");
         return "index.html";
     }
@@ -25,15 +23,4 @@ public class PagesController {
         System.out.println("set language to EN");
         return "index.html";
     }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login.html";
-    }
-
-    @GetMapping("/register")
-    public String register() {
-        return "register.html";
-    }
-
 }
