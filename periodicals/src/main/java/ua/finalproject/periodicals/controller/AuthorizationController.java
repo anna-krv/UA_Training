@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.finalproject.periodicals.entity.User;
 import ua.finalproject.periodicals.service.UserService;
 
@@ -21,16 +22,20 @@ public class AuthorizationController {
     }
 
     @GetMapping("/login")
-    public String loginPage(Model model) {
+    public String loginPage(
+            @RequestParam(value = "error", required = false) String error,
+            Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("error", error != null);
         return "authorization/login.html";
     }
 
     @PostMapping("/login")
     public String tryLogin(@ModelAttribute("user") User user) {
-        Optional<User> userFound = userService.findByLogin(user);
+        System.out.println("TRY TO LOGIN _-----------------------");
+        Optional<User> userFound = userService.findByUsername(user);
         if (userFound.isPresent() && userFound.get().getPassword().equals(user.getPassword())) {
-            return "home.html";
+            return "redirect:/readers/" + userFound.get().getId();
         }
         return "redirect:/login";
     }
@@ -41,10 +46,9 @@ public class AuthorizationController {
         return "authorization/register.html";
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public String tryRegister(@ModelAttribute("user") User user) {
         userService.save(user);
-        System.out.println("Added a user!!");
         return "redirect:/login";
     }
 }
