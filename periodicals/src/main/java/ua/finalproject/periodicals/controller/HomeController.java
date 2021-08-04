@@ -7,11 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class PagesController {
+public class HomeController {
 
     @GetMapping("/")
     public String mainPage() {
-        return "index.html";
+        return "guest.html";
     }
 
     @GetMapping("/home")
@@ -19,6 +19,8 @@ public class PagesController {
                            Model model) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         model.addAttribute("user", userDetails);
-        return "home.html";
+        return "home/home.html";
     }
+
+
 }

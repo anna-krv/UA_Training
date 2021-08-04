@@ -7,11 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.List;
 
-@ToString
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name = "user")
 public class User implements UserDetails {
@@ -43,6 +44,9 @@ public class User implements UserDetails {
     //@Column(columnDefinition="varchar(30) default 'USER'")
     @Transient
     private List<Role> authorities = ImmutableList.of(Role.USER);
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Account account;
 
     @Override
     public String getUsername() {

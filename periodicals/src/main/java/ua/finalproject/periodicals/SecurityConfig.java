@@ -32,9 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/home")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .permitAll();
-        //.and()
-        //.httpBasic();
+                .permitAll()
+                .and()
+                .httpBasic();
     }
 
     @Bean

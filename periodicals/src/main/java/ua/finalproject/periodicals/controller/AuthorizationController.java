@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.finalproject.periodicals.entity.User;
+import ua.finalproject.periodicals.service.AccountService;
 import ua.finalproject.periodicals.service.UserService;
 
 import java.util.Optional;
@@ -15,10 +16,12 @@ import java.util.Optional;
 @Controller
 public class AuthorizationController {
     private final UserService userService;
+    private final AccountService accountService;
 
     @Autowired
-    public AuthorizationController(UserService userService) {
+    public AuthorizationController(UserService userService, AccountService accountService) {
         this.userService = userService;
+        this.accountService = accountService;
     }
 
     @GetMapping("/login")
