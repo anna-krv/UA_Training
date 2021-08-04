@@ -25,7 +25,7 @@ public class PeriodicalService {
         if (sortBy == null) {
             return findAll();
         }
-        switch (sortBy.toLowerCase()) {
+        switch (sortBy) {
             case "title":
                 return periodicalRepository.findAllByOrderByTitleAsc();
             case "price":
@@ -42,4 +42,7 @@ public class PeriodicalService {
         return periodicalRepository.findByTitleIgnoreCase(title.trim());
     }
 
+    public List<String> findAllTopics() {
+        return periodicalRepository.findTopics();
+    }
 }

@@ -55,6 +55,11 @@ public class ReadersController {
         return "reader/account.html";
     }
 
+    @GetMapping("/periodicals/{topic}")
+    public String periodicalsPageForTopic() {
+        return "reader/periodicals.html";
+    }
+
     @GetMapping("/periodicals")
     public String periodicalsPage(@RequestParam(name = "search", required = false) String title,
                                   @RequestParam(name = "sortBy", required = false) String sortBy,
@@ -62,9 +67,9 @@ public class ReadersController {
         List<Periodical> periodicals;
 
         periodicals = periodicalService.find(title, sortBy);
-
         model.addAttribute("periodicals", periodicals);
         model.addAttribute("error", periodicals.isEmpty());
+        model.addAttribute("topics", periodicalService.findAllTopics());
         return "reader/periodicals.html";
     }
 }

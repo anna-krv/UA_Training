@@ -1,6 +1,7 @@
 package ua.finalproject.periodicals.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ua.finalproject.periodicals.entity.Periodical;
 
@@ -17,4 +18,7 @@ public interface PeriodicalRepository extends JpaRepository<Periodical, Long> {
     List<Periodical> findAllByOrderByPriceAsc();
 
     List<Periodical> findByTitleIgnoreCase(String title);
+
+    @Query(value = "SELECT DISTINCT topic FROM periodical", nativeQuery = true)
+    List<String> findTopics();
 }

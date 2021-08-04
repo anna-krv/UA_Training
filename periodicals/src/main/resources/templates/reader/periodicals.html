@@ -36,7 +36,6 @@
                 </div>
             </form>
             <div class="dropdown" style="margin-bottom: 30px">
-
                 <button class="btn btn-secondary dropdown-toggle"
                         type="button" id="dropdownMenuButton" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" th:text="#{sort}"></button>
@@ -45,6 +44,19 @@
                     <a class="dropdown-item" href="?sortBy=price" th:text="#{price}"/>
                 </div>
             </div>
+
+            <div class="dropdown" style="margin-bottom: 30px">
+                <button class="btn btn-secondary dropdown-toggle"
+                        type="button" id="dropdownMenuTopics" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" th:text="#{topic}"></button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuTopics">
+                    <a class="dropdown-item" th:href="@{/periodicals}" th:text="#{any.topic}"/>
+                    <div th:each="topic: ${topics}">
+                        <a class="dropdown-item" th:href="@{/periodicals/{topic}(topic=${topic})}" th:text="${topic}"/>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
