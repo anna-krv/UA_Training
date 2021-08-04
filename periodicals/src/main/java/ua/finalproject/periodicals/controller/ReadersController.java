@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.finalproject.periodicals.entity.Account;
 import ua.finalproject.periodicals.service.AccountService;
+import ua.finalproject.periodicals.service.PeriodicalService;
 import ua.finalproject.periodicals.service.UserService;
 
 import javax.validation.constraints.Min;
@@ -20,11 +21,13 @@ import javax.validation.constraints.Min;
 public class ReadersController {
     private final UserService userService;
     private final AccountService accountService;
+    private final PeriodicalService periodicalService;
 
     @Autowired
-    public ReadersController(UserService userService, AccountService accountService) {
+    public ReadersController(UserService userService, AccountService accountService, PeriodicalService periodicalService) {
         this.userService = userService;
         this.accountService = accountService;
+        this.periodicalService = periodicalService;
     }
 
     @GetMapping("/account")
@@ -46,5 +49,11 @@ public class ReadersController {
         model.addAttribute("success", true);
         model.addAttribute("account", accountUpdated);
         return "reader/account.html";
+    }
+
+    @GetMapping("/subscribe")
+    public String periodicalsPage(Model model) {
+        model.addAttribute("periodicals", periodicalService.findAll());
+        return "reader/periodicals.html";
     }
 }
