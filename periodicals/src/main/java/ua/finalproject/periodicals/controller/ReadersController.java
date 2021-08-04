@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,14 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.finalproject.periodicals.entity.Account;
+import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.service.AccountService;
 import ua.finalproject.periodicals.service.PeriodicalService;
 import ua.finalproject.periodicals.service.UserService;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @Controller
 @Validated
+@Slf4j
 public class ReadersController {
     private final UserService userService;
     private final AccountService accountService;
@@ -51,9 +55,13 @@ public class ReadersController {
         return "reader/account.html";
     }
 
-    @GetMapping("/subscribe")
-    public String periodicalsPage(Model model) {
-        model.addAttribute("periodicals", periodicalService.findAll());
+    @GetMapping("/periodicals")
+    public String periodicalsPage(@RequestParam(name = "search", required = false) String title,
+                                  Model model) {
+        List<Periodical> periodicals;
+        periodicals = title != null && !title.isEmpty() ? periodicalService.findByTitle(title) : periodicalService.findAll();
+        model.addAttribute("periodicals", periodicals);
+        model.addAttribute("error", periodicals.isEmpty());
         return "reader/periodicals.html";
     }
 }

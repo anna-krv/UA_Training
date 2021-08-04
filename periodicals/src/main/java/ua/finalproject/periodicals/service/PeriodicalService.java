@@ -19,6 +19,10 @@ public class PeriodicalService {
         return periodicalRepository.findAll();
     }
 
+    public List<Periodical> findByTitle(String title) {
+        return periodicalRepository.findByTitleIgnoreCase(title.trim());
+    }
+
     //@PostConstruct
     public void init() {
         Periodical p = Periodical.builder()
@@ -34,4 +38,6 @@ public class PeriodicalService {
                 .title("Риболовля").price(7300).topic(Topic.LEISURE).build();
         periodicalRepository.save(p);
     }
+
+
 }

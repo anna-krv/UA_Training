@@ -11,4 +11,6 @@ public interface PeriodicalRepository extends JpaRepository<Periodical, Long> {
     Periodical save(Periodical periodical);
 
     List<Periodical> findAll();
+
+    List<Periodical> findByTitleIgnoreCase(String title);
 }

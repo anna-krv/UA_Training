@@ -35,10 +35,9 @@ public class AuthorizationController {
 
     @PostMapping("/login")
     public String tryLogin(@ModelAttribute("user") User user) {
-        System.out.println("TRY TO LOGIN _-----------------------");
         Optional<User> userFound = userService.findByUsername(user);
         if (userFound.isPresent() && userFound.get().getPassword().equals(user.getPassword())) {
-            return "redirect:/readers/" + userFound.get().getId();
+            return "redirect:/home";
         }
         return "redirect:/login";
     }
