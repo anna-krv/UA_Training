@@ -12,5 +12,9 @@ public interface PeriodicalRepository extends JpaRepository<Periodical, Long> {
 
     List<Periodical> findAll();
 
+    List<Periodical> findAllByOrderByTitleAsc();
+
+    List<Periodical> findAllByOrderByPriceAsc();
+
     List<Periodical> findByTitleIgnoreCase(String title);
 }

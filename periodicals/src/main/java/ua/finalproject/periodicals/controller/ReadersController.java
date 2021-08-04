@@ -57,9 +57,12 @@ public class ReadersController {
 
     @GetMapping("/periodicals")
     public String periodicalsPage(@RequestParam(name = "search", required = false) String title,
+                                  @RequestParam(name = "sortBy", required = false) String sortBy,
                                   Model model) {
         List<Periodical> periodicals;
-        periodicals = title != null && !title.isEmpty() ? periodicalService.findByTitle(title) : periodicalService.findAll();
+
+        periodicals = periodicalService.find(title, sortBy);
+
         model.addAttribute("periodicals", periodicals);
         model.addAttribute("error", periodicals.isEmpty());
         return "reader/periodicals.html";

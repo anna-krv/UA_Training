@@ -17,10 +17,11 @@ public class Periodical {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String title;
     // Divide by 100 to get real price.
     private int price;
-    private Topic topic;
+    private String topic;
 
     public double getPrice() {
         return price / 100.;
