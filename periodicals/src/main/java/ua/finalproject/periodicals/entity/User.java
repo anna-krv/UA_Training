@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -47,10 +48,15 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Account account;
+    @OneToMany(mappedBy = "user")
+    Set<Subscription> subscriptions;
 
     @Override
     public String getUsername() {
         return username;
     }
 
+    public String toString() {
+        return "";
+    }
 }

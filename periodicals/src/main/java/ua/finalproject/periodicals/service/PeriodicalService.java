@@ -5,6 +5,7 @@ import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.repository.PeriodicalRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PeriodicalService {
@@ -52,5 +53,9 @@ public class PeriodicalService {
 
     public List<String> findAllTopics() {
         return periodicalRepository.findTopics();
+    }
+
+    public Optional<Periodical> findById(Long id) {
+        return periodicalRepository.findById(id);
     }
 }

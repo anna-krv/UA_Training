@@ -6,9 +6,12 @@ import org.springframework.stereotype.Repository;
 import ua.finalproject.periodicals.entity.Periodical;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PeriodicalRepository extends JpaRepository<Periodical, Long> {
+    Optional<Periodical> findById(Long id);
+
     Periodical save(Periodical periodical);
 
     List<Periodical> findAll();

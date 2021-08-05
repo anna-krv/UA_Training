@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "periodical")
 public class Periodical {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,8 @@ public class Periodical {
     // Divide by 100 to get real price.
     private int price;
     private String topic;
+    @OneToMany(mappedBy = "periodical")
+    Set<Subscription> subscriptions;
 
     public double getPrice() {
         return price / 100.;
@@ -29,5 +32,9 @@ public class Periodical {
 
     public void setPrice(double price) {
         this.price = (int) price * 100;
+    }
+
+    public String toString() {
+        return "";
     }
 }

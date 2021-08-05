@@ -44,7 +44,7 @@
 
             </form>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             <form id="search-form" style="margin-bottom: 30px">
                 <div class="alert alert-danger" th:if="${error}"
                      th:text="#{search.error}">
@@ -59,7 +59,7 @@
             </form>
             <div class="list-group">
                 <div th:foreach></div>
-                <a th:each="periodical: ${periodicals}" href="#"
+                <a th:each="periodical: ${periodicals}" th:href="@{/periodicals/{id}(id=${periodical.id})}"
                    class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1" th:text="${periodical.title}"></h5>
