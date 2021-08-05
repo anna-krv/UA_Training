@@ -20,11 +20,10 @@ public class SubscriptionService {
     }
 
     public Subscription save(User user, Periodical periodical) {
-        Subscription subscription = Subscription.builder()
-                .user(user)
-                .periodical(periodical)
-                .startDate(LocalDateTime.now().toLocalDate())
-                .build();
+        Subscription subscription = new Subscription();
+        subscription.setUser(user);
+        subscription.setPeriodical(periodical);
+        subscription.setStartDate(LocalDateTime.now().toLocalDate());
         return subscriptionRepository.save(subscription);
     }
 

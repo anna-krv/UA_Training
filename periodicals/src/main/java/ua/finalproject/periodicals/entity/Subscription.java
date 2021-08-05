@@ -14,17 +14,17 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table
+//@Table
 public class Subscription {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @ManyToOne
+    @EmbeddedId
+    private SubscriptionKey subscriptionKey = new SubscriptionKey();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @MapsId("periodicalId")
     @JoinColumn(name = "periodical_id")
     private Periodical periodical;
 
@@ -32,7 +32,7 @@ public class Subscription {
     private LocalDate startDate;
 
     public String toString() {
-        return id + ";user id: " + user.getId();
+        return ";user id: " + user.getId();
     }
 }
 
