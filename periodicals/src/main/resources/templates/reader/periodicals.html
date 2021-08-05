@@ -19,10 +19,33 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
+
 <div class="container" style="margin-top: 30px">
     <div class="row justify-content-center">
+        <div class="col-md-2">
+            <form id="sort-and-topic-select-form">
+                <input type="submit" th:value="#{apply}" class="btn btn-dark">
+                <legend th:text="#{sort}"></legend>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="sort" id="sortByName" autocomplete="off"
+                           value="title" th:checked="${sort}==title"/>
+                    <label class="form-check-label" for="sortByName" th:text="#{periodical.title}"/>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="sort" id="sortByPrice" autocomplete="off"
+                           value="price" th:checked="${sort}==price"/>
+                    <label class="form-check-label" for="sortByName" th:text="#{price}"/>
+                </div>
+                <legend th:text="#{topic}"></legend>
+                <div th:each="topic: ${topics}">
+                    <input type="checkbox" name="topic" th:id="${topic}" th:value="${topic}">
+                    <label th:for="${topic}" th:text="${topic}"></label>
+                </div>
+
+            </form>
+        </div>
         <div class="col-md-10">
-            <form style="margin-bottom: 30px">
+            <form id="search-form" style="margin-bottom: 30px">
                 <div class="alert alert-danger" th:if="${error}"
                      th:text="#{search.error}">
                 </div>
@@ -30,38 +53,10 @@
                     <div class="form-outline">
                         <input type="search" id="search" th:placeholder="#{searchBy.title}"
                                name="search" class="form-control"/>
-
                     </div>
                     <input type="submit" th:value="#{search}" class="btn btn-primary"/>
                 </div>
             </form>
-            <div class="dropdown" style="margin-bottom: 30px">
-                <button class="btn btn-secondary dropdown-toggle"
-                        type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" th:text="#{sort}"></button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="?sortBy=title" th:text="#{periodical.title}"/>
-                    <a class="dropdown-item" href="?sortBy=price" th:text="#{price}"/>
-                </div>
-            </div>
-
-            <div class="dropdown" style="margin-bottom: 30px">
-                <button class="btn btn-secondary dropdown-toggle"
-                        type="button" id="dropdownMenuTopics" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" th:text="#{topic}"></button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuTopics">
-                    <a class="dropdown-item" th:href="@{/periodicals}" th:text="#{any.topic}"/>
-                    <div th:each="topic: ${topics}">
-                        <a class="dropdown-item" th:href="@{/periodicals/{topic}(topic=${topic})}" th:text="${topic}"/>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-md-10">
             <div class="list-group">
                 <div th:foreach></div>
                 <a th:each="periodical: ${periodicals}" href="#"
@@ -72,10 +67,10 @@
                     </div>
                     <p class="mb-1" th:text="#{price}+': '+${periodical.price}"></p>
                 </a>
-
             </div>
         </div>
     </div>
+
 </div>
 </body>
 </html>

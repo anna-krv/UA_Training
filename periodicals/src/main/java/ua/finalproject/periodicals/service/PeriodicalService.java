@@ -14,28 +14,36 @@ public class PeriodicalService {
         this.periodicalRepository = periodicalRepository;
     }
 
-    public List<Periodical> find(String title, String sortBy) {
+    public List<Periodical> find(String title, String sortBy, List<String> topicsSelected) {
         if (title != null && !title.isEmpty()) {
             return findByTitle(title);
         }
-        return findAll(sortBy);
+        if (topicsSelected == null) {
+            return findAllSorted(sortBy);
+        }
+        return findAllByTopicsSorted(sortBy, topicsSelected);
     }
 
-    public List<Periodical> findAll(String sortBy) {
-        if (sortBy == null) {
-            return findAll();
-        }
+    public List<Periodical> findAllSorted(String sortBy) {
         switch (sortBy) {
             case "title":
                 return periodicalRepository.findAllByOrderByTitleAsc();
             case "price":
                 return periodicalRepository.findAllByOrderByPriceAsc();
+            default:
+                return null;
         }
-        return periodicalRepository.findAll();
     }
 
-    public List<Periodical> findAll() {
-        return periodicalRepository.findAll();
+    public List<Periodical> findAllByTopicsSorted(String sortBy, List<String> topicsSelected) {
+        switch (sortBy) {
+            case "title":
+                return periodicalRepository.findByTopicInIgnoreCaseOrderByTitleAsc(topicsSelected);
+            case "price":
+                return periodicalRepository.findByTopicInIgnoreCaseOrderByPriceAsc(topicsSelected);
+            default:
+                return null;
+        }
     }
 
     public List<Periodical> findByTitle(String title) {

@@ -21,4 +21,8 @@ public interface PeriodicalRepository extends JpaRepository<Periodical, Long> {
 
     @Query(value = "SELECT DISTINCT topic FROM periodical", nativeQuery = true)
     List<String> findTopics();
+
+    List<Periodical> findByTopicInIgnoreCaseOrderByTitleAsc(List<String> topics);
+
+    List<Periodical> findByTopicInIgnoreCaseOrderByPriceAsc(List<String> topics);
 }
