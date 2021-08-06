@@ -18,21 +18,28 @@
     <title th:text="#{title}"></title>
 </head>
 <body>
+<div th:replace="fragments/header :: header"></div>
 
-<div class="list-group" th:fragment="users-list">
-    <div th:foreach></div>
-    <a th:each="user: ${users}" th:href="@{/admin/users/{id}(id=${user.id})}"
-       class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1" th:text="${user.name}+' '+${user.surname}"></h5>
-            <small th:text="#{login}+': '+${user.username}"></small>
+<div class="container" style="margin-top: 30px">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1" th:text="${user.name}+' '+${user.surname}"></h5>
+                <small th:text="#{login}+': '+${user.username}"></small>
+            </div>
+            <p class="mb-1" th:text="#{account.balance}+': '+ ${user.account.balance}"></p>
+            <p class="mb-1" th:text="#{user.account}+' ' +#{nonLocked}" th:if="${user.accountNonLocked}"></p>
+            <p class="mb-1" th:text="#{user.account}+' ' +#{locked}" th:unless="${user.accountNonLocked}"></p>
         </div>
-        <p class="mb-1" th:text="#{account.balance}+': '+ ${user.account.balance}"></p>
-        <p class="mb-1" th:text="#{user.account}+' ' +#{nonLocked}" th:if="${user.accountNonLocked}"></p>
-        <p class="mb-1" th:text="#{user.account}+' ' +#{locked}" th:unless="${user.accountNonLocked}"></p>
-    </a>
-</div>
+        <div class="col-md-3">
+            <a class="btn btn-primary" th:text="#{action.block}" th:if="${user.accountNonLocked}"
+               href="?block"></a>
+            <a class="btn btn-secondary" th:text="#{action.unblock}" th:unless="${user.accountNonLocked}"
+               href="?block"></a>
+        </div>
+    </div>
 
+</div>
 
 </body>
 </html>

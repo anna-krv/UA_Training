@@ -50,7 +50,7 @@ public class AuthorizationController {
 
     @PostMapping("/register")
     public String tryRegister(@ModelAttribute("user") User user) {
-        userService.save(user);
+        userService.create(user);
         return "redirect:/login";
     }
 }

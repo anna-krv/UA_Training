@@ -33,7 +33,6 @@ public class User implements UserDetails {
     private String password;
     @Column(columnDefinition = "varchar(3) default 'UA'")
     private String language = "UA";
-
     @Column(columnDefinition = "boolean default true")
     private boolean accountNonLocked = true;
     @Column(columnDefinition = "boolean default true")
@@ -42,11 +41,9 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired = true;
     @Column(columnDefinition = "boolean default true")
     private boolean enabled = true;
-    //@Column(columnDefinition="varchar(30) default 'USER'")
-
     private Role authority;
     @Transient
-    private List<Role> authorities;//= Arrays.asList(authority);
+    private List<Role> authorities;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Account account;

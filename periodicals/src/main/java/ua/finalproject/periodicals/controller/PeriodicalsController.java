@@ -75,7 +75,7 @@ public class PeriodicalsController {
 
         model.addAttribute("periodical", periodical);
         model.addAttribute("alreadySubscribed", subscriptions != null && !subscriptions.isEmpty());
-        return "reader/onePeriodical.html";
+        return "reader/aPeriodical.html";
     }
 
     @GetMapping("/{id}/subscribe")
@@ -99,7 +99,7 @@ public class PeriodicalsController {
             model.addAttribute("subscriptionError", true);
         }
 
-        return "reader/onePeriodical.html";
+        return "reader/aPeriodical.html";
     }
 
     @GetMapping("/{id}/unsubscribe")
@@ -113,6 +113,6 @@ public class PeriodicalsController {
         subscriptionService.delete(user, periodical);
         model.addAttribute("alreadySubscribed", false);
         model.addAttribute("periodical", periodical);
-        return "reader/onePeriodical.html";
+        return "reader/aPeriodical.html";
     }
 }

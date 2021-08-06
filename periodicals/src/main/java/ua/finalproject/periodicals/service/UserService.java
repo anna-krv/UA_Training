@@ -45,9 +45,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    public User create(User user) {
+        return userRepository.save(setUp(user));
+    }
 
     public User save(User user) {
-        return userRepository.save(setUp(user));
+        return userRepository.save(user);
     }
 
     private User setUp(User user) {
@@ -63,9 +66,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("bad credentials"));
         user.setAuthorities(Arrays.asList(user.getAuthority()));
-        //((UserDetails)user).hasAuthority("ADMIN");
         return user;
-
     }
 
     public List<Periodical> findPeriodicalsByUsernameAndFilterAndSort(String username, String title,
@@ -91,4 +92,23 @@ public class UserService implements UserDetailsService {
                 .stream()
                 .collect(Collectors.toList());
     }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public List<User> findAllExcept(String username) {
+        return userRepository.findAllExceptOne(username);
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public User changeBlockStatus(Long id) {
+        User user = findById(id).get();
+        user.setAccountNonLocked(!user.isAccountNonLocked());
+        return save(user);
+    }
+
 }
