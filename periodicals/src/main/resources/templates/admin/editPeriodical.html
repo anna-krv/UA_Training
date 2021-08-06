@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title th:text="#{register}"></title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container" style="margin-top: 60px">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 th:text="#{action.editPeriodical}"></h1>
+            <div class="alert alert-success" th:if="${success}"
+                 th:text="#{success}">
+            </div>
+            <div class="alert alert-danger" th:if="${errorNotUnique}"
+                 th:text="#{error.notUnique}">
+            </div>
+            <form th:method="post" th:object="${periodical}"
+                  th:action="@{/admin/periodicals/{id}(id=${periodical.id})}">
+                <div class="form-group">
+                    <label for="title" th:text="#{periodical.title}"></label>
+                    <input type="text" th:field="*{title}" id="title"
+                           class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="price" th:text="#{price}"></label>
+                    <input type="text" th:field="*{price}" id="price"
+                           class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="topic" th:text="#{topic}"></label>
+                    <input type="text" th:field="*{topic}" id="topic"
+                           class="form-control"/>
+                </div>
+                <input type="submit" th:value="#{action.editPeriodical}"
+                       class="btn btn-success"/>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

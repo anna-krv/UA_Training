@@ -58,4 +58,20 @@ public class PeriodicalService {
     public Optional<Periodical> findById(Long id) {
         return periodicalRepository.findById(id);
     }
+
+    public Periodical save(Periodical periodical) {
+        return periodicalRepository.save(periodical);
+    }
+
+    public List<Periodical> findAll() {
+        return periodicalRepository.findAll();
+    }
+
+    public Periodical update(Long id, Periodical periodical) {
+        Periodical periodicalInDb = periodicalRepository.findById(id).get();
+        periodicalInDb.setTitle(periodical.getTitle());
+        periodicalInDb.setPrice(periodical.getPrice());
+        periodicalInDb.setTopic(periodical.getTopic());
+        return periodicalRepository.save(periodicalInDb);
+    }
 }

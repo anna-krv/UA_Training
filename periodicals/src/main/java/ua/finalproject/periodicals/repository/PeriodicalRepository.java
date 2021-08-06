@@ -28,4 +28,6 @@ public interface PeriodicalRepository extends JpaRepository<Periodical, Long> {
     List<Periodical> findByTopicInIgnoreCaseOrderByTitleAsc(List<String> topics);
 
     List<Periodical> findByTopicInIgnoreCaseOrderByPriceAsc(List<String> topics);
+
+    //Periodical update(Periodical periodical);
 }

@@ -20,6 +20,9 @@ public class AccountService {
     }
 
     public Account putMoney(Account account, double moneyToPut) {
+        if (moneyToPut < 0) {
+            throw new IllegalArgumentException();
+        }
         account.setBalance(account.getBalance() + moneyToPut);
         return accountRepository.save(account);
     }

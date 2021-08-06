@@ -46,7 +46,10 @@
                 <a class="nav-link" href="/account" th:text="#{account}"></a>
             </li>
             <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
-                <a class="nav-link" href="/admin/users" th:text="#{menu.users}"></a>
+                <a class="nav-link" href="/admin/users" th:text="#{menu.users.manage}"></a>
+            </li>
+            <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
+                <a class="nav-link" href="/admin/periodicals" th:text="#{menu.periodicals.manage}"></a>
             </li>
 
         </ul>

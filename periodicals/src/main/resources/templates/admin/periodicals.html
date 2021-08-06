@@ -20,28 +20,19 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 
-<div class="container" style="margin-top: 60px">
-
-    <h1 th:text="#{account}"></h1>
-
-    <div class="row">
-
-        <div class="col-md-8 col-md-offset-2">
-            <div class="alert alert-danger" th:if="${error}"
-                 th:text="#{error.money}">
-            </div>
+<div class="container" style="margin-top: 30px">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
             <div class="alert alert-success" th:if="${success}"
                  th:text="#{success}">
             </div>
-            <form style="margin-bottom: 30px" th:method="post" th:action="@{/account}">
-                <h3 th:text="#{account.balance}+': '+${account.balance}"></h3>
-                <div class="form-group">
-                    <label for="moneyToPut" th:text="#{account.putMoney}"></label>
-                    <input type="text" name="moneyToPut" id="moneyToPut" class="form-control"/>
-                </div>
-                <input type="submit" th:value="#{account.putMoney}"
-                       class="btn btn-success"/>
-            </form>
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-success" th:text="#{action.addPeriodical}"
+               href="/admin/periodicals/add"></a>
+        </div>
+        <div class="col-md-8">
+            <div th:replace="fragments/periodicalsListAdmin :: periodicals-list-admin"></div>
         </div>
     </div>
 </div>
