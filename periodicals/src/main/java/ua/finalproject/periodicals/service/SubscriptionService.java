@@ -2,6 +2,8 @@ package ua.finalproject.periodicals.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.finalproject.periodicals.entity.*;
 import ua.finalproject.periodicals.repository.SubscriptionRepository;
 
@@ -19,18 +21,21 @@ public class SubscriptionService {
         this.accountService = accountService;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW,
+            rollbackFor = MoneyAccountException.class)
     public Subscription save(User user, Periodical periodical) throws MoneyAccountException, SubscriptionException {
         if (checkByUserAndPeriodical(user, periodical)) {
             throw new SubscriptionException();
         }
-        accountService.chargeMoney(user.getAccount(), periodical.getPrice());
-
         Subscription subscription = new Subscription();
         subscription.setUser(user);
         subscription.setPeriodical(periodical);
         subscription.setStartDate(LocalDateTime.now().toLocalDate());
+        Subscription savedSubscription = subscriptionRepository.save(subscription);
 
-        return subscriptionRepository.save(subscription);
+        accountService.chargeMoney(user.getAccount(), periodical.getPrice());
+
+        return savedSubscription;
     }
 
     public boolean checkByUserAndPeriodical(User user, Periodical periodical) {

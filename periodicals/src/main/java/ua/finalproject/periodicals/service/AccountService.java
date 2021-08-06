@@ -3,6 +3,8 @@ package ua.finalproject.periodicals.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.finalproject.periodicals.entity.Account;
 import ua.finalproject.periodicals.entity.MoneyAccountException;
 import ua.finalproject.periodicals.repository.AccountRepository;
@@ -22,6 +24,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public Account chargeMoney(Account account, double moneyToCharge) throws MoneyAccountException {
         if (account.getBalance() < moneyToCharge) {
             throw new MoneyAccountException();
