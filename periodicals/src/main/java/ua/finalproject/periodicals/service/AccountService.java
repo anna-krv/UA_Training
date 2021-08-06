@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.finalproject.periodicals.entity.Account;
+import ua.finalproject.periodicals.entity.MoneyAccountException;
 import ua.finalproject.periodicals.repository.AccountRepository;
 
 @Slf4j
@@ -19,5 +20,12 @@ public class AccountService {
     public Account putMoney(Account account, double moneyToPut) {
         account.setBalance(account.getBalance() + moneyToPut);
         return accountRepository.save(account);
+    }
+
+    public Account chargeMoney(Account account, double moneyToCharge) throws MoneyAccountException {
+        if (account.getBalance() < moneyToCharge) {
+            throw new MoneyAccountException();
+        }
+        return putMoney(account, -moneyToCharge);
     }
 }

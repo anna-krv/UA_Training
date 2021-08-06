@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ua.finalproject.periodicals.entity.Periodical;
-import ua.finalproject.periodicals.entity.Subscription;
-import ua.finalproject.periodicals.entity.User;
+import ua.finalproject.periodicals.entity.*;
 import ua.finalproject.periodicals.service.PeriodicalService;
 import ua.finalproject.periodicals.service.SubscriptionService;
 import ua.finalproject.periodicals.service.UserService;
@@ -88,9 +86,19 @@ public class PeriodicalsController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername()).get();
 
-        subscriptionService.save(user, periodical);
-        model.addAttribute("alreadySubscribed", true);
         model.addAttribute("periodical", periodical);
+        model.addAttribute("alreadySubscribed", false);
+        try {
+            subscriptionService.save(user, periodical);
+            model.addAttribute("alreadySubscribed", true);
+            model.addAttribute("success", true);
+        } catch (MoneyAccountException ex) {
+            model.addAttribute("accountError", true);
+        } catch (SubscriptionException ex) {
+            model.addAttribute("alreadySubscribed", true);
+            model.addAttribute("subscriptionError", true);
+        }
+
         return "reader/onePeriodical.html";
     }
 
