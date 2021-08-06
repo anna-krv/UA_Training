@@ -47,6 +47,25 @@ public class PeriodicalsController {
         return "reader/periodicals.html";
     }
 
+    @GetMapping("/subscribed")
+    public String periodicalsSubscribedPage(Authentication authentication,
+                                            @RequestParam(name = "search", required = false, defaultValue = "any") String title,
+                                            @RequestParam(name = "sort", required = false, defaultValue = "title") String sort,
+                                            @RequestParam(name = "topic", required = false) List<String> topicsSelected,
+                                            Model model) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<Periodical> periodicals = userService.findPeriodicalsByUsernameAndFilterAndSort(
+                userDetails.getUsername(),
+                title, topicsSelected,
+                sort);
+
+        model.addAttribute("periodicals", periodicals);
+        model.addAttribute("error", periodicals == null || periodicals.isEmpty());
+        model.addAttribute("topics", userService.findAllTopicsByUsername(userDetails.getUsername()));
+        model.addAttribute("sort", sort);
+        return "reader/periodicals.html";
+    }
+
     @GetMapping("/{id}")
     public String periodicalPageById(@PathVariable("id") Long id,
                                      Authentication authentication,

@@ -8,10 +8,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.finalproject.periodicals.entity.Account;
+import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.entity.User;
 import ua.finalproject.periodicals.repository.UserRepository;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -56,5 +60,29 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("bad credentials"));
 
+    }
+
+    public List<Periodical> findPeriodicalsByUsernameAndFilterAndSort(String username, String title,
+                                                                      List<String> topicsSelected,
+                                                                      String sort) {
+        User user = userRepository.findByUsername(username).get();
+        return user.getSubscriptions()
+                .stream()
+                .map(subscription -> subscription.getPeriodical())
+                .filter(periodical -> (title == null || title.equals("any") || title.equalsIgnoreCase(periodical.getTitle())) &&
+                        (topicsSelected == null || topicsSelected.contains(periodical.getTopic().toLowerCase(Locale.ROOT))))
+                .sorted((p1, p2) -> sort.equals("title") ? p1.getTitle().compareTo(p2.getTitle()) :
+                        (int) (p1.getPrice() - p2.getPrice()))
+                .collect(Collectors.toList());
+    }
+
+    public List<String> findAllTopicsByUsername(String username) {
+        User user = userRepository.findByUsername(username).get();
+        return user.getSubscriptions()
+                .stream()
+                .map(subscription -> subscription.getPeriodical().getTopic())
+                .collect(Collectors.toSet())
+                .stream()
+                .collect(Collectors.toList());
     }
 }

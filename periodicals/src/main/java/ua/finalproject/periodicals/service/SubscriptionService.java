@@ -35,4 +35,6 @@ public class SubscriptionService {
     public List<Subscription> findByUserAndPeriodical(User user, Periodical periodical) {
         return subscriptionRepository.findByUserIdAndPeriodicalId(user.getId(), periodical.getId());
     }
+
+
 }

@@ -14,4 +14,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Subs
     void delete(Subscription subscription);
 
     List<Subscription> findByUserIdAndPeriodicalId(Long id, Long id1);
+
 }

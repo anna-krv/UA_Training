@@ -18,12 +18,12 @@ import java.time.LocalDate;
 public class Subscription {
     @EmbeddedId
     private SubscriptionKey subscriptionKey = new SubscriptionKey();
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @MapsId("periodicalId")
     @JoinColumn(name = "periodical_id")
     private Periodical periodical;
@@ -33,6 +33,10 @@ public class Subscription {
 
     public String toString() {
         return ";user id: " + user.getId();
+    }
+
+    public int hashCode() {
+        return subscriptionKey.hashCode();
     }
 }
 
