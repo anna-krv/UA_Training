@@ -10,17 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/")
-    public String mainPage() {
-        return "guest.html";
-    }
-
-    @GetMapping("/home")
     public String homePage(Authentication authentication,
                            Model model) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "home/guest.html";
+        }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         model.addAttribute("user", userDetails);
         return "home/home.html";
     }
-
-
 }

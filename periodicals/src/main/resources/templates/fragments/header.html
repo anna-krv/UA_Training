@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -20,27 +20,45 @@
 <body>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark"
      th:fragment="header">
-    <a class="navbar-brand" href="/home" th:text="#{title}"></a>
+    <a class="navbar-brand" href="/" th:text="#{title}"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="navbar-collapse collapse" id="navbarNavAltMarkup">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" href="/home" th:text="#{home}"> <span
-                    class="sr-only">(current)</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="/periodicals/subscribed" th:text="#{mySubscriptions}"></a>
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/login" th:text="#{login.title}"></a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/periodicals" th:text="#{subscribe}"></a></li>
-            <li class="nav-item"><a class="nav-link" href="/account" th:text="#{account}"></a></li>
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/register" th:text="#{register}"></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" href="/" th:text="#{home}">
+                <span class="sr-only">(current)</span></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/periodicals/subscribed" th:text="#{mySubscriptions}"></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/periodicals" th:text="#{subscribe}"></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/account" th:text="#{account}"></a>
+            </li>
+            <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
+                <a class="nav-link" href="/admin/users" th:text="#{menu.users}"></a>
+            </li>
 
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="/logout" th:text="#{logout}"></a>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/logout" th:text="#{logout}"></a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="?localeData=ua">UA</a>
+            <li class="nav-item">
+                <a class="nav-link" href="?localeData=ua">UA</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="?localeData=en">EN</a>
+            <li class="nav-item">
+                <a class="nav-link" href="?localeData=en">EN</a>
             </li>
         </ul>
     </div>

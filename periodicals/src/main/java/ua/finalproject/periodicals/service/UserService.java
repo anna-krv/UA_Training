@@ -9,9 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.finalproject.periodicals.entity.Account;
 import ua.finalproject.periodicals.entity.Periodical;
+import ua.finalproject.periodicals.entity.Role;
 import ua.finalproject.periodicals.entity.User;
 import ua.finalproject.periodicals.repository.UserRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -52,13 +54,17 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Account account = Account.builder().user(user).build();
         user.setAccount(account);
+        user.setAuthority(Role.USER);
         return user;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(
+        User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("bad credentials"));
+        user.setAuthorities(Arrays.asList(user.getAuthority()));
+        //((UserDetails)user).hasAuthority("ADMIN");
+        return user;
 
     }
 

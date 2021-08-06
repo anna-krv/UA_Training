@@ -7,11 +7,10 @@
     <title th:text="#{register}"></title>
 </head>
 <body>
+<div th:replace="fragments/header :: header"></div>
 <div class="container" style="margin-top: 60px">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <a class="btn btn-default" href="?localeData=ua">UA</a>
-            <a class="btn btn-default" href="?localeData=en">EN</a>
             <h1 th:text="#{register}"></h1>
             <form th:method="post" th:object="${user}"
                   th:action="@{/register}">
@@ -41,9 +40,9 @@
                            class="form-control"/>
                 </div>
                 <input type="submit" th:value="#{register}"
-                       class="btn btn-default"/>
+                       class="btn btn-success"/>
             </form>
-            <a th:text="#{login.suggest}" th:href="@{/login}"></a>
+
         </div>
     </div>
 

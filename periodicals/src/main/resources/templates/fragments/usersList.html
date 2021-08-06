@@ -19,7 +19,18 @@
 </head>
 <body>
 
-<div th:replace="fragments/header :: header"></div>
+<div class="list-group" th:fragment="users-list">
+    <div th:foreach></div>
+    <a th:each="user: ${users}" th:href="@{/users/{id}(id=${user.id})}"
+       class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1" th:text="${user.name}+' '+${user.surname}"></h5>
+            <small th:text="${user.username}"></small>
+        </div>
+        <p class="mb-1" th:text="#{user.account}+': '+${user.accountNonLocked}"></p>
+    </a>
+</div>
+
 
 </body>
 </html>
