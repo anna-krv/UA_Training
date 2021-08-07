@@ -32,6 +32,7 @@ public class AccountService {
         if (account.getBalance() < moneyToCharge) {
             throw new MoneyAccountException();
         }
-        return putMoney(account, -moneyToCharge);
+        account.setBalance(account.getBalance() - moneyToCharge);
+        return accountRepository.save(account);
     }
 }

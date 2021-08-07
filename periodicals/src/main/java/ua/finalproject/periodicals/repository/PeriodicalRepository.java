@@ -1,8 +1,11 @@
 package ua.finalproject.periodicals.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ua.finalproject.periodicals.entity.Periodical;
 
 import java.util.List;
@@ -29,5 +32,8 @@ public interface PeriodicalRepository extends JpaRepository<Periodical, Long> {
 
     List<Periodical> findByTopicInIgnoreCaseOrderByPriceAsc(List<String> topics);
 
-    //Periodical update(Periodical periodical);
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = "DELETE FROM periodical WHERE id=:id", nativeQuery = true)
+    void nativeDelete(@Param("id") Long id);
 }

@@ -7,15 +7,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.service.PeriodicalService;
+import ua.finalproject.periodicals.service.SubscriptionService;
 
 @Controller
 @RequestMapping("/admin/periodicals")
 public class AdminPeriodicalsController {
     private final PeriodicalService periodicalService;
+    private final SubscriptionService subscriptionService;
 
     @Autowired
-    public AdminPeriodicalsController(PeriodicalService periodicalService) {
+    public AdminPeriodicalsController(PeriodicalService periodicalService, SubscriptionService subscriptionService) {
         this.periodicalService = periodicalService;
+        this.subscriptionService = subscriptionService;
     }
 
     @GetMapping()
@@ -38,6 +41,12 @@ public class AdminPeriodicalsController {
                                    @ModelAttribute("periodical") Periodical periodical,
                                    Model model) {
         periodicalService.update(id, periodical);
+        return "redirect:/admin/periodicals";
+    }
+
+    @DeleteMapping("/{id}")
+    public String periodicalDelete(@PathVariable("id") Long id) {
+        periodicalService.deleteById(id);
         return "redirect:/admin/periodicals";
     }
 

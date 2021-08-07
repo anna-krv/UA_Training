@@ -10,9 +10,11 @@ import java.util.Optional;
 @Service
 public class PeriodicalService {
     private final PeriodicalRepository periodicalRepository;
+    private final SubscriptionService subscriptionService;
 
-    public PeriodicalService(PeriodicalRepository periodicalRepository) {
+    public PeriodicalService(PeriodicalRepository periodicalRepository, SubscriptionService subscriptionService) {
         this.periodicalRepository = periodicalRepository;
+        this.subscriptionService = subscriptionService;
     }
 
     public List<Periodical> find(String title, String sortBy, List<String> topicsSelected) {
@@ -73,5 +75,10 @@ public class PeriodicalService {
         periodicalInDb.setPrice(periodical.getPrice());
         periodicalInDb.setTopic(periodical.getTopic());
         return periodicalRepository.save(periodicalInDb);
+    }
+
+    public void deleteById(Long id) {
+        subscriptionService.deleteByPeriodicalId(id);
+        periodicalRepository.nativeDelete(id);
     }
 }

@@ -18,12 +18,12 @@ import java.time.LocalDate;
 public class Subscription {
     @EmbeddedId
     private SubscriptionKey subscriptionKey = new SubscriptionKey();
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("periodicalId")
     @JoinColumn(name = "periodical_id")
     private Periodical periodical;

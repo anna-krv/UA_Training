@@ -54,5 +54,7 @@ public class SubscriptionService {
         return subscriptionRepository.findByUserIdAndPeriodicalId(user.getId(), periodical.getId());
     }
 
-
+    public void deleteByPeriodicalId(Long id) {
+        subscriptionRepository.deleteByPeriodicalIdNative(id);
+    }
 }

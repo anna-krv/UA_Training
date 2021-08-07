@@ -23,7 +23,7 @@ public class Periodical {
     // Divide by 100 to get real price.
     private int price;
     private String topic;
-    @OneToMany(mappedBy = "periodical")
+    @OneToMany(mappedBy = "periodical", fetch = FetchType.EAGER)
     Set<Subscription> subscriptions;
 
     public double getPrice() {
