@@ -27,12 +27,7 @@
     <div class="row">
 
         <div class="col-md-8 col-md-offset-2">
-            <div class="alert alert-danger" th:if="${error}"
-                 th:text="#{error.money}">
-            </div>
-            <div class="alert alert-success" th:if="${success}"
-                 th:text="#{success}">
-            </div>
+
             <form style="margin-bottom: 30px" th:method="post" th:action="@{/account}">
                 <h3 th:text="#{account.balance}+': '+${account.balance}"></h3>
                 <div class="form-group">
@@ -42,6 +37,16 @@
                 <input type="submit" th:value="#{account.putMoney}"
                        class="btn btn-success"/>
             </form>
+
+            <div class="alert alert-danger" th:if="${error}"
+                 th:text="#{error.money}">
+            </div>
+            <div class="alert alert-danger" th:if="${formatError}"
+                 th:text="#{error.format}">
+            </div>
+            <div class="alert alert-success" th:if="${success}"
+                 th:text="#{success}">
+            </div>
         </div>
     </div>
 </div>

@@ -2,14 +2,10 @@ package ua.finalproject.periodicals.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ua.finalproject.periodicals.entity.Account;
 import ua.finalproject.periodicals.service.AccountService;
 import ua.finalproject.periodicals.service.UserService;
@@ -30,10 +26,9 @@ public class AccountController {
     }
 
     @GetMapping
-    public String accountPage(Authentication authentication,
+    public String accountPage(Principal principal,
                               Model model) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Account account = userService.findAccountByUsername(userDetails.getUsername());
+        Account account = userService.findAccountByUsername(principal.getName());
         model.addAttribute("account", account);
         return "reader/account.html";
     }
@@ -51,6 +46,16 @@ public class AccountController {
             model.addAttribute("account", account);
             model.addAttribute("error", true);
         }
+        return "reader/account.html";
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public String handleArgumentException(MethodArgumentTypeMismatchException ex,
+                                          Principal principal,
+                                          Model model) {
+        model.addAttribute("formatError", true);
+        Account account = userService.findAccountByUsername(principal.getName());
+        model.addAttribute("account", account);
         return "reader/account.html";
     }
 
