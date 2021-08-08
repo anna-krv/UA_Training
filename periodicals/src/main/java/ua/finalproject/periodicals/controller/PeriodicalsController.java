@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ua.finalproject.periodicals.entity.*;
+import ua.finalproject.periodicals.entity.MoneyAccountException;
+import ua.finalproject.periodicals.entity.Periodical;
+import ua.finalproject.periodicals.entity.Subscription;
+import ua.finalproject.periodicals.entity.User;
 import ua.finalproject.periodicals.service.PeriodicalService;
 import ua.finalproject.periodicals.service.SubscriptionService;
 import ua.finalproject.periodicals.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/periodicals")
@@ -66,37 +71,36 @@ public class PeriodicalsController {
 
     @GetMapping("/{id}")
     public String periodicalPageById(@PathVariable("id") Long id,
-                                     Authentication authentication,
+                                     Principal principal,
                                      Model model) {
         Periodical periodical = periodicalService.findById(id).get();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername()).get();
-        List<Subscription> subscriptions = subscriptionService.findByUserAndPeriodical(user, periodical);
+        User user = userService.findByUsername(principal.getName()).get();
+        Optional<Subscription> subscription = subscriptionService.findByUserAndPeriodical(user, periodical);
 
         model.addAttribute("periodical", periodical);
-        model.addAttribute("alreadySubscribed", subscriptions != null && !subscriptions.isEmpty());
+        model.addAttribute("alreadySubscribed", subscription.isPresent());
+        model.addAttribute("subscription", subscription.orElse(null));
         return "reader/aPeriodical.html";
     }
 
     @GetMapping("/{id}/subscribe")
     public String periodicalSubscribe(@PathVariable("id") Long id,
-                                      Authentication authentication,
+                                      Principal principal,
                                       Model model) {
-        Periodical periodical = periodicalService.findById(id).get();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername()).get();
-
-        model.addAttribute("periodical", periodical);
-        model.addAttribute("alreadySubscribed", false);
         try {
-            subscriptionService.save(user, periodical);
+            Periodical periodical = periodicalService.findById(id).get();
+            model.addAttribute("periodical", periodical);
+
+            User user = userService.findByUsername(principal.getName()).get();
+            Subscription subscription = subscriptionService.save(user, periodical);
+
             model.addAttribute("alreadySubscribed", true);
+            model.addAttribute("subscription", subscription);
             model.addAttribute("success", true);
         } catch (MoneyAccountException ex) {
             model.addAttribute("accountError", true);
-        } catch (SubscriptionException ex) {
-            model.addAttribute("alreadySubscribed", true);
-            model.addAttribute("subscriptionError", true);
+        } catch (Exception ex) {
+            model.addAttribute("error", true);
         }
 
         return "reader/aPeriodical.html";
@@ -104,15 +108,18 @@ public class PeriodicalsController {
 
     @GetMapping("/{id}/unsubscribe")
     public String periodicalUnSubscribe(@PathVariable("id") Long id,
-                                        Authentication authentication,
+                                        Principal principal,
                                         Model model) {
-        Periodical periodical = periodicalService.findById(id).get();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername()).get();
+        try {
+            Periodical periodical = periodicalService.findById(id).get();
+            User user = userService.findByUsername(principal.getName()).get();
 
-        subscriptionService.delete(user, periodical);
-        model.addAttribute("alreadySubscribed", false);
-        model.addAttribute("periodical", periodical);
+            subscriptionService.delete(user, periodical);
+            model.addAttribute("alreadySubscribed", false);
+            model.addAttribute("periodical", periodical);
+        } catch (Exception ex) {
+            model.addAttribute("error", true);
+        }
         return "reader/aPeriodical.html";
     }
 }

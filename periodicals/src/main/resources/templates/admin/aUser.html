@@ -27,7 +27,7 @@
                 <h5 class="mb-1" th:text="${user.name}+' '+${user.surname}"></h5>
                 <small th:text="#{login}+': '+${user.username}"></small>
             </div>
-            <p class="mb-1" th:text="#{account.balance}+': '+ ${user.account.balance}"></p>
+            <p class="mb-1" th:text="#{email}+': '+ ${user.email}"></p>
             <p class="mb-1" th:text="#{user.account}+' ' +#{nonLocked}" th:if="${user.accountNonLocked}"></p>
             <p class="mb-1" th:text="#{user.account}+' ' +#{locked}" th:unless="${user.accountNonLocked}"></p>
         </div>

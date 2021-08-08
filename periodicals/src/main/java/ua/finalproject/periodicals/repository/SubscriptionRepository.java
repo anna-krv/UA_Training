@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.finalproject.periodicals.entity.Subscription;
 import ua.finalproject.periodicals.entity.SubscriptionKey;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -21,6 +22,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Subs
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "DELETE FROM subscription where periodical_id=:id", nativeQuery = true)
+    @Query(value = "DELETE FROM subscription WHERE periodical_id=:id", nativeQuery = true)
     void deleteByPeriodicalIdNative(@Param("id") Long id);
+
+    List<Subscription> findByNextPaymentDateTimeLessThanEqual(LocalDateTime now);
 }
