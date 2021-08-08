@@ -18,7 +18,7 @@ public class ChargeMoneyService {
         this.subscriptionService = subscriptionService;
     }
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void ChargeMoney() {
         List<Subscription> subscriptionsToBeCharged = subscriptionService.findByNextPaymentDateTimeLessThanEqual(
                 LocalDateTime.now());
@@ -28,7 +28,6 @@ public class ChargeMoneyService {
             } catch (MoneyAccountException ex) {
                 //todo mark subscription inactive
             }
-            System.out.println(subscription);
         }
     }
 }

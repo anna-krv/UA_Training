@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+
+    <title>Header</title>
+</head>
+<body>
+<div th:fragment="error-or-success">
+    <div class="alert alert-success" th:if="${success}"
+         th:text="#{success}">
+    </div>
+
+    <div class="alert alert-danger" th:if="${moneyError}"
+         th:text="#{error.money}">
+    </div>
+    <div class="alert alert-danger" th:if="${formatError}"
+         th:text="#{error.format}">
+    </div>
+
+    <div class="alert alert-danger" th:if="${accountError}"
+         th:text="#{error.account}">
+    </div>
+    <div class="alert alert-danger" th:if="${subscriptionError}"
+         th:text="#{error.subscription}">
+    </div>
+
+    <div class="alert alert-danger" th:if="${loginError}"
+         th:text="#{error.login}">
+    </div>
+    <div class="alert alert-danger" th:if="${errorNotUnique}"
+         th:text="#{error.notUnique}">
+    </div>
+    <div class="alert alert-danger" th:if="${notUniqueUserError}"
+         th:text="#{error.user.notUnique}">
+    </div>
+
+    <div class="alert alert-danger" th:if="${error}"
+         th:text="#{error}">
+    </div>
+</div>
+</body>
+</html>

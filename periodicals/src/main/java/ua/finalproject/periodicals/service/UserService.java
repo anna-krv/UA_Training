@@ -111,4 +111,8 @@ public class UserService implements UserDetailsService {
         return save(user);
     }
 
+    public boolean checkIfValid(User user) {
+        Optional<User> userFound = findByUsername(user);
+        return userFound.isPresent() && userFound.get().getPassword().equals(user.getPassword());
+    }
 }

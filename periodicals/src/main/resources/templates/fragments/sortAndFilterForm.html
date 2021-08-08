@@ -31,7 +31,7 @@
                value="price" th:checked="${sort}==price"/>
         <label class="form-check-label" for="sortByName" th:text="#{price}"/>
     </div>
-    <legend th:text="#{topic}"></legend>
+    <legend th:if="${topics!=null && topics.size()!=0}" th:text="#{topic}"></legend>
     <div th:each="topic: ${topics}">
         <input type="checkbox" name="topic" th:id="${topic}" th:value="${topic}">
         <label th:for="${topic}" th:text="${topic}"></label>

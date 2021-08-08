@@ -12,12 +12,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h1 th:text="#{action.addPeriodical}"></h1>
-            <div class="alert alert-success" th:if="${success}"
-                 th:text="#{success}">
-            </div>
-            <div class="alert alert-danger" th:if="${errorNotUnique}"
-                 th:text="#{error.notUnique}">
-            </div>
+            <div th:replace="fragments/diagnostics :: error-or-success"></div>
             <form th:method="post" th:object="${periodical}"
                   th:action="@{/admin/periodicals/add}">
                 <div class="form-group">

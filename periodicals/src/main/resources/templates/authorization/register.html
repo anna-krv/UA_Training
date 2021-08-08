@@ -12,37 +12,48 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h1 th:text="#{register}"></h1>
-            <form th:method="post" th:object="${user}"
+            <form style="margin-bottom:30px" th:method="post" th:object="${user}"
                   th:action="@{/register}">
                 <div class="form-group">
                     <label for="name" th:text="#{name}"></label>
                     <input type="text" th:field="*{name}" id="name"
                            class="form-control"/>
+                    <div style="color:red" th:errors="*{name}"
+                         th:if="${#fields.hasErrors('name')}"></div>
                 </div>
                 <div class="form-group">
                     <label for="surname" th:text="#{surname}"></label>
                     <input type="text" th:field="*{surname}" id="surname"
                            class="form-control"/>
+                    <div style="color:red" th:errors="*{surname}"
+                         th:if="${#fields.hasErrors('surname')}"></div>
                 </div>
                 <div class="form-group">
                     <label for="email" th:text="#{email}"></label>
                     <input type="text" th:field="*{email}" id="email"
                            class="form-control"/>
+                    <div style="color:red" th:errors="*{email}"
+                         th:if="${#fields.hasErrors('email')}"></div>
                 </div>
                 <div class="form-group">
-                    <label for="login" th:text="#{login}"></label>
-                    <input type="text" th:field="*{username}" id="login"
+                    <label for="username" th:text="#{login}"></label>
+                    <input id="username" th:field="*{username}" type="text"
                            class="form-control"/>
+                    <div style="color:red" th:errors="*{username}"
+                         th:if="${#fields.hasErrors('username')}"></div>
                 </div>
                 <div class="form-group">
                     <label for="password" th:text="#{password}"></label>
                     <input type="password" th:field="*{password}" id="password"
                            class="form-control"/>
+                    <div style="color:red" th:errors="*{password}"
+                         th:if="${#fields.hasErrors('password')}"></div>
                 </div>
                 <input type="submit" th:value="#{register}"
                        class="btn btn-success"/>
             </form>
 
+            <div th:replace="fragments/diagnostics :: error-or-success"></div>
         </div>
     </div>
 

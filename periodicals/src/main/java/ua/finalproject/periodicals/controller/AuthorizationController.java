@@ -1,8 +1,10 @@
 package ua.finalproject.periodicals.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +13,7 @@ import ua.finalproject.periodicals.entity.User;
 import ua.finalproject.periodicals.service.AccountService;
 import ua.finalproject.periodicals.service.UserService;
 
-import java.util.Optional;
+import javax.validation.Valid;
 
 @Controller
 public class AuthorizationController {
@@ -29,17 +31,13 @@ public class AuthorizationController {
             @RequestParam(value = "error", required = false) String error,
             Model model) {
         model.addAttribute("user", new User());
-        model.addAttribute("error", error != null);
+        model.addAttribute("loginError", error != null);
         return "authorization/login.html";
     }
 
     @PostMapping("/login")
     public String tryLogin(@ModelAttribute("user") User user) {
-        Optional<User> userFound = userService.findByUsername(user);
-        if (userFound.isPresent() && userFound.get().getPassword().equals(user.getPassword())) {
-            return "redirect:/home";
-        }
-        return "redirect:/login";
+        return userService.checkIfValid(user) ? "redirect:/" : "redirect:/login";
     }
 
     @GetMapping("/register")
@@ -49,8 +47,19 @@ public class AuthorizationController {
     }
 
     @PostMapping("/register")
-    public String tryRegister(@ModelAttribute("user") User user) {
-        userService.create(user);
+    public String tryRegister(@Valid @ModelAttribute("user") User user,
+                              BindingResult bindingResult,
+                              Model model) {
+        if (bindingResult.hasErrors()) {
+            return "authorization/register.html";
+        }
+        try {
+            userService.create(user);
+        } catch (DataIntegrityViolationException ex) {
+            model.addAttribute("notUniqueUserError", true);
+            model.addAttribute("user", user);
+            return "authorization/register.html";
+        }
         return "redirect:/login";
     }
 }

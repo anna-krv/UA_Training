@@ -14,9 +14,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h1 th:text="#{login.title}"></h1>
-            <div class="alert alert-danger" th:if="${error}"
-                 th:text="#{login.error}">
-            </div>
             <form style="margin-bottom: 30px" th:method="post" th:object="${user}"
                   th:action="@{/login}">
                 <input name="${_csrf.parameterName}" value="${_csrf.token}" type="hidden">
@@ -34,6 +31,7 @@
                        class="btn btn-success"/>
             </form>
 
+            <div th:replace="fragments/diagnostics :: error-or-success"></div>
         </div>
     </div>
 

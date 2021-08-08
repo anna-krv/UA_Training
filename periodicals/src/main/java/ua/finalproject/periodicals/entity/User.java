@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -21,15 +23,20 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
+    @Size(min = 2, max = 30)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
+    @Size(min = 2, max = 30)
     private String surname;
-    @Column(nullable = false)
-    private String email;
     @Column(nullable = false, unique = true)
+    @Email(regexp = "[^_\\W][\\w!#$%&'*+-/=?^_`{|}]{0,63}@[A-Za-z0-9-]{1,253}(\\.[A-Za-z0-9-]{1,253})+")
+    private String email;
+    @Column(nullable = false, length = 30, unique = true)
+    @Size(min = 4, max = 30)
     private String username;
-    @Column(nullable = false, columnDefinition = "varchar(200)")
+    @Column(nullable = false)
+    @Size(min = 4, max = 255)
     private String password;
     @Column(columnDefinition = "varchar(3) default 'UA'")
     private String language = "UA";

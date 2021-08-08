@@ -35,25 +35,20 @@
         </div>
 
         <div class="col-md-3">
-            <a class="btn btn-primary" th:text="#{subscribe}" th:unless="${alreadySubscribed}"
+            <a class="btn btn-primary" th:text="#{action.subscribe}" th:unless="${alreadySubscribed}"
                th:href="@{/periodicals/{id}/subscribe(id=${periodical.id})}"></a>
-            <a class="btn btn-secondary" th:text="#{unsubscribe}" th:if="${alreadySubscribed}"
+            <a class="btn btn-secondary" th:if="${alreadySubscribed}" th:text="#{action.unsubscribe}"
                th:href="@{/periodicals/{id}/unsubscribe(id=${periodical.id})}"></a>
         </div>
-        <div class="col-md-7" style="margin-top:30px">
-            <div class="alert alert-danger" th:if="${accountError}"
-                 th:text="#{error.account}">
-            </div>
-            <div class="alert alert-danger" th:if="${subscriptionError}"
-                 th:text="#{error.subscription}">
-            </div>
-            <div class="alert alert-success" th:if="${success}"
-                 th:text="#{success}">
-            </div>
-            <div class="alert alert-danger" th:if="${error}"
-                 th:text="#{error}">
-            </div>
+
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6" style="margin-top:30px">
+            <div th:replace="fragments/diagnostics :: error-or-success"></div>
         </div>
+        <div class="col-md-3"></div>
+
     </div>
 </div>
 

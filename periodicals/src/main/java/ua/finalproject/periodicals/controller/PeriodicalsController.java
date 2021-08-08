@@ -1,8 +1,6 @@
 package ua.finalproject.periodicals.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,21 +49,21 @@ public class PeriodicalsController {
     }
 
     @GetMapping("/subscribed")
-    public String periodicalsSubscribedPage(Authentication authentication,
+    public String periodicalsSubscribedPage(Principal principal,
                                             @RequestParam(name = "search", required = false, defaultValue = "any") String title,
                                             @RequestParam(name = "sort", required = false, defaultValue = "title") String sort,
                                             @RequestParam(name = "topic", required = false) List<String> topicsSelected,
                                             Model model) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<Periodical> periodicals = userService.findPeriodicalsByUsernameAndFilterAndSort(
-                userDetails.getUsername(),
+                principal.getName(),
                 title, topicsSelected,
                 sort);
 
         model.addAttribute("periodicals", periodicals);
         model.addAttribute("error", periodicals == null || periodicals.isEmpty());
-        model.addAttribute("topics", userService.findAllTopicsByUsername(userDetails.getUsername()));
+        model.addAttribute("topics", userService.findAllTopicsByUsername(principal.getName()));
         model.addAttribute("sort", sort);
+        model.addAttribute("personalPage", true);
         return "reader/periodicals.html";
     }
 

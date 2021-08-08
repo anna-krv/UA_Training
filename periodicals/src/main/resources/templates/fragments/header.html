@@ -33,14 +33,11 @@
             <li sec:authorize="!isAuthenticated()" class="nav-item">
                 <a class="nav-link" href="/register" th:text="#{register}"></a>
             </li>
-            <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" href="/" th:text="#{home}">
-                <span class="sr-only">(current)</span></a>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" href="/periodicals/subscribed" th:text="#{menu.personalPage}"></a>
             </li>
             <li sec:authorize="isAuthenticated()" class="nav-item">
-                <a class="nav-link" href="/periodicals/subscribed" th:text="#{mySubscriptions}"></a>
-            </li>
-            <li sec:authorize="isAuthenticated()" class="nav-item">
-                <a class="nav-link" href="/periodicals" th:text="#{subscribe}"></a>
+                <a class="nav-link" href="/periodicals" th:text="#{action.subscribe}"></a>
             </li>
             <li sec:authorize="isAuthenticated()" class="nav-item">
                 <a class="nav-link" href="/account" th:text="#{account}"></a>
@@ -55,7 +52,7 @@
         </ul>
         <ul class="navbar-nav ml-auto">
             <li sec:authorize="isAuthenticated()" class="nav-item">
-                <a class="nav-link" href="/logout" th:text="#{logout}"></a>
+                <a class="nav-link" href="/logout" th:text="#{action.logout}"></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="?localeData=ua">UA</a>

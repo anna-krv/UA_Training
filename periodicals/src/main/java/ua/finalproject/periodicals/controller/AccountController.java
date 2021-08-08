@@ -39,19 +39,17 @@ public class AccountController {
                            Model model) {
         Account account = userService.findAccountByUsername(principal.getName());
         try {
-            Account accountUpdated = accountService.putMoney(account, moneyToPut);
-            model.addAttribute("account", accountUpdated);
+            account = accountService.putMoney(account, moneyToPut);
             model.addAttribute("success", true);
         } catch (IllegalArgumentException ex) {
-            model.addAttribute("account", account);
-            model.addAttribute("error", true);
+            model.addAttribute("moneyError", true);
         }
+        model.addAttribute("account", account);
         return "reader/account.html";
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public String handleArgumentException(MethodArgumentTypeMismatchException ex,
-                                          Principal principal,
+    public String handleArgumentException(Principal principal,
                                           Model model) {
         model.addAttribute("formatError", true);
         Account account = userService.findAccountByUsername(principal.getName());

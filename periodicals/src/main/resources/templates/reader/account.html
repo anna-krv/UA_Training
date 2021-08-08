@@ -38,15 +38,7 @@
                        class="btn btn-success"/>
             </form>
 
-            <div class="alert alert-danger" th:if="${error}"
-                 th:text="#{error.money}">
-            </div>
-            <div class="alert alert-danger" th:if="${formatError}"
-                 th:text="#{error.format}">
-            </div>
-            <div class="alert alert-success" th:if="${success}"
-                 th:text="#{success}">
-            </div>
+            <div th:replace="fragments/diagnostics :: error-or-success"></div>
         </div>
     </div>
 </div>
