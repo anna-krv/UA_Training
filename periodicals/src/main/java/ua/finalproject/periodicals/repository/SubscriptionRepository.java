@@ -14,16 +14,12 @@ import java.util.List;
 
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, SubscriptionKey> {
-    Subscription save(Subscription subscription);
-
-    void delete(Subscription subscription);
-
-    List<Subscription> findByUserIdAndPeriodicalId(Long id, Long id1);
-
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = "DELETE FROM subscription WHERE periodical_id=:id", nativeQuery = true)
     void deleteByPeriodicalIdNative(@Param("id") Long id);
 
     List<Subscription> findByNextPaymentDateTimeLessThanEqual(LocalDateTime now);
+
+    List<Subscription> findByPeriodicalId(Long periodicalId);
 }

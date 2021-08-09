@@ -6,5 +6,4 @@ import ua.finalproject.periodicals.entity.Account;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    Account save(Account account);
 }

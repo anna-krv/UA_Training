@@ -19,7 +19,7 @@ import java.time.format.FormatStyle;
 //@Table
 public class Subscription {
     @EmbeddedId
-    private SubscriptionKey subscriptionKey = new SubscriptionKey();
+    private SubscriptionKey subscriptionKey;// = new SubscriptionKey();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
@@ -33,7 +33,8 @@ public class Subscription {
 
     private LocalDateTime lastPaymentDateTime;
     private LocalDateTime nextPaymentDateTime;
-    private int paymentPeriodInMin;
+    private int paymentPeriodInDays;
+    private boolean status;
 
     public String getLastPaymentDateTime() {
         return lastPaymentDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT));

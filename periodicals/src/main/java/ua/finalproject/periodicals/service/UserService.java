@@ -7,16 +7,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.finalproject.periodicals.entity.Account;
-import ua.finalproject.periodicals.entity.Periodical;
-import ua.finalproject.periodicals.entity.Role;
-import ua.finalproject.periodicals.entity.User;
+import ua.finalproject.periodicals.entity.*;
 import ua.finalproject.periodicals.repository.UserRepository;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,7 +69,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username).get();
         return user.getSubscriptions()
                 .stream()
-                .map(subscription -> subscription.getPeriodical())
+                .map(Subscription::getPeriodical)
                 .filter(periodical -> (title == null || title.equals("any") || title.equalsIgnoreCase(periodical.getTitle())) &&
                         (topicsSelected == null || topicsSelected.contains(periodical.getTopic().toLowerCase(Locale.ROOT))))
                 .sorted((p1, p2) -> sort.equals("title") ? p1.getTitle().compareTo(p2.getTitle()) :
@@ -85,20 +79,14 @@ public class UserService implements UserDetailsService {
 
     public List<String> findAllTopicsByUsername(String username) {
         User user = userRepository.findByUsername(username).get();
-        return user.getSubscriptions()
+        return new ArrayList<>(user.getSubscriptions()
                 .stream()
                 .map(subscription -> subscription.getPeriodical().getTopic())
-                .collect(Collectors.toSet())
-                .stream()
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet()));
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    public List<User> findAllExcept(String username) {
-        return userRepository.findAllExceptOne(username);
+    public List<User> findByUsernameNot(String username) {
+        return userRepository.findByUsernameNot(username);
     }
 
     public Optional<User> findById(Long id) {

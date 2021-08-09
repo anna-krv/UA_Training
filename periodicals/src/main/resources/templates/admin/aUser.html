@@ -21,7 +21,7 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container" style="margin-top: 30px">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" th:if="${user!=null}">
         <div class="col-md-4">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1" th:text="${user.name}+' '+${user.surname}"></h5>
@@ -37,6 +37,14 @@
             <a class="btn btn-secondary" th:text="#{action.unblock}" th:unless="${user.accountNonLocked}"
                href="?block"></a>
         </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-4" style="margin-top:30px">
+            <div th:replace="fragments/diagnostics :: error-or-success"></div>
+        </div>
+        <div class="col-md-3"></div>
+
     </div>
 
 </div>

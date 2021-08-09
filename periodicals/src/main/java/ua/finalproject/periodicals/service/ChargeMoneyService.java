@@ -22,12 +22,13 @@ public class ChargeMoneyService {
     public void ChargeMoney() {
         List<Subscription> subscriptionsToBeCharged = subscriptionService.findByNextPaymentDateTimeLessThanEqual(
                 LocalDateTime.now());
-        for (Subscription subscription : subscriptionsToBeCharged) {
-            try {
-                subscriptionService.chargeMoneyForSubscription(subscription);
-            } catch (MoneyAccountException ex) {
-                //todo mark subscription inactive
-            }
-        }
+        subscriptionsToBeCharged
+                .forEach(subscription -> {
+                    try {
+                        subscriptionService.chargeMoneyForSubscription(subscription);
+                    } catch (MoneyAccountException ex) {
+                        subscriptionService.deactivate(subscription);
+                    }
+                });
     }
 }

@@ -17,6 +17,7 @@ import ua.finalproject.periodicals.service.UserService;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
@@ -38,11 +39,10 @@ public class PeriodicalsController {
                                   @RequestParam(name = "sort", required = false, defaultValue = "title") String sort,
                                   @RequestParam(name = "topic", required = false) List<String> topicsSelected,
                                   Model model) {
-        List<Periodical> periodicals;
+        List<Periodical> periodicals = periodicalService.find(title, sort, topicsSelected);
 
-        periodicals = periodicalService.find(title, sort, topicsSelected);
         model.addAttribute("periodicals", periodicals);
-        model.addAttribute("error", periodicals == null || periodicals.isEmpty());
+        model.addAttribute("error", periodicals.isEmpty());
         model.addAttribute("topics", periodicalService.findAllTopics());
         model.addAttribute("sort", sort);
         return "reader/periodicals.html";
@@ -60,7 +60,7 @@ public class PeriodicalsController {
                 sort);
 
         model.addAttribute("periodicals", periodicals);
-        model.addAttribute("error", periodicals == null || periodicals.isEmpty());
+        model.addAttribute("error", periodicals.isEmpty());
         model.addAttribute("topics", userService.findAllTopicsByUsername(principal.getName()));
         model.addAttribute("sort", sort);
         model.addAttribute("personalPage", true);
@@ -71,13 +71,17 @@ public class PeriodicalsController {
     public String periodicalPageById(@PathVariable("id") Long id,
                                      Principal principal,
                                      Model model) {
-        Periodical periodical = periodicalService.findById(id).get();
-        User user = userService.findByUsername(principal.getName()).get();
-        Optional<Subscription> subscription = subscriptionService.findByUserAndPeriodical(user, periodical);
+        try {
+            Periodical periodical = periodicalService.findById(id).get();
+            User user = userService.findByUsername(principal.getName()).get();
+            Optional<Subscription> subscription = subscriptionService.findByUserAndPeriodical(user, periodical);
 
-        model.addAttribute("periodical", periodical);
-        model.addAttribute("alreadySubscribed", subscription.isPresent());
-        model.addAttribute("subscription", subscription.orElse(null));
+            model.addAttribute("periodical", periodical);
+            model.addAttribute("alreadySubscribed", subscription.isPresent());
+            model.addAttribute("subscription", subscription.orElse(null));
+        } catch (NoSuchElementException ex) {
+            model.addAttribute("error", true);
+        }
         return "reader/aPeriodical.html";
     }
 
@@ -97,7 +101,7 @@ public class PeriodicalsController {
             model.addAttribute("success", true);
         } catch (MoneyAccountException ex) {
             model.addAttribute("accountError", true);
-        } catch (Exception ex) {
+        } catch (NoSuchElementException ex) {
             model.addAttribute("error", true);
         }
 
@@ -115,7 +119,7 @@ public class PeriodicalsController {
             subscriptionService.delete(user, periodical);
             model.addAttribute("alreadySubscribed", false);
             model.addAttribute("periodical", periodical);
-        } catch (Exception ex) {
+        } catch (NoSuchElementException ex) {
             model.addAttribute("error", true);
         }
         return "reader/aPeriodical.html";
