@@ -1,10 +1,11 @@
 package ua.finalproject.periodicals.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.repository.PeriodicalRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,31 +19,38 @@ public class PeriodicalService {
         this.subscriptionService = subscriptionService;
     }
 
-    public List<Periodical> find(String title, String sortBy, List<String> topicsSelected) {
+    public List<Periodical> find(String title, String propertyForSort, List<String> topicsSelected) {
         if (title != null && !title.isEmpty()) {
             return findByTitle(title);
         }
-        return topicsSelected == null ? findAllSorted(sortBy) : findAllByTopicsSorted(sortBy, topicsSelected);
+        return topicsSelected == null ? findAllSorted(propertyForSort) :
+                findAllByTopicsSorted(propertyForSort, topicsSelected);
     }
 
-    public List<Periodical> findAllSorted(String sortBy) {
-        switch (sortBy) {
-            case "title":
-                return periodicalRepository.findAllByOrderByTitleAsc();
-            case "price":
-                return periodicalRepository.findAllByOrderByPriceAsc();
-        }
-        return new ArrayList<>();
+    public List<Periodical> findAllSorted(String propertyForSort) {
+        return periodicalRepository.findAll(Sort.by(Sort.Direction.ASC, propertyForSort));
     }
 
-    public List<Periodical> findAllByTopicsSorted(String sortBy, List<String> topicsSelected) {
-        switch (sortBy) {
-            case "title":
-                return periodicalRepository.findByTopicInIgnoreCaseOrderByTitleAsc(topicsSelected);
-            case "price":
-                return periodicalRepository.findByTopicInIgnoreCaseOrderByPriceAsc(topicsSelected);
-        }
-        return new ArrayList<>();
+    public List<Periodical> findAllByTopicsSorted(String propertyForSort, List<String> topicsSelected) {
+        return periodicalRepository.findByTopicInIgnoreCase(topicsSelected,
+                Sort.by(Sort.Direction.ASC, propertyForSort));
+    }
+
+    @Transactional
+    public Periodical update(Long id, Periodical periodical) {
+        Periodical periodicalInDb = periodicalRepository.getById(id);
+        return periodicalRepository.save(periodicalInDb
+                .toBuilder()
+                .title(periodical.getTitle())
+                .price(periodical.getPrice())
+                .topic(periodical.getTopic())
+                .build());
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        subscriptionService.deleteByPeriodicalId(id);
+        periodicalRepository.deleteById(id);
     }
 
     public List<Periodical> findByTitle(String title) {
@@ -65,18 +73,5 @@ public class PeriodicalService {
         return periodicalRepository.findAll();
     }
 
-    public Periodical update(Long id, Periodical periodical) {
-        Periodical periodicalInDb = periodicalRepository.findById(id).get();
 
-        periodicalInDb.setTitle(periodical.getTitle());
-        periodicalInDb.setPrice(periodical.getPrice());
-        periodicalInDb.setTopic(periodical.getTopic());
-
-        return periodicalRepository.save(periodicalInDb);
-    }
-
-    public void deleteById(Long id) {
-        subscriptionService.deleteByPeriodicalId(id);
-        periodicalRepository.deleteById(id);
-    }
 }

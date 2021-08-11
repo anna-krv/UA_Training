@@ -36,33 +36,37 @@ public class PeriodicalsController {
 
     @GetMapping
     public String periodicalsPage(@RequestParam(name = "search", required = false) String title,
-                                  @RequestParam(name = "sort", required = false, defaultValue = "title") String sort,
+                                  @RequestParam(name = "sort", required = false, defaultValue = "title") String propertyForSort,
                                   @RequestParam(name = "topic", required = false) List<String> topicsSelected,
                                   Model model) {
-        List<Periodical> periodicals = periodicalService.find(title, sort, topicsSelected);
+        List<Periodical> periodicals = periodicalService.find(title, propertyForSort, topicsSelected);
+        List<String> allTopics = periodicalService.findAllTopics();
 
         model.addAttribute("periodicals", periodicals);
         model.addAttribute("error", periodicals.isEmpty());
-        model.addAttribute("topics", periodicalService.findAllTopics());
-        model.addAttribute("sort", sort);
+        model.addAttribute("topics", allTopics);
+        model.addAttribute("topicsSelected", topicsSelected != null ? topicsSelected : allTopics);
+        model.addAttribute("sort", propertyForSort);
         return "reader/periodicals.html";
     }
 
     @GetMapping("/subscribed")
     public String periodicalsSubscribedPage(Principal principal,
-                                            @RequestParam(name = "search", required = false, defaultValue = "any") String title,
-                                            @RequestParam(name = "sort", required = false, defaultValue = "title") String sort,
+                                            @RequestParam(name = "search", required = false, defaultValue = "") String title,
+                                            @RequestParam(name = "sort", required = false, defaultValue = "title") String propertyForSort,
                                             @RequestParam(name = "topic", required = false) List<String> topicsSelected,
                                             Model model) {
         List<Periodical> periodicals = userService.findPeriodicalsByUsernameAndFilterAndSort(
                 principal.getName(),
                 title, topicsSelected,
-                sort);
+                propertyForSort);
+        List<String> topicsForUser = userService.findAllTopicsByUsername(principal.getName());
 
         model.addAttribute("periodicals", periodicals);
         model.addAttribute("error", periodicals.isEmpty());
-        model.addAttribute("topics", userService.findAllTopicsByUsername(principal.getName()));
-        model.addAttribute("sort", sort);
+        model.addAttribute("topics", topicsForUser);
+        model.addAttribute("topicsSelected", topicsSelected != null ? topicsSelected : topicsForUser);
+        model.addAttribute("sort", propertyForSort);
         model.addAttribute("personalPage", true);
         return "reader/periodicals.html";
     }
