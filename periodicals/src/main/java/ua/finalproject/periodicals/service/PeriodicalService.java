@@ -96,6 +96,10 @@ public class PeriodicalService {
         return periodicalRepository.findById(id);
     }
 
+    public Page<Periodical> findAll(int number) {
+        return periodicalRepository.findAll(PageRequest.of(number, AppConstants.PAGE_SIZE));
+    }
+
     public List<String> findAllTopics() {
         return periodicalRepository.findTopics();
     }
@@ -103,10 +107,5 @@ public class PeriodicalService {
     public Periodical save(Periodical periodical) {
         return periodicalRepository.save(periodical);
     }
-
-    public List<Periodical> findAll() {
-        return periodicalRepository.findAll();
-    }
-
 
 }

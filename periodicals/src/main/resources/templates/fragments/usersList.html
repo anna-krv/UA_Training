@@ -21,7 +21,7 @@
 
 <div class="list-group" th:fragment="users-list">
     <div th:foreach></div>
-    <a th:each="user: ${users}" th:href="@{/admin/users/{id}(id=${user.id})}"
+    <a th:each="user: ${page.content}" th:href="@{/admin/users/{id}(id=${user.id})}"
        class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1" th:text="${user.name}+' '+${user.surname}"></h5>

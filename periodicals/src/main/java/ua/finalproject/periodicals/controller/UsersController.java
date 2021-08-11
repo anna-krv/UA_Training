@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ua.finalproject.periodicals.exception.UserNotFoundException;
 import ua.finalproject.periodicals.service.UserService;
 
@@ -26,8 +23,11 @@ public class UsersController {
 
     @GetMapping
     public String getUsersPage(Principal principal,
-                               Model model) {
-        model.addAttribute("users", userService.findByUsernameNot(principal.getName()));
+                               Model model,
+                               @RequestParam(value = "number", defaultValue = "0") int number) {
+
+        model.addAttribute("page", userService.findByUsernameNot(principal.getName(), number));
+
         return "admin/users.html";
     }
 

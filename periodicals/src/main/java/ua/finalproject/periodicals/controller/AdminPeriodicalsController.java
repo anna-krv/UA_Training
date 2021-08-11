@@ -10,7 +10,6 @@ import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.service.PeriodicalService;
 import ua.finalproject.periodicals.service.SubscriptionService;
 
-import java.security.Principal;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -27,16 +26,22 @@ public class AdminPeriodicalsController {
     }
 
     @GetMapping()
-    public String allPeriodicalsPage(Model model) {
-        model.addAttribute("periodicals", periodicalService.findAll());
+    public String allPeriodicalsPage(Model model,
+                                     @RequestParam(name = "number", defaultValue = "0") int number) {
+        model.addAttribute("page", periodicalService.findAll(number));
         return "admin/periodicals.html";
     }
 
     @GetMapping("/{id}")
     public String periodicalEditPageById(@PathVariable("id") Long id,
                                          Model model) {
-        Periodical periodical = periodicalService.getById(id);
-        model.addAttribute("periodical", periodical);
+        try {
+            Periodical periodical = periodicalService.getById(id);
+            model.addAttribute("periodical", periodical);
+        } catch (NoSuchElementException ex) {
+            log.error(ex.getMessage());
+            model.addAttribute("resourceError", true);
+        }
 
         return "admin/editPeriodical.html";
     }
@@ -75,13 +80,4 @@ public class AdminPeriodicalsController {
         return "admin/addPeriodical.html";
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public String handleNoSuchElementException(Principal principal,
-                                               Model model,
-                                               NoSuchElementException ex) {
-        log.error(ex.getMessage());
-        model.addAttribute("resourceError", true);
-
-        return "redirect:/admin/periodicals";
-    }
 }

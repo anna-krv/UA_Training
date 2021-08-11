@@ -1,6 +1,8 @@
 package ua.finalproject.periodicals.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +15,7 @@ import ua.finalproject.periodicals.exception.UserNotFoundException;
 import ua.finalproject.periodicals.repository.UserRepository;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -68,7 +70,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("bad credentials"));
-        user.setAuthorities(Arrays.asList(user.getAuthority()));
+        user.setAuthorities(Collections.singletonList(user.getAuthority()));
         return user;
     }
 
@@ -83,8 +85,8 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public List<User> findByUsernameNot(String username) {
-        return userRepository.findByUsernameNot(username);
+    public Page<User> findByUsernameNot(String username, int number) {
+        return userRepository.findByUsernameNot(username, PageRequest.of(number, AppConstants.PAGE_SIZE));
     }
 
     public User getById(Long id) {

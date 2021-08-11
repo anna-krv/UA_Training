@@ -21,7 +21,7 @@
 
 <div class="list-group" th:fragment="periodicals-list-admin">
     <div th:foreach></div>
-    <a th:each="periodical: ${periodicals}" th:href="@{/admin/periodicals/{id}(id=${periodical.id})}"
+    <a th:each="periodical: ${page.content}" th:href="@{/admin/periodicals/{id}(id=${periodical.id})}"
        class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1" th:text="${periodical.title}"></h5>

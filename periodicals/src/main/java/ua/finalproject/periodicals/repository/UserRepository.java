@@ -1,10 +1,11 @@
 package ua.finalproject.periodicals.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.finalproject.periodicals.entity.User;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -12,5 +13,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
-    List<User> findByUsernameNot(String username);
+    Page<User> findByUsernameNot(String username, Pageable pageable);
 }

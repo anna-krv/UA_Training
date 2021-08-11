@@ -14,6 +14,9 @@ public interface PeriodicalRepository extends JpaRepository<Periodical, Long> {
     @Query(value = "SELECT DISTINCT topic FROM periodical", nativeQuery = true)
     List<String> findTopics();
 
+    @Override
+    Page<Periodical> findAll(Pageable pageable);
+
     Page<Periodical> findByTitleContainsIgnoreCase(String trim, Pageable pageable);
 
     Page<Periodical> findAllByTopicInIgnoreCase(List<String> topicsSelected, Pageable pageable);
