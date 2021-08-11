@@ -26,7 +26,7 @@ public class Periodical {
 
     private String topic;
 
-    @OneToMany(mappedBy = "periodical", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "periodical", fetch = FetchType.LAZY)
     Set<Subscription> subscriptions;
 
     public String toString() {

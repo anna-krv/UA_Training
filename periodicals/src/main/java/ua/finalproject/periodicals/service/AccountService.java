@@ -1,17 +1,16 @@
 package ua.finalproject.periodicals.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.finalproject.periodicals.entity.Account;
-import ua.finalproject.periodicals.entity.MoneyAccountException;
+import ua.finalproject.periodicals.exception.MoneyAccountException;
 import ua.finalproject.periodicals.repository.AccountRepository;
 
 import java.math.BigDecimal;
 
-@Slf4j
+
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
@@ -32,7 +31,7 @@ public class AccountService {
     @Transactional(propagation = Propagation.MANDATORY)
     public Account chargeMoney(Account account, BigDecimal moneyToCharge) throws MoneyAccountException {
         if (account.getBalance().compareTo(moneyToCharge) < 0) {
-            throw new MoneyAccountException();
+            throw new MoneyAccountException(account.getId());
         }
         account.setBalance(account.getBalance().subtract(moneyToCharge));
         return accountRepository.save(account);

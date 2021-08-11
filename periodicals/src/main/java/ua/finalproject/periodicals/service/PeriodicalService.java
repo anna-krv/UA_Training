@@ -10,6 +10,7 @@ import ua.finalproject.periodicals.entity.User;
 import ua.finalproject.periodicals.repository.PeriodicalRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -87,13 +88,16 @@ public class PeriodicalService {
         periodicalRepository.deleteById(id);
     }
 
-
-    public List<String> findAllTopics() {
-        return periodicalRepository.findTopics();
+    public Periodical getById(Long id) throws NoSuchElementException {
+        return findById(id).orElseThrow(() -> new NoSuchElementException("no periodical with id " + id));
     }
 
     public Optional<Periodical> findById(Long id) {
         return periodicalRepository.findById(id);
+    }
+
+    public List<String> findAllTopics() {
+        return periodicalRepository.findTopics();
     }
 
     public Periodical save(Periodical periodical) {
@@ -103,4 +107,6 @@ public class PeriodicalService {
     public List<Periodical> findAll() {
         return periodicalRepository.findAll();
     }
+
+
 }

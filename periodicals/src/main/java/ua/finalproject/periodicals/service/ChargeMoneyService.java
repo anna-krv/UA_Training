@@ -3,8 +3,8 @@ package ua.finalproject.periodicals.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ua.finalproject.periodicals.entity.MoneyAccountException;
 import ua.finalproject.periodicals.entity.Subscription;
+import ua.finalproject.periodicals.exception.MoneyAccountException;
 
 import java.time.LocalDateTime;
 import java.util.List;

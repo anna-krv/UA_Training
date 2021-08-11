@@ -4,7 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ua.finalproject.periodicals.entity.*;
+import ua.finalproject.periodicals.entity.Periodical;
+import ua.finalproject.periodicals.entity.Subscription;
+import ua.finalproject.periodicals.entity.SubscriptionKey;
+import ua.finalproject.periodicals.entity.User;
+import ua.finalproject.periodicals.exception.MoneyAccountException;
 import ua.finalproject.periodicals.repository.SubscriptionRepository;
 
 import java.time.LocalDateTime;
@@ -13,7 +17,6 @@ import java.util.Optional;
 
 @Service
 public class SubscriptionService {
-    private static final int DEFAULT_PAYMENT_PERIOD_IN_DAYS = 30;
     private final SubscriptionRepository subscriptionRepository;
     private final AccountService accountService;
 
@@ -24,16 +27,18 @@ public class SubscriptionService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = MoneyAccountException.class)
-    public Subscription save(User user, Periodical periodical) throws MoneyAccountException {
+    public Subscription saveForUserAndPeriodical(User user, Periodical periodical) throws MoneyAccountException {
         Optional<Subscription> optionalSubscription = findByUserAndPeriodical(user, periodical);
         if (optionalSubscription.isPresent()) {
             return optionalSubscription.get();
         }
 
-        Subscription subscription = build(user, periodical);
-        save(subscription);
-        accountService.chargeMoney(user.getAccount(), periodical.getPrice());
+        return saveAndCharge(build(user, periodical));
+    }
 
+    public Subscription saveAndCharge(Subscription subscription) throws MoneyAccountException {
+        subscriptionRepository.save(subscription);
+        accountService.chargeMoney(subscription.getUser().getAccount(), subscription.getPeriodical().getPrice());
         return subscription;
     }
 
@@ -45,29 +50,23 @@ public class SubscriptionService {
                 .periodical(periodical)
                 .status(true)
                 .lastPaymentDateTime(LocalDateTime.now())
-                .paymentPeriodInDays(DEFAULT_PAYMENT_PERIOD_IN_DAYS)
-                .nextPaymentDateTime(LocalDateTime.now().plusDays(DEFAULT_PAYMENT_PERIOD_IN_DAYS))
+                .paymentPeriodInDays(AppConstants.PAYMENT_PERIOD_IN_DAYS)
+                .nextPaymentDateTime(LocalDateTime.now().plusDays(AppConstants.PAYMENT_PERIOD_IN_DAYS))
                 .build();
     }
 
-    private Subscription save(Subscription subscription) {
-        return subscriptionRepository.save(subscription);
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = MoneyAccountException.class)
+    public Subscription chargeMoneyForSubscription(Subscription subscription) throws MoneyAccountException {
+        return saveAndCharge(updateDates(subscription));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = MoneyAccountException.class)
-    public void chargeMoneyForSubscription(Subscription subscription) throws MoneyAccountException {
-        User user = subscription.getUser();
-        Periodical periodical = subscription.getPeriodical();
+
+    public Subscription updateDates(Subscription subscription) {
         subscription.setLastPaymentDateTime(LocalDateTime.now());
         subscription.setNextPaymentDateTime(LocalDateTime.now().plusMinutes(subscription.getPaymentPeriodInDays()));
-        save(subscription);
-
-        accountService.chargeMoney(user.getAccount(), periodical.getPrice());
+        return subscription;
     }
 
-    public void delete(User user, Periodical periodical) {
-        subscriptionRepository.deleteById(new SubscriptionKey(user.getId(), periodical.getId()));
-    }
 
     public Optional<Subscription> findByUserAndPeriodical(User user, Periodical periodical) {
         return findByUserIdAndPeriodicalId(user.getId(), periodical.getId());
@@ -77,11 +76,6 @@ public class SubscriptionService {
         return subscriptionRepository.findById(new SubscriptionKey(userId, periodicalId));
     }
 
-    public void deleteByPeriodicalId(Long id) {
-        subscriptionRepository.deleteByPeriodicalIdNative(id);
-    }
-
-
     public List<Subscription> findByNextPaymentDateTimeLessThanEqual(LocalDateTime now) {
         return subscriptionRepository.findByNextPaymentDateTimeLessThanEqual(LocalDateTime.now());
     }
@@ -90,8 +84,16 @@ public class SubscriptionService {
         return subscriptionRepository.findByPeriodicalId(periodicalId);
     }
 
+    public void delete(User user, Periodical periodical) {
+        subscriptionRepository.deleteById(new SubscriptionKey(user.getId(), periodical.getId()));
+    }
+
+    public void deleteByPeriodicalId(Long id) {
+        subscriptionRepository.deleteByPeriodicalIdNative(id);
+    }
+
     public Subscription deactivate(Subscription subscription) {
         subscription.setStatus(false);
-        return save(subscription);
+        return subscriptionRepository.save(subscription);
     }
 }

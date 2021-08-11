@@ -1,6 +1,5 @@
 package ua.finalproject.periodicals.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ua.finalproject.periodicals.entity.Account;
 import ua.finalproject.periodicals.entity.Role;
 import ua.finalproject.periodicals.entity.User;
-import ua.finalproject.periodicals.entity.UserNotFoundException;
+import ua.finalproject.periodicals.exception.UserNotFoundException;
 import ua.finalproject.periodicals.repository.UserRepository;
 
 import java.math.BigDecimal;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Slf4j
+
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
@@ -31,11 +30,8 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Account findAccountByUsername(String username) throws UsernameNotFoundException {
-        return userRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with username " + username))
-                .getAccount();
+    public User getByUsername(String username) throws UsernameNotFoundException {
+        return findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("no user with username " + username));
     }
 
     public Optional<User> findByUsername(User user) {
@@ -45,6 +41,12 @@ public class UserService implements UserDetailsService {
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public Account findAccountByUsername(String username) throws UsernameNotFoundException {
+        return getByUsername(username)
+                .getAccount();
+    }
+
 
     public User create(User user) {
         return userRepository.save(setUp(user));
@@ -85,13 +87,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsernameNot(username);
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(
-                "Cannot find user with id " + id));
+    public User getById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public User changeBlockStatus(Long id) throws UserNotFoundException {
-        User user = findById(id);
+        User user = getById(id);
         user.setAccountNonLocked(!user.isAccountNonLocked());
         return save(user);
     }
@@ -101,4 +102,6 @@ public class UserService implements UserDetailsService {
                 "Cannot find user with username " + user.getUsername()));
         return userFound.getPassword().equals(user.getPassword());
     }
+
+
 }
