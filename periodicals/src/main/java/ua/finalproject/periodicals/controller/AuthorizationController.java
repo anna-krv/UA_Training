@@ -37,7 +37,7 @@ public class AuthorizationController {
 
     @PostMapping("/login")
     public String tryLogin(@ModelAttribute("user") User user) {
-        return userService.checkIfValid(user) ? "redirect:/" : "redirect:/login";
+        return userService.checkCredentials(user) ? "redirect:/" : "redirect:/login";
     }
 
     @GetMapping("/register")

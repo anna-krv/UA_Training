@@ -23,6 +23,8 @@ import java.util.Locale;
 @Slf4j
 public class PeriodicalsApplication implements WebMvcConfigurer {
 
+
+    ///private static final Logger log = LoggerFactory.getLogger(PeriodicalsApplication.class);
     public static void main(String[] args) {
         SpringApplication.run(PeriodicalsApplication.class, args);
     }

@@ -5,13 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ua.finalproject.periodicals.entity.User;
+import ua.finalproject.periodicals.entity.UserNotFoundException;
 import ua.finalproject.periodicals.service.UserService;
 
 import java.security.Principal;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -31,14 +30,20 @@ public class UsersController {
     }
 
     @GetMapping("/{id}")
-    public String changeBlockStatusIfRequiredAndShowUser(
-            @PathVariable("id") Long id,
-            @RequestParam(value = "block", required = false) String block,
-            Model model) {
+    public String showUser(@PathVariable("id") Long id, Model model) {
         try {
-            User user = block != null ? userService.changeBlockStatus(id) : userService.findById(id).get();
-            model.addAttribute("user", user);
-        } catch (NoSuchElementException ex) {
+            model.addAttribute("user", userService.findById(id));
+        } catch (UserNotFoundException ex) {
+            model.addAttribute("error", true);
+        }
+        return "admin/aUser.html";
+    }
+
+    @PutMapping("/{id}")
+    public String changeBlockStatus(@PathVariable("id") Long id, Model model) {
+        try {
+            model.addAttribute("user", userService.changeBlockStatus(id));
+        } catch (UserNotFoundException ex) {
             model.addAttribute("error", true);
         }
         return "admin/aUser.html";

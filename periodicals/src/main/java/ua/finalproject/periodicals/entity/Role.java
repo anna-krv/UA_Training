@@ -4,7 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
     USER,
-    ADMIN;
+    ADMIN;          // should not be reordered
 
     @Override
     public String getAuthority() {

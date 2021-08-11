@@ -9,6 +9,8 @@ import ua.finalproject.periodicals.entity.Account;
 import ua.finalproject.periodicals.entity.MoneyAccountException;
 import ua.finalproject.periodicals.repository.AccountRepository;
 
+import java.math.BigDecimal;
+
 @Slf4j
 @Service
 public class AccountService {
@@ -19,20 +21,20 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account putMoney(Account account, double moneyToPut) {
-        if (moneyToPut < 0) {
+    public Account putMoney(Account account, BigDecimal moneyToPut) {
+        if (moneyToPut.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException();
         }
-        account.setBalance(account.getBalance() + moneyToPut);
+        account.setBalance(account.getBalance().add(moneyToPut));
         return accountRepository.save(account);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public Account chargeMoney(Account account, double moneyToCharge) throws MoneyAccountException {
-        if (account.getBalance() < moneyToCharge) {
+    public Account chargeMoney(Account account, BigDecimal moneyToCharge) throws MoneyAccountException {
+        if (account.getBalance().compareTo(moneyToCharge) < 0) {
             throw new MoneyAccountException();
         }
-        account.setBalance(account.getBalance() - moneyToCharge);
+        account.setBalance(account.getBalance().subtract(moneyToCharge));
         return accountRepository.save(account);
     }
 }

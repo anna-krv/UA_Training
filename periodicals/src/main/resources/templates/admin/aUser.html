@@ -32,10 +32,12 @@
             <p class="mb-1" th:text="#{user.account}+' ' +#{locked}" th:unless="${user.accountNonLocked}"></p>
         </div>
         <div class="col-md-3">
-            <a class="btn btn-primary" th:text="#{action.block}" th:if="${user.accountNonLocked}"
-               href="?block"></a>
-            <a class="btn btn-secondary" th:text="#{action.unblock}" th:unless="${user.accountNonLocked}"
-               href="?block"></a>
+            <form th:method="put">
+                <input class="btn btn-primary" th:if="${user.accountNonLocked}" th:value="#{action.block}"
+                       type="submit"/>
+                <input class="btn btn-secondary" th:unless="${user.accountNonLocked}" th:value="#{action.unblock}"
+                       type="submit"/>
+            </form>
         </div>
     </div>
 

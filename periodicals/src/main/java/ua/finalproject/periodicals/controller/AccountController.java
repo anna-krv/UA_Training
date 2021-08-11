@@ -2,6 +2,7 @@ package ua.finalproject.periodicals.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import ua.finalproject.periodicals.entity.Account;
 import ua.finalproject.periodicals.service.AccountService;
 import ua.finalproject.periodicals.service.UserService;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 
 @Controller
@@ -28,13 +30,16 @@ public class AccountController {
     @GetMapping
     public String accountPage(Principal principal,
                               Model model) {
-        Account account = userService.findAccountByUsername(principal.getName());
-        model.addAttribute("account", account);
+        try {
+            model.addAttribute("account", userService.findAccountByUsername(principal.getName()));
+        } catch (UsernameNotFoundException ex) {
+            model.addAttribute("error", true);
+        }
         return "reader/account.html";
     }
 
     @PostMapping
-    public String putMoney(@RequestParam("moneyToPut") double moneyToPut,
+    public String putMoney(@RequestParam("moneyToPut") BigDecimal moneyToPut,
                            Principal principal,
                            Model model) {
         Account account = userService.findAccountByUsername(principal.getName());

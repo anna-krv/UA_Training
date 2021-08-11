@@ -90,8 +90,8 @@ public class SubscriptionService {
         return subscriptionRepository.findByPeriodicalId(periodicalId);
     }
 
-    public void deactivate(Subscription subscription) {
+    public Subscription deactivate(Subscription subscription) {
         subscription.setStatus(false);
-        save(subscription);
+        return save(subscription);
     }
 }

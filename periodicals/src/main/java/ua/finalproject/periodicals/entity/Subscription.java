@@ -16,7 +16,6 @@ import java.time.format.FormatStyle;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//@Table
 public class Subscription {
     @EmbeddedId
     private SubscriptionKey subscriptionKey;// = new SubscriptionKey();

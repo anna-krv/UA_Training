@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import ua.finalproject.periodicals.entity.*;
 import ua.finalproject.periodicals.repository.UserRepository;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,9 +30,10 @@ public class UserService implements UserDetailsService {
     }
 
     public Account findAccountByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
-        return user.orElseThrow(
-                () -> new UsernameNotFoundException("bad credentials")).getAccount();
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with username " + username))
+                .getAccount();
     }
 
     public Optional<User> findByUsername(User user) {
@@ -49,7 +54,7 @@ public class UserService implements UserDetailsService {
 
     private User setUp(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Account account = Account.builder().user(user).build();
+        Account account = Account.builder().user(user).balance(BigDecimal.ZERO).build();
         user.setAccount(account);
         user.setAuthority(Role.USER);
         return user;
@@ -65,42 +70,49 @@ public class UserService implements UserDetailsService {
 
     public List<Periodical> findPeriodicalsByUsernameAndFilterAndSort(String username, String title,
                                                                       List<String> topicsSelected,
-                                                                      String sort) {
-        User user = userRepository.findByUsername(username).get();
+                                                                      String sort) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+                "Cannot find user with username " + username));
+        title = title.toLowerCase();
+        String finalTitle = title;
         return user.getSubscriptions()
                 .stream()
                 .map(Subscription::getPeriodical)
-                .filter(periodical -> (title == null || title.equals("any") || title.equalsIgnoreCase(periodical.getTitle())) &&
+                .filter(periodical -> (periodical.getTitle().toLowerCase().contains(finalTitle)) &&
                         (topicsSelected == null || topicsSelected.contains(periodical.getTopic().toLowerCase(Locale.ROOT))))
                 .sorted((p1, p2) -> sort.equals("title") ? p1.getTitle().compareTo(p2.getTitle()) :
-                        (int) (p1.getPrice() - p2.getPrice()))
+                        p1.getPrice().compareTo(p2.getPrice()))
                 .collect(Collectors.toList());
     }
 
-    public List<String> findAllTopicsByUsername(String username) {
-        User user = userRepository.findByUsername(username).get();
-        return new ArrayList<>(user.getSubscriptions()
+    public List<String> findAllTopicsByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+                "Cannot find user with username " + username));
+        return user.getSubscriptions()
                 .stream()
                 .map(subscription -> subscription.getPeriodical().getTopic())
-                .collect(Collectors.toSet()));
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     public List<User> findByUsernameNot(String username) {
         return userRepository.findByUsernameNot(username);
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(
+                "Cannot find user with id " + id));
     }
 
-    public User changeBlockStatus(Long id) {
-        User user = findById(id).get();
+    public User changeBlockStatus(Long id) throws UserNotFoundException {
+        User user = findById(id);
         user.setAccountNonLocked(!user.isAccountNonLocked());
         return save(user);
     }
 
-    public boolean checkIfValid(User user) {
-        Optional<User> userFound = findByUsername(user);
-        return userFound.isPresent() && userFound.get().getPassword().equals(user.getPassword());
+    public boolean checkCredentials(User user) throws UsernameNotFoundException {
+        User userFound = findByUsername(user).orElseThrow(() -> new UsernameNotFoundException(
+                "Cannot find user with username " + user.getUsername()));
+        return userFound.getPassword().equals(user.getPassword());
     }
 }
