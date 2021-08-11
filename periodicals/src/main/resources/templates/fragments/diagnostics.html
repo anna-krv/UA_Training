@@ -36,7 +36,9 @@
     <div class="alert alert-danger" th:if="${subscriptionError}"
          th:text="#{error.subscription}">
     </div>
-
+    <div class="alert alert-danger" th:if="${searchError}"
+         th:text="#{error.search}">
+    </div>
     <div class="alert alert-danger" th:if="${loginError}"
          th:text="#{error.login}">
     </div>

@@ -1,6 +1,7 @@
 package ua.finalproject.periodicals.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,15 +39,18 @@ public class PeriodicalsController {
     public String periodicalsPage(@RequestParam(name = "search", required = false) String title,
                                   @RequestParam(name = "sort", required = false, defaultValue = "title") String propertyForSort,
                                   @RequestParam(name = "topic", required = false) List<String> topicsSelected,
+                                  @RequestParam(name = "number", required = false, defaultValue = "0") int number,
                                   Model model) {
-        List<Periodical> periodicals = periodicalService.find(title, propertyForSort, topicsSelected);
+        Page<Periodical> page = periodicalService.find(title, propertyForSort, topicsSelected, number);
         List<String> allTopics = periodicalService.findAllTopics();
 
-        model.addAttribute("periodicals", periodicals);
-        model.addAttribute("error", periodicals.isEmpty());
+        model.addAttribute("periodicals", page.getContent());
+        model.addAttribute("searchError", page.isEmpty());
+        model.addAttribute("page", page);
         model.addAttribute("topics", allTopics);
         model.addAttribute("topicsSelected", topicsSelected != null ? topicsSelected : allTopics);
         model.addAttribute("sort", propertyForSort);
+        model.addAttribute("search", title);
         return "reader/periodicals.html";
     }
 
@@ -55,18 +59,21 @@ public class PeriodicalsController {
                                             @RequestParam(name = "search", required = false, defaultValue = "") String title,
                                             @RequestParam(name = "sort", required = false, defaultValue = "title") String propertyForSort,
                                             @RequestParam(name = "topic", required = false) List<String> topicsSelected,
+                                            @RequestParam(name = "number", required = false, defaultValue = "0") int number,
                                             Model model) {
-        List<Periodical> periodicals = userService.findPeriodicalsByUsernameAndFilterAndSort(
-                principal.getName(),
-                title, topicsSelected,
-                propertyForSort);
+        Page<Periodical> page = periodicalService.findForUser(
+                userService.findByUsername(principal.getName()).get(),
+                title, propertyForSort, topicsSelected, number);
         List<String> topicsForUser = userService.findAllTopicsByUsername(principal.getName());
 
-        model.addAttribute("periodicals", periodicals);
-        model.addAttribute("error", periodicals.isEmpty());
+        model.addAttribute("periodicals", page.getContent());
+        model.addAttribute("searchError", page.isEmpty());
+        model.addAttribute("page", page);
         model.addAttribute("topics", topicsForUser);
         model.addAttribute("topicsSelected", topicsSelected != null ? topicsSelected : topicsForUser);
         model.addAttribute("sort", propertyForSort);
+        model.addAttribute("search", title);
+
         model.addAttribute("personalPage", true);
         return "reader/periodicals.html";
     }

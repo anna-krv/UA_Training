@@ -40,7 +40,7 @@ public class PeriodicalsApplicationTests {
     public void init() {
         user = userService.findByUsername(username).get();
         accountService.putMoney(user.getAccount(), BIG_SUM);
-        periodical = periodicalService.findByTitle(periodicalTitle).get(0);
+        periodical = periodicalService.findByTitle(periodicalTitle, "title", 1).getContent().get(0);
     }
 
     @Test

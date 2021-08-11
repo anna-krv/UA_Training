@@ -18,17 +18,24 @@
     <title th:text="#{title}"></title>
 </head>
 <body>
-<form th:fragment="sort-and-filter-form">
-    <input type="submit" th:value="#{apply}" class="btn btn-dark">
+<form th:fragment="search-sort-and-filter-form">
+    <div class="form-group">
+
+        <input class="form-control" id="search" name="search"
+               th:placeholder="#{searchBy.title}" type="search"/>
+    </div>
+    <div class="form-group">
+        <input class="btn btn-dark" th:value="#{apply}" type="submit">
+    </div>
     <legend th:text="#{sort}"></legend>
     <div class="form-check">
-        <input type="radio" class="form-check-input" name="sort" id="sortByName" autocomplete="off"
-               value="title" th:checked="${sort}==title"/>
+        <input autocomplete="off" class="form-check-input" id="sortByName" name="sort" th:checked="${sort}==title"
+               type="radio" value="title"/>
         <label class="form-check-label" for="sortByName" th:text="#{periodical.title}"/>
     </div>
     <div class="form-check">
-        <input type="radio" class="form-check-input" name="sort" id="sortByPrice" autocomplete="off"
-               value="price" th:checked="${sort}==price"/>
+        <input autocomplete="off" class="form-check-input" id="sortByPrice" name="sort" th:checked="${sort}==price"
+               type="radio" value="price"/>
         <label class="form-check-label" for="sortByName" th:text="#{price}"/>
     </div>
     <legend th:if="${topics!=null && topics.size()!=0}" th:text="#{topic}"></legend>

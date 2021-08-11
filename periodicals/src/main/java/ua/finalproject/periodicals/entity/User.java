@@ -66,7 +66,7 @@ public class User implements UserDetails {
     @PrimaryKeyJoinColumn
     private Account account;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     Set<Subscription> subscriptions;
 
     public List<Role> getAuthorities() {

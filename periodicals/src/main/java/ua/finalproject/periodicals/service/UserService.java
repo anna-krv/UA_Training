@@ -7,13 +7,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ua.finalproject.periodicals.entity.*;
+import ua.finalproject.periodicals.entity.Account;
+import ua.finalproject.periodicals.entity.Role;
+import ua.finalproject.periodicals.entity.User;
+import ua.finalproject.periodicals.entity.UserNotFoundException;
 import ua.finalproject.periodicals.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -68,22 +70,6 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public List<Periodical> findPeriodicalsByUsernameAndFilterAndSort(String username, String title,
-                                                                      List<String> topicsSelected,
-                                                                      String sort) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
-                "Cannot find user with username " + username));
-        title = title.toLowerCase();
-        String finalTitle = title;
-        return user.getSubscriptions()
-                .stream()
-                .map(Subscription::getPeriodical)
-                .filter(periodical -> (periodical.getTitle().toLowerCase().contains(finalTitle)) &&
-                        (topicsSelected == null || topicsSelected.contains(periodical.getTopic().toLowerCase(Locale.ROOT))))
-                .sorted((p1, p2) -> sort.equals("title") ? p1.getTitle().compareTo(p2.getTitle()) :
-                        p1.getPrice().compareTo(p2.getPrice()))
-                .collect(Collectors.toList());
-    }
 
     public List<String> findAllTopicsByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(

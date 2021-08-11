@@ -21,20 +21,24 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container">
-    <div class="row justify-content-center" style="margin-top: 30px" th:if="${personalPage}">
+    <div class="row justify-content-center" style="margin-top: 30px">
         <div class="col-md-10">
-            <h1 th:text="#{mySubscriptions}"/>
+            <h1 th:if="${personalPage}" th:text="#{subscriptions.my}"/>
+            <h1 th:text="#{subscriptions.available}" th:unless="${personalPage}"/>
         </div>
     </div>
     <div class="row justify-content-center" style="margin-top: 30px">
-        <div class="col-md-2">
-            <div th:replace="fragments/sortAndFilterForm :: sort-and-filter-form"></div>
+        <div class="col-md-3">
+            <div th:replace="fragments/criteriaForm :: search-sort-and-filter-form"></div>
+
         </div>
         <div class="col-md-8">
-            <div th:replace="fragments/searchForm :: search-form"></div>
             <div th:replace="fragments/periodicalsList :: periodicals-list"></div>
+            <div th:replace="fragments/pageNavigation :: periodicals-page-nav"></div>
         </div>
     </div>
+
+
 </div>
 </body>
 </html>

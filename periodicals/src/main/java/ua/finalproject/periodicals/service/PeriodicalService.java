@@ -1,9 +1,12 @@
 package ua.finalproject.periodicals.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.finalproject.periodicals.entity.Periodical;
+import ua.finalproject.periodicals.entity.User;
 import ua.finalproject.periodicals.repository.PeriodicalRepository;
 
 import java.util.List;
@@ -19,21 +22,52 @@ public class PeriodicalService {
         this.subscriptionService = subscriptionService;
     }
 
-    public List<Periodical> find(String title, String propertyForSort, List<String> topicsSelected) {
+    public Page<Periodical> find(String title, String propertyForSort, List<String> topicsSelected, int number) {
         if (title != null && !title.isEmpty()) {
-            return findByTitle(title);
+            return findByTitle(title, propertyForSort, number);
         }
-        return topicsSelected == null ? findAllSorted(propertyForSort) :
-                findAllByTopicsSorted(propertyForSort, topicsSelected);
+        return topicsSelected == null ? findAllSorted(propertyForSort, number) :
+                findAllByTopicsSorted(propertyForSort, topicsSelected, number);
     }
 
-    public List<Periodical> findAllSorted(String propertyForSort) {
-        return periodicalRepository.findAll(Sort.by(Sort.Direction.ASC, propertyForSort));
+    public Page<Periodical> findByTitle(String title, String propertyForSort, int number) {
+        return periodicalRepository.findByTitleContainsIgnoreCase(title.trim(),
+                PageRequest.of(number, AppConstants.PAGE_SIZE, Sort.by(Sort.Direction.ASC, propertyForSort)));
     }
 
-    public List<Periodical> findAllByTopicsSorted(String propertyForSort, List<String> topicsSelected) {
-        return periodicalRepository.findByTopicInIgnoreCase(topicsSelected,
-                Sort.by(Sort.Direction.ASC, propertyForSort));
+    public Page<Periodical> findAllSorted(String propertyForSort, int number) {
+        return periodicalRepository.findAll(PageRequest.of(number, AppConstants.PAGE_SIZE, Sort.by(Sort.Direction.ASC, propertyForSort)));
+    }
+
+    public Page<Periodical> findAllByTopicsSorted(String propertyForSort, List<String> topicsSelected, int number) {
+        return periodicalRepository.findAllByTopicInIgnoreCase(topicsSelected,
+                PageRequest.of(number, AppConstants.PAGE_SIZE, Sort.by(Sort.Direction.ASC, propertyForSort)));
+    }
+
+    public Page<Periodical> findForUser(User user, String title, String propertyForSort, List<String> topicsSelected, int number) {
+        if (title != null && !title.isEmpty()) {
+            return findForUserByTitle(user, title, propertyForSort, number);
+        }
+        return topicsSelected == null ? findForUserSorted(user, propertyForSort, number) :
+                findForUserByTopicsSorted(user, propertyForSort, topicsSelected, number);
+
+    }
+
+
+    private Page<Periodical> findForUserByTitle(User user, String title, String propertyForSort, int number) {
+        return periodicalRepository.findByUserIdAndTitleContainsIgnoreCase(user.getId(), title.trim(),
+                PageRequest.of(number, AppConstants.PAGE_SIZE, Sort.by(Sort.Direction.ASC, propertyForSort)));
+
+    }
+
+    private Page<Periodical> findForUserSorted(User user, String propertyForSort, int number) {
+        return periodicalRepository.findByUserId(user.getId(),
+                PageRequest.of(number, AppConstants.PAGE_SIZE, Sort.by(Sort.Direction.ASC, propertyForSort)));
+    }
+
+    private Page<Periodical> findForUserByTopicsSorted(User user, String propertyForSort, List<String> topicsSelected, int number) {
+        return periodicalRepository.findByUserIdAndTopicInIgnoreCase(user.getId(), topicsSelected,
+                PageRequest.of(number, AppConstants.PAGE_SIZE, Sort.by(Sort.Direction.ASC, propertyForSort)));
     }
 
     @Transactional
@@ -53,9 +87,6 @@ public class PeriodicalService {
         periodicalRepository.deleteById(id);
     }
 
-    public List<Periodical> findByTitle(String title) {
-        return periodicalRepository.findByTitleContainsIgnoreCase(title.trim());
-    }
 
     public List<String> findAllTopics() {
         return periodicalRepository.findTopics();
@@ -72,6 +103,4 @@ public class PeriodicalService {
     public List<Periodical> findAll() {
         return periodicalRepository.findAll();
     }
-
-
 }
