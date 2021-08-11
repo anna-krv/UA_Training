@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.service.PeriodicalService;
 import ua.finalproject.periodicals.service.SubscriptionService;
 
+import javax.validation.Valid;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -48,8 +50,12 @@ public class AdminPeriodicalsController {
 
     @PostMapping("/{id}")
     public String periodicalUpdate(@PathVariable("id") Long id,
-                                   @ModelAttribute("periodical") Periodical periodical,
+                                   @Valid @ModelAttribute("periodical") Periodical periodical,
+                                   BindingResult bindingResult,
                                    Model model) {
+        if (bindingResult.hasErrors()) {
+            return "admin/editPeriodical.html";
+        }
         periodicalService.update(id, periodical);
         return "redirect:/admin/periodicals";
     }
@@ -67,8 +73,12 @@ public class AdminPeriodicalsController {
     }
 
     @PostMapping("/add")
-    public String addPeriodical(@ModelAttribute("periodical") Periodical periodical,
+    public String addPeriodical(@Valid @ModelAttribute("periodical") Periodical periodical,
+                                BindingResult bindingResult,
                                 Model model) {
+        if (bindingResult.hasErrors()) {
+            return "admin/addPeriodical.html";
+        }
         try {
             periodicalService.save(periodical);
             model.addAttribute("success", true);
@@ -79,5 +89,7 @@ public class AdminPeriodicalsController {
         }
         return "admin/addPeriodical.html";
     }
+
+
 
 }

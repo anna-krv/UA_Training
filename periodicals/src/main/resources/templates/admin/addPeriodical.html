@@ -24,6 +24,8 @@
                     <label for="price" th:text="#{price}"></label>
                     <input type="text" th:field="*{price}" id="price"
                            class="form-control"/>
+                    <div style="color:red" th:errors="*{price}"
+                         th:if="${#fields.hasErrors('price')}"></div>
                 </div>
                 <div class="form-group">
                     <label for="topic" th:text="#{topic}"></label>

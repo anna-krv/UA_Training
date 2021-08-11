@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -22,6 +23,7 @@ public class Periodical {
     @Column(unique = true)
     private String title;
 
+    @Positive
     private BigDecimal price;
 
     private String topic;
