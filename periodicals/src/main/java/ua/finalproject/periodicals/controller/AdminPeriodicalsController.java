@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,10 @@ import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.service.PeriodicalService;
 import ua.finalproject.periodicals.service.SubscriptionService;
 
+import java.security.Principal;
+import java.util.NoSuchElementException;
+
+@Slf4j
 @Controller
 @RequestMapping("/admin/periodicals")
 public class AdminPeriodicalsController {
@@ -30,9 +35,9 @@ public class AdminPeriodicalsController {
     @GetMapping("/{id}")
     public String periodicalEditPageById(@PathVariable("id") Long id,
                                          Model model) {
-        Periodical periodical = periodicalService.findById(id).get();
-
+        Periodical periodical = periodicalService.getById(id);
         model.addAttribute("periodical", periodical);
+
         return "admin/editPeriodical.html";
     }
 
@@ -64,8 +69,19 @@ public class AdminPeriodicalsController {
             model.addAttribute("success", true);
             model.addAttribute("periodical", new Periodical());
         } catch (DataIntegrityViolationException ex) {
+            log.error(ex.getMessage());
             model.addAttribute("errorNotUnique", true);
         }
         return "admin/addPeriodical.html";
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public String handleNoSuchElementException(Principal principal,
+                                               Model model,
+                                               NoSuchElementException ex) {
+        log.error(ex.getMessage());
+        model.addAttribute("resourceError", true);
+
+        return "redirect:/admin/periodicals";
     }
 }

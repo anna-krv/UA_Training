@@ -45,6 +45,9 @@
     <div class="alert alert-danger" th:if="${errorNotUnique}"
          th:text="#{error.notUnique}">
     </div>
+    <div class="alert alert-danger" th:if="${resourceError}"
+         th:text="#{error.resource}">
+    </div>
     <div class="alert alert-danger" th:if="${notUniqueUserError}"
          th:text="#{error.user.notUnique}">
     </div>

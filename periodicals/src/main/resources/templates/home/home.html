@@ -24,7 +24,9 @@
     <div class="col-md-10 col-md-offset-1">
         <h3 sec:authorize="isAuthenticated()" th:text="#{message.welcome.logged}"></h3>
         <h3 sec:authorize="!isAuthenticated()" th:text="#{message.welcome.notLogged}"></h3>
+        <div th:replace="fragments/diagnostics :: error-or-success"></div>
     </div>
+
 
 </div>
 </body>

@@ -27,6 +27,7 @@
                href="/admin/periodicals/add"></a>
         </div>
         <div class="col-md-8">
+            <div th:replace="fragments/diagnostics :: error-or-success"></div>
             <div th:replace="fragments/periodicalsListAdmin :: periodicals-list-admin"></div>
         </div>
     </div>

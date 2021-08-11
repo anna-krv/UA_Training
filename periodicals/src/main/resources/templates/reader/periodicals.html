@@ -33,6 +33,7 @@
 
         </div>
         <div class="col-md-8">
+            <div th:replace="fragments/diagnostics :: error-or-success"></div>
             <div th:replace="fragments/periodicalsList :: periodicals-list"></div>
             <div th:replace="fragments/pageNavigation :: periodicals-page-nav"></div>
         </div>

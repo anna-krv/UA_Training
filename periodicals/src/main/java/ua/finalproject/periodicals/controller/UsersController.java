@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,11 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.finalproject.periodicals.entity.UserNotFoundException;
+import ua.finalproject.periodicals.exception.UserNotFoundException;
 import ua.finalproject.periodicals.service.UserService;
 
 import java.security.Principal;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/users")
 public class UsersController {
@@ -32,9 +34,10 @@ public class UsersController {
     @GetMapping("/{id}")
     public String showUser(@PathVariable("id") Long id, Model model) {
         try {
-            model.addAttribute("user", userService.findById(id));
+            model.addAttribute("user", userService.getById(id));
         } catch (UserNotFoundException ex) {
-            model.addAttribute("error", true);
+            log.error(ex.getMessage());
+            model.addAttribute("resourceError", true);
         }
         return "admin/aUser.html";
     }
@@ -44,6 +47,7 @@ public class UsersController {
         try {
             model.addAttribute("user", userService.changeBlockStatus(id));
         } catch (UserNotFoundException ex) {
+            log.error(ex.getMessage());
             model.addAttribute("error", true);
         }
         return "admin/aUser.html";

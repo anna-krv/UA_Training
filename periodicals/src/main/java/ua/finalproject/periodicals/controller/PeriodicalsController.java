@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -8,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ua.finalproject.periodicals.entity.MoneyAccountException;
 import ua.finalproject.periodicals.entity.Periodical;
 import ua.finalproject.periodicals.entity.Subscription;
 import ua.finalproject.periodicals.entity.User;
+import ua.finalproject.periodicals.exception.MoneyAccountException;
 import ua.finalproject.periodicals.service.PeriodicalService;
 import ua.finalproject.periodicals.service.SubscriptionService;
 import ua.finalproject.periodicals.service.UserService;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/periodicals")
 public class PeriodicalsController {
@@ -82,17 +84,20 @@ public class PeriodicalsController {
     public String periodicalPageById(@PathVariable("id") Long id,
                                      Principal principal,
                                      Model model) {
+
         try {
-            Periodical periodical = periodicalService.findById(id).get();
-            User user = userService.findByUsername(principal.getName()).get();
+            Periodical periodical = periodicalService.getById(id);
+            User user = userService.getByUsername(principal.getName());
             Optional<Subscription> subscription = subscriptionService.findByUserAndPeriodical(user, periodical);
 
             model.addAttribute("periodical", periodical);
             model.addAttribute("alreadySubscribed", subscription.isPresent());
             model.addAttribute("subscription", subscription.orElse(null));
         } catch (NoSuchElementException ex) {
-            model.addAttribute("error", true);
+            log.error(ex.getMessage());
+            model.addAttribute("resourceError", true);
         }
+
         return "reader/aPeriodical.html";
     }
 
@@ -101,21 +106,19 @@ public class PeriodicalsController {
                                       Principal principal,
                                       Model model) {
         try {
-            Periodical periodical = periodicalService.findById(id).get();
+            Periodical periodical = periodicalService.getById(id);
             model.addAttribute("periodical", periodical);
-
-            User user = userService.findByUsername(principal.getName()).get();
-            Subscription subscription = subscriptionService.save(user, periodical);
-
+            User user = userService.getByUsername(principal.getName());
+            model.addAttribute("subscription", subscriptionService.saveForUserAndPeriodical(user, periodical));
             model.addAttribute("alreadySubscribed", true);
-            model.addAttribute("subscription", subscription);
             model.addAttribute("success", true);
         } catch (MoneyAccountException ex) {
+            log.error(ex.getMessage());
             model.addAttribute("accountError", true);
         } catch (NoSuchElementException ex) {
-            model.addAttribute("error", true);
+            log.error(ex.getMessage());
+            model.addAttribute("resourceError", true);
         }
-
         return "reader/aPeriodical.html";
     }
 
@@ -124,15 +127,18 @@ public class PeriodicalsController {
                                         Principal principal,
                                         Model model) {
         try {
-            Periodical periodical = periodicalService.findById(id).get();
-            User user = userService.findByUsername(principal.getName()).get();
+            Periodical periodical = periodicalService.getById(id);
+            User user = userService.getByUsername(principal.getName());
 
             subscriptionService.delete(user, periodical);
             model.addAttribute("alreadySubscribed", false);
             model.addAttribute("periodical", periodical);
         } catch (NoSuchElementException ex) {
-            model.addAttribute("error", true);
+            log.error(ex.getMessage());
+            model.addAttribute("resourceError", true);
         }
+
         return "reader/aPeriodical.html";
     }
+
 }

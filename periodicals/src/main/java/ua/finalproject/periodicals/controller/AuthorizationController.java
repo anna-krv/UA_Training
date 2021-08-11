@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import ua.finalproject.periodicals.service.UserService;
 
 import javax.validation.Valid;
 
+@Slf4j
 @Controller
 public class AuthorizationController {
     private final UserService userService;
@@ -55,11 +57,11 @@ public class AuthorizationController {
         }
         try {
             userService.create(user);
+            return "redirect:/login";
         } catch (DataIntegrityViolationException ex) {
+            log.error(ex.getMessage());
             model.addAttribute("notUniqueUserError", true);
-            model.addAttribute("user", user);
             return "authorization/register.html";
         }
-        return "redirect:/login";
     }
 }

@@ -1,6 +1,5 @@
 package ua.finalproject.periodicals;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,11 +19,8 @@ import java.util.Locale;
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableScheduling
-@Slf4j
 public class PeriodicalsApplication implements WebMvcConfigurer {
 
-
-    ///private static final Logger log = LoggerFactory.getLogger(PeriodicalsApplication.class);
     public static void main(String[] args) {
         SpringApplication.run(PeriodicalsApplication.class, args);
     }
@@ -36,7 +32,7 @@ public class PeriodicalsApplication implements WebMvcConfigurer {
         messageSource.setUseCodeAsDefaultMessage(true);
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setCacheSeconds(5);
-        messageSource.setDefaultLocale(new Locale("EN", "EN"));
+        messageSource.setDefaultLocale(new Locale("en", "en"));
         return messageSource;
     }
 
@@ -50,7 +46,6 @@ public class PeriodicalsApplication implements WebMvcConfigurer {
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        // Defaults to "locale" if not set
         localeChangeInterceptor.setParamName("localeData");
         return localeChangeInterceptor;
     }
