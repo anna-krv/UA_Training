@@ -13,7 +13,7 @@
     <body>
         <h2>
            Error Page<br/>
-            <i>Error <%= exception %></i>
+            <i>Error <%= exception.getMessage()%></i>
         </h2>
     <br>
         <a href="${pageContext.request.contextPath}/index.jsp">Index</a>

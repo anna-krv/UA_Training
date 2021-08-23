@@ -1,7 +1,5 @@
 package ua.finalproject.periodicals.old.controller;
 
-import ua.finalproject.periodicals.old.config.Configurations;
-import ua.finalproject.periodicals.old.config.Constants;
 import ua.finalproject.periodicals.old.controller.command.*;
 
 import javax.servlet.ServletException;
@@ -15,7 +13,7 @@ import java.util.logging.Logger;
 
 public class Servlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(Servlet.class.getName());
-    private static final String REGEX_PATH = Configurations.getProperty(Constants.PATH);
+
     private static Map<String, Command> commands;
 
     public Servlet() {
@@ -24,6 +22,9 @@ public class Servlet extends HttpServlet {
         commands.put("login", new Login());
         commands.put("registerPage", new RegisterPage());
         commands.put("register", new Register());
+        commands.put("periodicals", new Periodicals());
+        commands.put("periodicals/subscribed", new PeriodicalsSubscribed());
+        //commands.put("periodicals/", new )
     }
 
     @Override
@@ -37,8 +38,8 @@ public class Servlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String path = request.getRequestURI();
-        path = path.replaceAll(REGEX_PATH, "");
+        String path=PathUtil.getPath(request.getRequestURI());
+        logger.info("path "+path);
         Command command = commands.getOrDefault(path,
                 (req) -> "/index.jsp");
         String page = command.execute(request);

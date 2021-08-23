@@ -35,7 +35,7 @@
                     out.println(props.getProperty("login.title"));
                 %>
             </h1>
-            <form style="margin-bottom: 30px" method="get"
+            <form style="margin-bottom: 30px" method="post"
                   action="${pageContext.request.contextPath}/app/login">
                 <div class="form-group">
                     <label for="username">
@@ -43,7 +43,7 @@
                             out.println(props.getProperty("login"));
                         %>
                     </label>
-                    <input type="text" id="username"
+                    <input type="text" id="username" name="username"
                            class="form-control"/>
                 </div>
                 <div class="form-group">
@@ -52,7 +52,7 @@
                            out.println(props.getProperty("password"));
                        %>
                     </label>
-                    <input type="password" id="password"
+                    <input type="password" id="password" name="password"
                            class="form-control"/>
                 </div>
                 <input type="submit"

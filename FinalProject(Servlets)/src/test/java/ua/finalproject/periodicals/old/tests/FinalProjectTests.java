@@ -2,12 +2,13 @@ package ua.finalproject.periodicals.old.tests;
 
 import org.junit.Assert;
 import org.junit.Test;
+import ua.finalproject.periodicals.old.controller.PathUtil;
 import ua.finalproject.periodicals.old.entity.Periodical;
 import ua.finalproject.periodicals.old.entity.User;
 import ua.finalproject.periodicals.old.service.Criteria;
-import ua.finalproject.periodicals.old.service.UserService;
 import ua.finalproject.periodicals.old.service.PeriodicalService;
 import ua.finalproject.periodicals.old.service.SubscriptionService;
+import ua.finalproject.periodicals.old.service.UserService;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -60,5 +61,10 @@ public class FinalProjectTests {
                         Optional.ofNullable(Long.valueOf(2))))
                 .stream()
                 .count() > 0);
+    }
+
+    @Test
+    public void pathUtilTest(){
+        System.out.println(PathUtil.getPath("periodicals_servlets__war"));
     }
 }

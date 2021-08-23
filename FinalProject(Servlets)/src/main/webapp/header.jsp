@@ -1,5 +1,4 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark"
-     th:fragment="header">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/app/">
         <%
             out.println(props.getProperty("title"));
