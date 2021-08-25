@@ -12,7 +12,7 @@
             </div>
             <p class="mb-1">
                 <%
-                    out.println(props.getProperty("price")+": ");
+                    out.println(rb.getString("price")+": ");
                 %>
                     ${periodical.price}
             </p>

@@ -12,7 +12,7 @@
                 <a class="page-link"
                    href="?sort=${sort}&search=${search}&topic=<%=topicsQueryParam%>&number=${number-1}">
                     <%
-                        out.println(props.getProperty("navigation.prev"));
+                        out.println(rb.getString("navigation.prev"));
                     %>
                 </a>
             </li>
@@ -31,7 +31,7 @@
                 <a class="page-link"
                    href="?sort=${sort}&search=${search}&topic=<%=topicsQueryParam%>&number=${number+1}">
                     <%
-                        out.println(props.getProperty("navigation.next"));
+                        out.println(rb.getString("navigation.next"));
                     %>
                 </a>
             </li>

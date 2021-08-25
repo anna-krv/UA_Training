@@ -3,7 +3,7 @@
         <ul class="pagination justify-content-center">
             <li class="${number>0 ? 'page-item' : 'page-item disabled'}">
                 <a class="page-link" href="?number=${number-1}">
-                    <%=props.getProperty("navigation.prev")%>
+                    <%=rb.getString("navigation.prev")%>
                 </a>
             </li>
             <li class="page-item">
@@ -13,7 +13,7 @@
             </li>
             <li class="page-item">
                 <a class="page-link" href="?number=${number+1}">
-                    <%=props.getProperty("navigation.next")%>
+                    <%=rb.getString("navigation.next")%>
                 </a>
             </li>
         </ul>

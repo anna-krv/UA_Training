@@ -7,15 +7,15 @@
                         ${user.name} ${user.surname}
                 </h5>
                 <small>
-                    <%=props.getProperty("login")%>: ${user.username}
+                    <%=rb.getString("login")%>: ${user.username}
                 </small>
             </div>
             <p class="mb-1">
                 <c:if test="${user.accountNonLocked}">
-                    <%=props.getProperty("user.account")%> <%=props.getProperty("nonLocked")%>
+                    <%=rb.getString("user.account")%> <%=rb.getString("nonLocked")%>
                 </c:if>
                 <c:if test="${!user.accountNonLocked}">
-                    <%=props.getProperty("user.account")%> <%=props.getProperty("locked")%>
+                    <%=rb.getString("user.account")%> <%=rb.getString("locked")%>
                 </c:if>
             </p>
         </a>

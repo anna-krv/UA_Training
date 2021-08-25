@@ -7,4 +7,5 @@ public interface Constants {
     String PAGE_SIZE="view.size.page";
     String PAYMENT_PERIOD_IN_DAYS ="subscription.payment.period.days";
     String PATH = "web.path";
+    String LOCALE="locale";
 }

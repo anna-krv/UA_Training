@@ -2,18 +2,18 @@
     <div class="form-group">
 
         <input class="form-control" id="search" name="search"
-               placeholder="<%=props.getProperty("searchBy.title")%>" type="search"/>
+               placeholder="<%=rb.getString("searchBy.title")%>" type="search"/>
     </div>
     <div class="form-group">
-        <input class="btn btn-dark" value="<%=props.getProperty("apply")%>" type="submit">
+        <input class="btn btn-dark" value="<%=rb.getString("apply")%>" type="submit">
     </div>
-    <legend text="<%=props.getProperty("sort")%>"></legend>
+    <legend text="<%=rb.getString("sort")%>"></legend>
     <div class="form-check">
         <input autocomplete="off" class="form-check-input" id="sortByName" name="sort"
         ${sort=="title" ? "checked" : "" } type="radio" value="title"/>
         <label class="form-check-label" for="sortByName">
             <%
-                out.println(props.getProperty("periodical.title"));
+                out.println(rb.getString("periodical.title"));
             %>
         </label>
     </div>
@@ -22,12 +22,12 @@
         ${sort=="price" ? "checked" : ""} type="radio" value="price"/>
         <label class="form-check-label" for="sortByPrice">
             <%
-                out.println(props.getProperty("price"));
+                out.println(rb.getString("price"));
             %>
         </label>
     </div>
     <c:if test="${topics!=null && topics.size()!=0}">
-        <legend text="<%=props.getProperty("topic")%>"></legend>
+        <legend text="<%=rb.getString("topic")%>"></legend>
     </c:if>
     <c:forEach items="${topics}" var="topic">
         <div>

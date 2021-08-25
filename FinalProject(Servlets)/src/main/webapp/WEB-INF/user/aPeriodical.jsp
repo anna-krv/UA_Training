@@ -9,7 +9,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>
         <%
-            out.println(props.getProperty("title"));
+            out.println(rb.getString("title"));
         %>
     </title>
 </head>
@@ -25,14 +25,14 @@
                     </h5>
                     <small>
                         <%
-                            out.println(props.getProperty("topic") + ": ");
+                            out.println(rb.getString("topic") + ": ");
                         %>
                             ${periodical.topic}
                     </small>
                 </div>
                 <p class="mb-1">
                     <%
-                        out.println(props.getProperty("price") + ": ");
+                        out.println(rb.getString("price") + ": ");
                     %>
                         ${periodical.price}
                 </p>
@@ -41,18 +41,18 @@
                 <c:if test="${subscription!=null}">
                     <p class="mb-1">
                         <%
-                            out.println(props.getProperty("payment.last") + ": "+
+                            out.println(rb.getString("payment.last") + ": "+
                                     subscription.getLastPaymentDateTime().format(DateTimeFormatter.ofPattern(
-                                            props.getProperty("format.data")
+                                            rb.getString("format.data")
                                     ))
                             );
                         %>
                     </p>
                     <p class="mb-1">
                         <%
-                            out.println(props.getProperty("payment.next") + ": " +
+                            out.println(rb.getString("payment.next") + ": " +
                                     subscription.getNextPaymentDateTime().format(DateTimeFormatter.ofPattern(
-                                            props.getProperty("format.data")
+                                            rb.getString("format.data")
                                     ))
                             );
                         %>
@@ -66,7 +66,7 @@
                     <a class="btn btn-primary"
                        href="${pageContext.request.contextPath}/app/periodicals/${periodical.id}/subscribe">
                         <%
-                            out.println(props.getProperty("action.subscribe"));
+                            out.println(rb.getString("action.subscribe"));
                         %>
                     </a>
                 </c:if>
@@ -74,7 +74,7 @@
                     <a class="btn btn-secondary"
                        href="${pageContext.request.contextPath}/app/periodicals/${periodical.id}/unsubscribe">
                         <%
-                            out.println(props.getProperty("action.unsubscribe"));
+                            out.println(rb.getString("action.unsubscribe"));
                         %>
                     </a>
                 </c:if>

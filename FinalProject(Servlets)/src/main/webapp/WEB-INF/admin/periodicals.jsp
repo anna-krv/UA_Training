@@ -9,7 +9,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>
         <%
-            out.println(props.getProperty("title"));
+            out.println(rb.getString("title"));
         %>
     </title>
 </head>
@@ -19,7 +19,7 @@
         <div class="col-md-2">
             <a class="btn btn-success"
                href="${pageContext.request.contextPath}/app/admin/periodicals/addPage">
-                <%=props.getProperty("action.addPeriodical")%>
+                <%=rb.getString("action.addPeriodical")%>
             </a>
         </div>
         <div class="col-md-8">

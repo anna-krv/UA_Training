@@ -7,7 +7,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>
         <%
-            out.println(props.getProperty("title"));
+            out.println(rb.getString("title"));
         %>
     </title>
 </head>
@@ -21,13 +21,13 @@
             <h1>
                 <c:if test = "${personalPage}">
                     <%
-                        out.println(props.getProperty("subscriptions.my"));
+                        out.println(rb.getString("subscriptions.my"));
                     %>
                 </c:if>
 
                 <c:if test = "${!personalPage}">
                     <%
-                        out.println(props.getProperty("subscriptions.available"));
+                        out.println(rb.getString("subscriptions.available"));
                     %>
                 </c:if>
             </h1>

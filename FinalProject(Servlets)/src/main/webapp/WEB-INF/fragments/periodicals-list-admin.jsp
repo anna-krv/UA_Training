@@ -9,7 +9,7 @@
                 <small>${periodical.topic}</small>
             </div>
             <p class="mb-1">
-                <%=props.getProperty("price")%>: ${periodical.price}
+                <%=rb.getString("price")%>: ${periodical.price}
             </p>
         </a>
     </c:forEach>
