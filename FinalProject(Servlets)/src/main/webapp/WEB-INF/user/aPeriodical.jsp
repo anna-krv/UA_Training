@@ -2,7 +2,7 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <!DOCTYPE html>
 <html lang="en">
-<%@include file="fragments/header.jsp" %>
+<%@include file="../fragments/header.jsp" %>
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"

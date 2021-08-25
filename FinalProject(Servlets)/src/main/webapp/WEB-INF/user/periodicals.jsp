@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<%@include file="fragments/header.jsp"%>
+<%@include file="../fragments/header.jsp"%>
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -35,14 +35,14 @@
     </div>
     <div class="row justify-content-center" style="margin-top: 30px">
         <div class="col-md-3">
-            <%@include file ="fragments/search-filter-form.jsp" %>
+            <%@include file ="../fragments/search-filter-form.jsp" %>
         </div>
 
         <div class="col-md-8">
             <!--<div th:replace="fragments/diagnostics :: error-or-success"></div>
             -->
-            <%@include file ="fragments/periodicals-list.jsp"%>
-            <%@include file ="fragments/periodicals-page-nav.jsp"%>
+            <%@include file ="../fragments/periodicals-list.jsp"%>
+            <%@include file ="../fragments/periodicals-page-nav.jsp"%>
         </div>
 
     </div>

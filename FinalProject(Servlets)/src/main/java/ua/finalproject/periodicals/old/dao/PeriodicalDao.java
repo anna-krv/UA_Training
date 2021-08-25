@@ -1,7 +1,6 @@
 package ua.finalproject.periodicals.old.dao;
 
 import ua.finalproject.periodicals.old.entity.Periodical;
-import ua.finalproject.periodicals.old.entity.User;
 import ua.finalproject.periodicals.old.service.Criteria;
 
 import java.util.List;
@@ -13,6 +12,8 @@ public interface PeriodicalDao extends GenericDao<Periodical, Long>{
 
     void deleteByTitle(String title);
 
-    List<String> findAllTopicsByUser(User user);
+    List<Periodical> findAll(int number);
+
+    List<String> findAllTopicsByUser(Long userId);
 }
 

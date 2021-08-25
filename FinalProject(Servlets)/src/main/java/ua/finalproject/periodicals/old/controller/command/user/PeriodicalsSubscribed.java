@@ -1,7 +1,8 @@
-package ua.finalproject.periodicals.old.controller.command;
+package ua.finalproject.periodicals.old.controller.command.user;
 
+import ua.finalproject.periodicals.old.controller.RequestUtil;
+import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.entity.Periodical;
-import ua.finalproject.periodicals.old.entity.User;
 import ua.finalproject.periodicals.old.service.Criteria;
 import ua.finalproject.periodicals.old.service.PeriodicalService;
 
@@ -21,13 +22,13 @@ public class PeriodicalsSubscribed implements Command {
         String[] topicsSelectedArr = request.getParameterValues("topic");
         List<String> allTopics = periodicalService.findTopics();
         List<String> topicsSelected = topicsSelectedArr != null ? Arrays.asList(topicsSelectedArr) : allTopics;
-        String numberStr = request.getParameter("number");
-        int number = Integer.valueOf(numberStr == null ? "0" : numberStr);
+        int number = RequestUtil.getNumberParam(request);
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        Criteria criteria = new Criteria(fieldForSort, number, title, topicsSelected, Optional.of(user.getId()));
+        Long userId = (Long) session.getAttribute("userId");
+
+        Criteria criteria = new Criteria(fieldForSort, number, title, topicsSelected, Optional.of(userId));
         List<Periodical> periodicals = periodicalService.findByCriteria(criteria);
-        List<String> topicsForUser = periodicalService.findAllTopicsByUser(user);
+        List<String> topicsForUser = periodicalService.findAllTopicsByUser(userId);
 
         session.setAttribute("periodicals", periodicals);
         session.setAttribute("searchError", periodicals.isEmpty());
@@ -37,6 +38,6 @@ public class PeriodicalsSubscribed implements Command {
         session.setAttribute("sort", fieldForSort);
         session.setAttribute("search", title);
         session.setAttribute("personalPage", true);
-        return "/WEB-INF/periodicals.jsp";
+        return "/WEB-INF/user/periodicals.jsp";
     }
 }

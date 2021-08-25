@@ -3,7 +3,6 @@ package ua.finalproject.periodicals.old.service;
 import ua.finalproject.periodicals.old.dao.DaoFactory;
 import ua.finalproject.periodicals.old.entity.Periodical;
 import ua.finalproject.periodicals.old.dao.PeriodicalDao;
-import ua.finalproject.periodicals.old.entity.User;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -11,8 +10,8 @@ import java.util.Optional;
 
 public class PeriodicalService {
     private PeriodicalDao periodicalDao= DaoFactory.getInstance().createPeriodicalDao();
-    public List<Periodical> findAll(){
-        return periodicalDao.findAll();
+    public List<Periodical> findAll(int number){
+        return periodicalDao.findAll(number);
     }
     public List<String> findTopics(){
         return periodicalDao.findTopics();
@@ -38,7 +37,15 @@ public class PeriodicalService {
         periodicalDao.deleteByTitle(title);
     }
 
-    public List<String> findAllTopicsByUser(User user) {
-        return periodicalDao.findAllTopicsByUser(user);
+    public List<String> findAllTopicsByUser(Long userId) {
+        return periodicalDao.findAllTopicsByUser(userId);
+    }
+
+    public void deleteById(Long id) {
+        periodicalDao.delete(id);
+    }
+
+    public void save(Periodical periodical) throws SQLException {
+        periodicalDao.create(periodical);
     }
 }

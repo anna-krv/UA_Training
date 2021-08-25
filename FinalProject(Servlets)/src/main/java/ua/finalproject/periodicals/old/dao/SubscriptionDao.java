@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface SubscriptionDao extends GenericDao<Subscription, SubscriptionKey>{
     Optional<Subscription> findByUserAndPeriodical(User user, Periodical periodical);
+
+    void deleteByPeriodicalId(Long periodicalId);
 }

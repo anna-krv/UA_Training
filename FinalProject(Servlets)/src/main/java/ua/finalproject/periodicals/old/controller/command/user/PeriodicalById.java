@@ -1,13 +1,15 @@
-package ua.finalproject.periodicals.old.controller.command;
+package ua.finalproject.periodicals.old.controller.command.user;
 
 
-import ua.finalproject.periodicals.old.controller.PathUtil;
+import ua.finalproject.periodicals.old.controller.RequestUtil;
+import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.dao.MoneyAccountException;
 import ua.finalproject.periodicals.old.entity.Periodical;
 import ua.finalproject.periodicals.old.entity.Subscription;
 import ua.finalproject.periodicals.old.entity.User;
 import ua.finalproject.periodicals.old.service.PeriodicalService;
 import ua.finalproject.periodicals.old.service.SubscriptionService;
+import ua.finalproject.periodicals.old.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,6 +21,7 @@ import java.util.logging.Logger;
 public class PeriodicalById implements Command {
     private static final PeriodicalService periodicalService = new PeriodicalService();
     private static final SubscriptionService subscriptionService = new SubscriptionService();
+    private static final UserService userService = new UserService();
     private static final Logger logger = Logger.getLogger(PeriodicalById.class.getName());
 
     enum RequestType {GET, SUBSCRIBE, UNSUBSCRIBE}
@@ -28,8 +31,10 @@ public class PeriodicalById implements Command {
     public String execute(HttpServletRequest request) {
         Long id = extractId(request);
         HttpSession session = request.getSession();
-        User user = (User) request.getSession().getAttribute("user");
+        Long userId= (Long)request.getSession().getAttribute("userId");
+
         try {
+            User user = userService.findById(userId).orElseThrow(()->new NoSuchElementException("no user with id "+userId));
             Periodical periodical = periodicalService.findById(id).orElseThrow(
                     () -> new NoSuchElementException("no periodical with id " + id));
             session.setAttribute("periodical", periodical);
@@ -46,7 +51,7 @@ public class PeriodicalById implements Command {
         } catch (SQLException ex) {
             session.setAttribute("error", true);
         }
-        return "/WEB-INF/aPeriodical.jsp";
+        return "/WEB-INF/user/aPeriodical.jsp";
     }
 
     private Optional<Subscription> getSubscription(HttpServletRequest request, User user, Periodical periodical) throws SQLException {
@@ -66,7 +71,7 @@ public class PeriodicalById implements Command {
     }
 
     private RequestType getType(HttpServletRequest request) {
-        String path = PathUtil.getPath(request.getRequestURI());
+        String path = RequestUtil.getPath(request.getRequestURI());
         if (path.endsWith("unsubscribe")) {
             return RequestType.UNSUBSCRIBE;
         }
@@ -77,7 +82,7 @@ public class PeriodicalById implements Command {
     }
 
     private Long extractId(HttpServletRequest request) {
-        String id = PathUtil.getPath(request.getRequestURI())
+        String id = RequestUtil.getPath(request.getRequestURI())
                 .replace("periodicals/", "")
                 .replaceFirst("/.*", "");
         return Long.valueOf(id);

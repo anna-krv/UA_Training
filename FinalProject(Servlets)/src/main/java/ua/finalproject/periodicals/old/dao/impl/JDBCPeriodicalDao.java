@@ -4,7 +4,6 @@ import ua.finalproject.periodicals.old.config.Configurations;
 import ua.finalproject.periodicals.old.config.Constants;
 import ua.finalproject.periodicals.old.dao.PeriodicalDao;
 import ua.finalproject.periodicals.old.entity.Periodical;
-import ua.finalproject.periodicals.old.entity.User;
 import ua.finalproject.periodicals.old.service.Criteria;
 
 import java.sql.*;
@@ -16,6 +15,7 @@ import java.util.stream.IntStream;
 
 public class JDBCPeriodicalDao implements PeriodicalDao {
     private static final String QUERY_FIND_ALL = "SELECT * FROM periodical";
+    private static final String QUERY_FIND_ALL_LIMIT="SELECT * FROM periodical ORDER BY title LIMIT ?,?";
     private static final String QUERY_FIND_TOPICS = "SELECT DISTINCT topic FROM periodical";
     private static final String QUERY_FIND_TOPICS_BY_USER = "SELECT DISTINCT topic FROM periodical p "+
             "INNER JOIN subscription s ON p.id=s.periodical_id WHERE user_id = ?";
@@ -66,6 +66,21 @@ public class JDBCPeriodicalDao implements PeriodicalDao {
         List<Periodical> entities = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(QUERY_FIND_ALL);
+            while (rs.next()) {
+                entities.add(extractFromResultSet(rs));
+            }
+        } catch (SQLException ex) {
+            logger.severe(ex.getMessage());
+        }
+        return entities;
+    }
+    @Override
+    public List<Periodical> findAll(int number) {
+        List<Periodical> entities = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(QUERY_FIND_ALL_LIMIT)) {
+            statement.setInt(1, number*PAGE_SIZE);
+            statement.setInt(2, PAGE_SIZE);
+            ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 entities.add(extractFromResultSet(rs));
             }
@@ -129,10 +144,10 @@ public class JDBCPeriodicalDao implements PeriodicalDao {
     }
 
     @Override
-    public List<String> findAllTopicsByUser(User user) {
+    public List<String> findAllTopicsByUser(Long userId) {
         List<String> topics= new ArrayList<>();
         try(PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_TOPICS_BY_USER)){
-            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setLong(1, userId);
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()){
                 topics.add(rs.getString(1));
@@ -142,7 +157,6 @@ public class JDBCPeriodicalDao implements PeriodicalDao {
         }
         return topics;
     }
-
 
     private String buildQueryForCriteria(Criteria criteria) {
         StringBuilder sb = new StringBuilder(QUERY_SELECT);

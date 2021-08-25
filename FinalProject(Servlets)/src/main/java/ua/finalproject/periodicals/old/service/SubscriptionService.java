@@ -39,4 +39,8 @@ public class SubscriptionService {
     public Optional<Subscription> findByUserAndPeriodical(User user, Periodical periodical) {
         return subscriptionDao.findByUserAndPeriodical(user, periodical);
     }
+
+    public void deleteByPeriodicalId(Long periodicalId) {
+        subscriptionDao.deleteByPeriodicalId(periodicalId);
+    }
 }

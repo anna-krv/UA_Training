@@ -1,5 +1,6 @@
-package ua.finalproject.periodicals.old.controller.command;
+package ua.finalproject.periodicals.old.controller.command.user;
 
+import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;

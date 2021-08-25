@@ -1,6 +1,8 @@
 package ua.finalproject.periodicals.old.dao.impl;
 
 
+import ua.finalproject.periodicals.old.config.Configurations;
+import ua.finalproject.periodicals.old.config.Constants;
 import ua.finalproject.periodicals.old.dao.BCrypt;
 import ua.finalproject.periodicals.old.dao.UserDao;
 import ua.finalproject.periodicals.old.entity.Role;
@@ -15,11 +17,15 @@ import java.util.logging.Logger;
 
 public class JDBCUserDao implements UserDao {
     private static final String QUERY_FIND_ALL = "SELECT * FROM user";
+    private static final String QUERY_FIND_BY_ID_NOT = "SELECT * FROM user WHERE id<>? " +
+            "ORDER BY name LIMIT ?, ?";
     private static final String QUERY_FIND_BY_ID = "SELECT * FROM user WHERE id=?";
     private static final String QUERY_FIND_BY_USERNAME = "SELECT * FROM user WHERE username=?";
     private static final String QUERY_INSERT = "INSERT INTO user() VALUES ()";
     private static final String QUERY_UPDATE_BALANCE="UPDATE user SET balance=balance+? WHERE id=?";
     private static final Logger logger = Logger.getLogger(JDBCUserDao.class.getName());
+    private static final int PAGE_SIZE = Integer.valueOf(Configurations.getProperty(Constants.PAGE_SIZE));
+
     private Connection connection;
 
     public JDBCUserDao(Connection connection) {
@@ -51,6 +57,23 @@ public class JDBCUserDao implements UserDao {
         List<User> items = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(QUERY_FIND_ALL);
+            while (rs.next()) {
+                items.add(extractFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    @Override
+    public List<User> findByIdNot(Long userId, int number) {
+        List<User> items = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_BY_ID_NOT)) {
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setInt(2, PAGE_SIZE * number);
+            preparedStatement.setInt(3, PAGE_SIZE);
+            ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 items.add(extractFromResultSet(rs));
             }

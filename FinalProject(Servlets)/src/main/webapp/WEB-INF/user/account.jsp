@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%@include file="fragments/header.jsp"%>
+<%@include file="../fragments/header.jsp"%>
 
 <head>
     <meta charset="UTF-8">

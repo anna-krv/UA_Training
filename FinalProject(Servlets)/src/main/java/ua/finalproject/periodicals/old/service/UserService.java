@@ -26,4 +26,8 @@ public class UserService {
     public boolean putMoney(Long userId, BigDecimal moneyToPut) {
             return userDao.updateBalance(userId, moneyToPut);
     }
+
+    public List<User> findByIdNot(Long userId, int number) {
+        return userDao.findByIdNot(userId, number);
+    }
 }

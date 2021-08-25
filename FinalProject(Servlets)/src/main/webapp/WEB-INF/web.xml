@@ -31,15 +31,28 @@
   </filter-mapping>
 
   <filter>
-    <filter-name>AuthFilter</filter-name>
-    <filter-class>ua.finalproject.periodicals.old.controller.filter.AuthFilter</filter-class>
+    <filter-name>AuthenticationFilter</filter-name>
+    <filter-class>ua.finalproject.periodicals.old.controller.filter.AuthenticationFilter</filter-class>
   </filter>
 
 
   <filter-mapping>
-    <filter-name>AuthFilter</filter-name>
+    <filter-name>AuthenticationFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+
+
+  <filter>
+    <filter-name>AuthorizationFilter</filter-name>
+    <filter-class>ua.finalproject.periodicals.old.controller.filter.AuthorizationFilter</filter-class>
+  </filter>
+
+
+  <filter-mapping>
+    <filter-name>AuthorizationFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
 
 
   <welcome-file-list>

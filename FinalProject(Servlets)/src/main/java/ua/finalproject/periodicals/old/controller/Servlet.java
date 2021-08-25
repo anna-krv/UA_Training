@@ -1,6 +1,8 @@
 package ua.finalproject.periodicals.old.controller;
 
 import ua.finalproject.periodicals.old.controller.command.*;
+import ua.finalproject.periodicals.old.controller.command.admin.*;
+import ua.finalproject.periodicals.old.controller.command.user.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +30,17 @@ public class Servlet extends HttpServlet {
         commands.put("periodicals/[0-9]+.*", new PeriodicalById());
         commands.put("account(\\?.*)*", new Account());
 
+        commands.put("admin/periodicals", new AdminPeriodicals());
+        commands.put("admin/periodicals/addPage", new AdminPeriodicalAddPage());
+        commands.put("admin/periodicals/add", new AdminPeriodicalAdd());
+        commands.put("admin/periodicals/[0-9]+", new AdminPeriodicalById());
+        commands.put("admin/periodicals/[0-9]+/delete", new AdminPeriodicalDelete());
+        commands.put("admin/periodicals/[0-9]+/update", new AdminPeriodicalUpdate());
+
+
+        commands.put("admin/users", new AdminUsersPage());
+        commands.put("admin/users/[0-9]+", new AdminUserById());
+
     }
 
     @Override
@@ -41,13 +54,13 @@ public class Servlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String path = PathUtil.getPath(request.getRequestURI());
+        String path = RequestUtil.getPath(request.getRequestURI());
         logger.info("path " + path);
         Command command = getCommand(path);//commands.getOrDefault(path, (req) -> "/index.jsp");
         String page = command.execute(request);
         logger.info("next page "+page);
         if (page.contains("redirect:")) {
-            response.sendRedirect(page.replace("redirect:", ""));
+            response.sendRedirect(page.replace("redirect:", "/periodicals_servlets__war/app"));
         } else {
             request.getRequestDispatcher(page).forward(request, response);
         }

@@ -2,7 +2,7 @@ package ua.finalproject.periodicals.old.tests;
 
 import org.junit.Assert;
 import org.junit.Test;
-import ua.finalproject.periodicals.old.controller.PathUtil;
+import ua.finalproject.periodicals.old.controller.RequestUtil;
 import ua.finalproject.periodicals.old.entity.Periodical;
 import ua.finalproject.periodicals.old.entity.User;
 import ua.finalproject.periodicals.old.service.Criteria;
@@ -39,7 +39,7 @@ public class FinalProjectTests {
 
     @Test
     public void createSubscription() throws SQLException {
-        Periodical periodical = periodicalService.findAll().get(0);
+        Periodical periodical = periodicalService.findAll(0).get(0);
         User user = userService.findById(Long.valueOf(1)).get();
 
         //subscriptionService.create(user, periodical);
@@ -65,6 +65,7 @@ public class FinalProjectTests {
 
     @Test
     public void pathUtilTest(){
-        System.out.println(PathUtil.getPath("periodicals_servlets__war"));
+        System.out.println(RequestUtil.getPath("periodicals_servlets__war"));
     }
+
 }

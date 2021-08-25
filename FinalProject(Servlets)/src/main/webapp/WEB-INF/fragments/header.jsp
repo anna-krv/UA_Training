@@ -35,27 +35,26 @@
             </li>
             <li  class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/app/account" >
-                    <%
-                        out.println(props.getProperty("account"));
-                    %>
+                    <%=props.getProperty("account")%>
                 </a>
             </li>
-            <!--
-            <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
-                <a class="nav-link" href="/admin/users" th:text="{menu.users.manage}"></a>
-            </li>
-            <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
-                <a class="nav-link" href="/admin/periodicals" th:text="{menu.periodicals.manage}"></a>
-            </li>
-            -->
-
+            <c:if test="${role=='ADMIN'}">
+                <li  class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/app/admin/users" >
+                        <%=props.getProperty("menu.users.manage")%>
+                    </a>
+                </li>
+                <li  class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/app/admin/periodicals">
+                        <%=props.getProperty("menu.periodicals.manage")%>
+                    </a>
+                </li>
+            </c:if>
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/app/logout" >
-                    <%
-                        out.println(props.getProperty("action.logout"));
-                    %>
+                    <%=props.getProperty("action.logout")%>
                 </a>
             </li>
             <li class="nav-item">
@@ -65,5 +64,6 @@
                 <a class="nav-link" href="?localeData=en">EN</a>
             </li>
         </ul>
+
     </div>
 </nav>

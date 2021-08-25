@@ -1,9 +1,16 @@
+<%@ page import="java.util.stream.Collectors" %>
 <div style="margin-top:30px">
     <nav aria-label="Page navigation for periodicals">
+        <%
+            List<String> topicsSelected = (List<String>) request.getSession().getAttribute("topicsSelected");
+            String topicsQueryParam = topicsSelected.stream().collect(Collectors.joining("&topic="));
+        %>
+
         <ul class="pagination justify-content-center">
             <li class="${number>0 ? 'page-item' : 'page-item disabled'}">
+
                 <a class="page-link"
-                   href="?sort=${sort}&search=${search}&topic=${topicsSelected}&number=${number-1}">
+                   href="?sort=${sort}&search=${search}&topic=<%=topicsQueryParam%>&number=${number-1}">
                     <%
                         out.println(props.getProperty("navigation.prev"));
                     %>
@@ -12,7 +19,7 @@
 
             <li class="page-item">
                 <a class="page-link"
-                   href="?sort=${sort}&search=${search}&topic=${topicsSelected}&number=${number}">
+                   href="?sort=${sort}&search=${search}&topic=<%=topicsQueryParam%>&number=${number}">
 
                 ${number+1}
 
@@ -22,7 +29,7 @@
 
             <li class="page-item">
                 <a class="page-link"
-                   href="?(sort=${sort}&search=${search}&topic=${topicsSelected}&number=${number+1}">
+                   href="?sort=${sort}&search=${search}&topic=<%=topicsQueryParam%>&number=${number+1}">
                     <%
                         out.println(props.getProperty("navigation.next"));
                     %>

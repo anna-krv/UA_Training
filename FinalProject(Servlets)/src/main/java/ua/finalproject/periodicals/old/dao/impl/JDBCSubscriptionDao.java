@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class JDBCSubscriptionDao implements SubscriptionDao {
     private static final String QUERY_CHARGE_MONEY = "UPDATE user SET balance = balance-? WHERE id=?";
     private static final String QUERY_DELETE = "DELETE FROM subscription WHERE periodical_id=? AND user_id=?";
+    private static final String  QUERY_DELETE_BY_PERIODICAL="DELETE FROM subscription WHERE periodical_id=?";
     private static final String QUERY_INSERT = "INSERT INTO subscription(periodical_id, user_id, last_payment_date_time," +
             "next_payment_date_time, payment_period_in_days, status) VALUES (?,?,?,?,?,?)";
 
@@ -78,17 +79,6 @@ public class JDBCSubscriptionDao implements SubscriptionDao {
     public void update(Subscription entity) {
 
     }
-
-    @Override
-    public void delete(SubscriptionKey id) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_DELETE)) {
-            preparedStatement.setLong(1, id.getPeriodicalId());
-            preparedStatement.setLong(2, id.getUserId());
-            preparedStatement.executeUpdate();
-        } catch (SQLException ex) {
-            logger.severe(ex.getMessage());
-        }
-    }
     @Override
     public Optional<Subscription> findByUserAndPeriodical(User user, Periodical periodical) {
         Optional<Subscription> optional = Optional.empty();
@@ -105,6 +95,25 @@ public class JDBCSubscriptionDao implements SubscriptionDao {
             logger.severe(ex.getMessage());
         }
         return optional;
+    }
+    @Override
+    public void delete(SubscriptionKey id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_DELETE)) {
+            preparedStatement.setLong(1, id.getPeriodicalId());
+            preparedStatement.setLong(2, id.getUserId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            logger.severe(ex.getMessage());
+        }
+    }
+    @Override
+    public void deleteByPeriodicalId(Long periodicalId) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_DELETE_BY_PERIODICAL)) {
+            preparedStatement.setLong(1, periodicalId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            logger.severe(ex.getMessage());
+        }
     }
 
     private Subscription extractFromResultSet(ResultSet rs) throws SQLException {

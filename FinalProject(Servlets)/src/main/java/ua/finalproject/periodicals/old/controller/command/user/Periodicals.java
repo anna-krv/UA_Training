@@ -1,4 +1,4 @@
-package ua.finalproject.periodicals.old.controller.command;
+package ua.finalproject.periodicals.old.controller.command.user;
 
 import ua.finalproject.periodicals.old.entity.Periodical;
 import ua.finalproject.periodicals.old.service.Criteria;
@@ -36,7 +36,7 @@ public class Periodicals implements ua.finalproject.periodicals.old.controller.c
         session.setAttribute("search", title);
         session.setAttribute("personalPage", false);
         session.setAttribute("number", number);
-        return "/WEB-INF/periodicals.jsp";
+        return "/WEB-INF/user/periodicals.jsp";
     }
 }
 
