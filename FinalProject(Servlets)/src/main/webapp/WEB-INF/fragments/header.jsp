@@ -1,3 +1,12 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%@ page language="java" import="java.util.*" %>
+<%@ page import="java.util.ResourceBundle" %>
+<% Properties props = new Properties();
+    props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("messages.properties"));
+%>
+
+
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">
         <%
@@ -33,10 +42,10 @@
             </li>
             <!--
             <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
-                <a class="nav-link" href="/admin/users" th:text="#{menu.users.manage}"></a>
+                <a class="nav-link" href="/admin/users" th:text="{menu.users.manage}"></a>
             </li>
             <li sec:authorize="hasAuthority('ADMIN')" class="nav-item">
-                <a class="nav-link" href="/admin/periodicals" th:text="#{menu.periodicals.manage}"></a>
+                <a class="nav-link" href="/admin/periodicals" th:text="{menu.periodicals.manage}"></a>
             </li>
             -->
 

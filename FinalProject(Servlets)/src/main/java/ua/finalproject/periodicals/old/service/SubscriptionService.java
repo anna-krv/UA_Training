@@ -11,6 +11,7 @@ import ua.finalproject.periodicals.old.entity.User;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class SubscriptionService {
@@ -19,8 +20,10 @@ public class SubscriptionService {
 
     private Logger logger = Logger.getLogger(SubscriptionService.class.getName());
 
-    public void create(User user, Periodical periodical) throws SQLException {
-        subscriptionDao.create(buildForUserAndPeriodical(user, periodical));
+    public Subscription create(User user, Periodical periodical) throws SQLException {
+        Subscription subscription = buildForUserAndPeriodical(user, periodical);
+        subscriptionDao.create(subscription);
+        return subscription;
     }
 
     private Subscription buildForUserAndPeriodical(User user, Periodical periodical) {
@@ -31,5 +34,9 @@ public class SubscriptionService {
 
     public void delete(User user, Periodical periodical) {
         subscriptionDao.delete(new SubscriptionKey(periodical.getId(), user.getId()));
+    }
+
+    public Optional<Subscription> findByUserAndPeriodical(User user, Periodical periodical) {
+        return subscriptionDao.findByUserAndPeriodical(user, periodical);
     }
 }

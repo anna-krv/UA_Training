@@ -59,12 +59,7 @@
                        class="btn btn-success" value="<%=props.getProperty("login.title")%>"/>
             </form>
         </div>
-        <br/>
-        <a lass="btn btn-primary" href="${pageContext.request.contextPath}/app/home">
-            <%
-                out.println(props.getProperty("home"));
-            %>
-        </a>
+
     </div>
 </div>
 </body>

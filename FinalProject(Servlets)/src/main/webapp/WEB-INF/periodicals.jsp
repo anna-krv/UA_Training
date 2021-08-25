@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<%@ page language="java" import="java.util.*" %>
-<%@ page import="java.util.ResourceBundle" %>
-<% Properties props = new Properties();
-    props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("messages.properties"));
-%>
-
+<%@include file="fragments/header.jsp"%>
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -17,10 +11,41 @@
         %>
     </title>
 </head>
+
+
+
 <body>
+<div class="container">
+    <div class="row justify-content-center" style="margin-top: 30px">
+        <div class="col-md-10">
+            <h1>
+                <c:if test = "${personalPage}">
+                    <%
+                        out.println(props.getProperty("subscriptions.my"));
+                    %>
+                </c:if>
 
-<%@include file="fragments/header.jsp"%>
-THIS IS TOP SECRET PAGE
+                <c:if test = "${!personalPage}">
+                    <%
+                        out.println(props.getProperty("subscriptions.available"));
+                    %>
+                </c:if>
+            </h1>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="margin-top: 30px">
+        <div class="col-md-3">
+            <%@include file ="fragments/search-filter-form.jsp" %>
+        </div>
 
+        <div class="col-md-8">
+            <!--<div th:replace="fragments/diagnostics :: error-or-success"></div>
+            -->
+            <%@include file ="fragments/periodicals-list.jsp"%>
+            <%@include file ="fragments/periodicals-page-nav.jsp"%>
+        </div>
+
+    </div>
+</div>
 </body>
 </html>

@@ -21,8 +21,8 @@ public class Login implements Command{
 
         if (user.isPresent()){
             request.getSession().setAttribute("role", user.get().getAuthority());
-            request.getSession().setAttribute("user", user);
-            return "/index.jsp";
+            request.getSession().setAttribute("userId", user.get().getId());
+            return "/WEB-INF/index.jsp";
         }
 
         logger.info("invalid credentials for username: "+ username);

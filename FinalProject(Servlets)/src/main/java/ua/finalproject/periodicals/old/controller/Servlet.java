@@ -22,9 +22,12 @@ public class Servlet extends HttpServlet {
         commands.put("login", new Login());
         commands.put("registerPage", new RegisterPage());
         commands.put("register", new Register());
+        commands.put("logout", new Logout());
         commands.put("periodicals", new Periodicals());
         commands.put("periodicals/subscribed", new PeriodicalsSubscribed());
-        //commands.put("periodicals/", new )
+        commands.put("periodicals/[0-9]+.*", new PeriodicalById());
+        commands.put("account(\\?.*)*", new Account());
+
     }
 
     @Override
@@ -38,15 +41,26 @@ public class Servlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String path=PathUtil.getPath(request.getRequestURI());
-        logger.info("path "+path);
-        Command command = commands.getOrDefault(path,
-                (req) -> "/index.jsp");
+        String path = PathUtil.getPath(request.getRequestURI());
+        logger.info("path " + path);
+        Command command = getCommand(path);//commands.getOrDefault(path, (req) -> "/index.jsp");
         String page = command.execute(request);
+        logger.info("next page "+page);
         if (page.contains("redirect:")) {
             response.sendRedirect(page.replace("redirect:", ""));
         } else {
             request.getRequestDispatcher(page).forward(request, response);
         }
+    }
+
+    private Command getCommand(String path) {
+        String commandKey = commands
+                .keySet()
+                .stream()
+                .filter(key -> path.matches(key))
+                .findFirst()
+                .orElse("");
+        logger.info("command with key: "+commandKey);
+        return commands.getOrDefault(commandKey, (req) -> "index.jsp");
     }
 }

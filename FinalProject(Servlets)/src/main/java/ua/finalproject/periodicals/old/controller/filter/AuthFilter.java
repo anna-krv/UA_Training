@@ -13,7 +13,6 @@ public class AuthFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
-        logger.info("init filter");
     }
 
     @Override
@@ -21,10 +20,10 @@ public class AuthFilter implements Filter {
         logger.info("filtering");
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String uri = httpServletRequest.getRequestURI();
-        boolean isLoggedIn = httpServletRequest.getSession().getAttribute("role")!=null;
+        boolean isLoggedIn = httpServletRequest.getSession().getAttribute("role") != null;
         boolean isLoginRequest = PathUtil.isLoginRequest(uri);
         boolean isPublicPath = PathUtil.isPublic(uri);
-        logger.info(isPublicPath+"is public");
+        logger.info("is public: " + isPublicPath);
         if (isLoggedIn || isPublicPath) {
             logger.info("public or good credentials");
             filterChain.doFilter(servletRequest, servletResponse);
