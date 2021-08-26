@@ -14,31 +14,30 @@ public class Account implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = (Long) request.getSession().getAttribute("userId");
 
         String moneyToPutStr= request.getParameter("moneyToPut");
         if (moneyToPutStr!=null){
-            putMoney(session, moneyToPutStr, userId);
+            putMoney(request, moneyToPutStr, userId);
         }
 
-        session.setAttribute("balance", userService.findById(userId).get().getBalance());
-        return "/WEB-INF/account.jsp";
+        request.setAttribute("balance", userService.findById(userId).get().getBalance());
+        return "/WEB-INF/user/account.jsp";
     }
 
-    private void putMoney(HttpSession session, String moneyToPutStr, Long userId) {
+    private void putMoney(HttpServletRequest request, String moneyToPutStr, Long userId) {
         try {
             BigDecimal moneyToPut=new BigDecimal(moneyToPutStr);
             if (moneyToPut.compareTo(BigDecimal.ZERO)<=0){
                 throw new IllegalArgumentException("Money amount is negative: "+moneyToPut+", but should be >0.");
             }
-            session.setAttribute("success", userService.putMoney(userId, moneyToPut));
+            request.setAttribute("success", userService.putMoney(userId, moneyToPut));
         } catch (NumberFormatException ex){
             logger.severe(ex.getMessage());
-            session.setAttribute("formatError", true);
+            request.setAttribute("formatError", true);
         } catch (IllegalArgumentException ex) {
             logger.severe(ex.getMessage());
-            session.setAttribute("moneyError", true);
+            request.setAttribute("moneyError", true);
         }
     }
 }

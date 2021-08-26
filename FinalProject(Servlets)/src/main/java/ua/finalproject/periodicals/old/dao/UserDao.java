@@ -12,4 +12,6 @@ public interface UserDao extends GenericDao<User, Long>{
     boolean updateBalance(Long userId, BigDecimal moneyToPut);
 
     List<User> findByIdNot(Long userId, int number);
+
+    Optional<User> changeBlockStatus(Long id);
 }

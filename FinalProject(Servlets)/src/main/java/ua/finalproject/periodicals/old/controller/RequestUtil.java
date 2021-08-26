@@ -9,10 +9,15 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RequestUtil {
     private static final String REGEX_PATH = Configurations.getProperty(Constants.PATH);
+    private static final String REGEX_NUMBER="[0-9]+";
     private static Set<String> publicPath;
+    private static final Logger logger = Logger.getLogger(RequestUtil.class.getName());
 
     static {
         publicPath = new HashSet<>();
@@ -46,11 +51,11 @@ public class RequestUtil {
         return number;
     }
 
-    public static Long extractId(HttpServletRequest request, String targetBegin, String targetEnd) {
-        String id = RequestUtil.getPath(request.getRequestURI())
-                .replace(targetBegin, "")
-                .replace(targetEnd, "");
-        return Long.valueOf(id);
+    public static Long extractId(HttpServletRequest request) {
+        String path = getPath(request.getRequestURI());
+        Matcher matcher = Pattern.compile(REGEX_NUMBER).matcher(path);
+        matcher.find();
+        return Long.valueOf(matcher.group());
     }
 
     public static Periodical extractPeriodicalParam(HttpServletRequest request) {
@@ -81,5 +86,19 @@ public class RequestUtil {
 
     private static boolean check(String s){
         return s!=null && s.length()>2;
+    }
+
+    public static RequestAction getRequestAction(HttpServletRequest request) {
+        String path = RequestUtil.getPath(request.getRequestURI());
+        if (path.endsWith("unsubscribe")) {
+            return RequestAction.UNSUBSCRIBE;
+        }
+        if (path.endsWith("subscribe")) {
+            return RequestAction.SUBSCRIBE;
+        }
+        if (path.endsWith("changeBlockStatus")){
+            return RequestAction.CHANGE_BLOCK_STATUS;
+        }
+        return RequestAction.GET;
     }
 }

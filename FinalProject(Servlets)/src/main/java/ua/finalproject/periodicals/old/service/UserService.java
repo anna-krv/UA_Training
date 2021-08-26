@@ -30,4 +30,8 @@ public class UserService {
     public List<User> findByIdNot(Long userId, int number) {
         return userDao.findByIdNot(userId, number);
     }
+
+    public Optional<User> changeBlockStatus(Long id) {
+        return userDao.changeBlockStatus(id);
+    }
 }

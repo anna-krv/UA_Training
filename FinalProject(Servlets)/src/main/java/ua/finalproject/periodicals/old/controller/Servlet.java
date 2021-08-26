@@ -2,6 +2,10 @@ package ua.finalproject.periodicals.old.controller;
 
 import ua.finalproject.periodicals.old.controller.command.*;
 import ua.finalproject.periodicals.old.controller.command.admin.*;
+import ua.finalproject.periodicals.old.controller.command.authentication.Login;
+import ua.finalproject.periodicals.old.controller.command.authentication.LoginPage;
+import ua.finalproject.periodicals.old.controller.command.authentication.Register;
+import ua.finalproject.periodicals.old.controller.command.authentication.RegisterPage;
 import ua.finalproject.periodicals.old.controller.command.user.*;
 
 import javax.servlet.ServletException;
@@ -37,9 +41,8 @@ public class Servlet extends HttpServlet {
         commands.put("admin/periodicals/[0-9]+/delete", new AdminPeriodicalDelete());
         commands.put("admin/periodicals/[0-9]+/update", new AdminPeriodicalUpdate());
 
-
         commands.put("admin/users", new AdminUsersPage());
-        commands.put("admin/users/[0-9]+", new AdminUserById());
+        commands.put("admin/users/[0-9]+.*", new AdminUserById());
 
     }
 

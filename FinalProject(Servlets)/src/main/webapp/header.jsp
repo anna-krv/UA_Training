@@ -1,7 +1,13 @@
+<%@ page language="java" import="java.util.*" %>
+<%@ page import="java.util.ResourceBundle" %>
+<% ResourceBundle rb = ResourceBundle.getBundle("messages",
+        Locale.ENGLISH);
+%>
+
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/app/">
         <%
-            out.println(props.getProperty("title"));
+            out.println(rb.getString("title"));
         %>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -13,14 +19,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/app/loginPage" >
                     <%
-                        out.println(props.getProperty("login.title"));
+                        out.println(rb.getString("login.title"));
                     %>
                 </a>
             </li>
             <li  class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/app/registerPage" >
                     <%
-                        out.println(props.getProperty("register"));
+                        out.println(rb.getString("register"));
                     %>
                 </a>
             </li>

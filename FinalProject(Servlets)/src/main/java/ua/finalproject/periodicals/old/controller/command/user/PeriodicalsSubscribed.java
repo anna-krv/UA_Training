@@ -23,21 +23,20 @@ public class PeriodicalsSubscribed implements Command {
         List<String> allTopics = periodicalService.findTopics();
         List<String> topicsSelected = topicsSelectedArr != null ? Arrays.asList(topicsSelectedArr) : allTopics;
         int number = RequestUtil.getNumberParam(request);
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = (Long) request.getSession().getAttribute("userId");
 
         Criteria criteria = new Criteria(fieldForSort, number, title, topicsSelected, Optional.of(userId));
         List<Periodical> periodicals = periodicalService.findByCriteria(criteria);
         List<String> topicsForUser = periodicalService.findAllTopicsByUser(userId);
 
-        session.setAttribute("periodicals", periodicals);
-        session.setAttribute("searchError", periodicals.isEmpty());
-        session.setAttribute("number", number);
-        session.setAttribute("topics", topicsForUser);
-        session.setAttribute("topicsSelected", topicsSelected != null ? topicsSelected : topicsForUser);
-        session.setAttribute("sort", fieldForSort);
-        session.setAttribute("search", title);
-        session.setAttribute("personalPage", true);
+        request.setAttribute("periodicals", periodicals);
+        request.setAttribute("searchError", periodicals.isEmpty());
+        request.setAttribute("number", number);
+        request.setAttribute("topics", topicsForUser);
+        request.setAttribute("topicsSelected", topicsSelected != null ? topicsSelected : topicsForUser);
+        request.setAttribute("sort", fieldForSort);
+        request.setAttribute("search", title);
+        request.setAttribute("personalPage", true);
         return "/WEB-INF/user/periodicals.jsp";
     }
 }

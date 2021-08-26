@@ -1,4 +1,6 @@
-package ua.finalproject.periodicals.old.controller.command;
+package ua.finalproject.periodicals.old.controller.command.authentication;
+
+import ua.finalproject.periodicals.old.controller.command.Command;
 
 import javax.servlet.http.HttpServletRequest;
 

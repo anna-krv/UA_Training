@@ -5,7 +5,6 @@ import ua.finalproject.periodicals.old.service.Criteria;
 import ua.finalproject.periodicals.old.service.PeriodicalService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,15 +26,13 @@ public class Periodicals implements ua.finalproject.periodicals.old.controller.c
         Criteria criteria = new Criteria(fieldForSort, number, title, topicsSelected, Optional.empty());
         List<Periodical> periodicals = periodicalService.findByCriteria(criteria);
 
-        HttpSession session = request.getSession();
-
-        session.setAttribute("periodicals", periodicals);
-        session.setAttribute("topics", allTopics);
-        session.setAttribute("topicsSelected", topicsSelected != null ? topicsSelected : allTopics);
-        session.setAttribute("sort", fieldForSort);
-        session.setAttribute("search", title);
-        session.setAttribute("personalPage", false);
-        session.setAttribute("number", number);
+        request.setAttribute("periodicals", periodicals);
+        request.setAttribute("topics", allTopics);
+        request.setAttribute("topicsSelected", topicsSelected != null ? topicsSelected : allTopics);
+        request.setAttribute("sort", fieldForSort);
+        request.setAttribute("search", title);
+        request.setAttribute("personalPage", false);
+        request.setAttribute("number", number);
         return "/WEB-INF/user/periodicals.jsp";
     }
 }

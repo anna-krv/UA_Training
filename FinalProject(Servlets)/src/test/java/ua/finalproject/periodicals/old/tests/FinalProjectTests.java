@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class FinalProjectTests {
@@ -66,6 +68,13 @@ public class FinalProjectTests {
     @Test
     public void pathUtilTest(){
         System.out.println(RequestUtil.getPath("periodicals_servlets__war"));
+    }
+
+    @Test public void pathUtilIdTest(){
+        Matcher matcher =Pattern.compile("[0-9]+").matcher("admin/users/11");
+        //System.out.println(matcher.groupCount());
+        matcher.find();
+        System.out.println(matcher.group(0));
     }
 
 }

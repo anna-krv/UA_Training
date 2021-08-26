@@ -12,7 +12,7 @@ public class AdminPeriodicalDelete implements ua.finalproject.periodicals.old.co
 
     @Override
     public String execute(HttpServletRequest request) {
-        Long id =RequestUtil.extractId(request, "admin/periodicals/", "/delete");
+        Long id =RequestUtil.extractId(request);
         subscriptionService.deleteByPeriodicalId(id);
         periodicalService.deleteById(id);
         return "redirect:/admin/periodicals";

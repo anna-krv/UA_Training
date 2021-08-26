@@ -21,6 +21,8 @@ public class JDBCUserDao implements UserDao {
             "ORDER BY name LIMIT ?, ?";
     private static final String QUERY_FIND_BY_ID = "SELECT * FROM user WHERE id=?";
     private static final String QUERY_FIND_BY_USERNAME = "SELECT * FROM user WHERE username=?";
+    private static final String QUERY_UPDATE_ACCOUNT_NON_LOCKED=
+            "UPDATE user SET account_non_locked = NOT account_non_locked WHERE id=?";
     private static final String QUERY_INSERT = "INSERT INTO user() VALUES ()";
     private static final String QUERY_UPDATE_BALANCE="UPDATE user SET balance=balance+? WHERE id=?";
     private static final Logger logger = Logger.getLogger(JDBCUserDao.class.getName());
@@ -36,7 +38,18 @@ public class JDBCUserDao implements UserDao {
     public void create(User entity) {
 
     }
-
+    @Override
+    public Optional<User> changeBlockStatus(Long id) {
+        Optional<User> optional = Optional.empty();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_UPDATE_ACCOUNT_NON_LOCKED)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+            optional=findById(id);
+        } catch (SQLException ex) {
+            logger.severe(ex.getMessage());
+        }
+        return optional;
+    }
     @Override
     public Optional<User> findById(Long id) {
         Optional<User> optional = Optional.ofNullable(null);

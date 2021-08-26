@@ -11,7 +11,7 @@ public class AdminPeriodicalUpdate implements ua.finalproject.periodicals.old.co
     private static final PeriodicalService periodicalService = new PeriodicalService();
     @Override
     public String execute(HttpServletRequest request) {
-        Long id = RequestUtil.extractId(request, "admin/periodicals/", "/update");
+        Long id = RequestUtil.extractId(request);
         try {
             Periodical periodical = RequestUtil.extractPeriodicalParam(request);
             periodicalService.update(id, periodical);

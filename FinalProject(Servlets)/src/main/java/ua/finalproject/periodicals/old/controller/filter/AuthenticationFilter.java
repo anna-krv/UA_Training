@@ -4,6 +4,7 @@ import ua.finalproject.periodicals.old.controller.RequestUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -17,18 +18,22 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        ((HttpServletResponse)servletResponse).setHeader("Cache-Control", "no-store");
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String uri = httpServletRequest.getRequestURI();
         boolean isLoggedIn = httpServletRequest.getSession().getAttribute("role") != null;
-        boolean isLoginRequest = RequestUtil.isLoginRequest(uri);
         boolean isPublicPath = RequestUtil.isPublic(uri);
 
-        if (isLoginRequest && isLoggedIn){
+        if (isPublicPath && isLoggedIn){
+            logger.info("public and logged");
             RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher("/WEB-INF/index.jsp");
             dispatcher.forward(servletRequest, servletResponse);
+            return;
         }
-        if (isLoggedIn || isPublicPath) {
+        else if (isLoggedIn || isPublicPath) {
+            logger.info("is logged or is public path");
             filterChain.doFilter(servletRequest, servletResponse);
+            return;
         } else {
             logger.info("not public and no credentials, redirect to login page");
             RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher("/login.jsp");

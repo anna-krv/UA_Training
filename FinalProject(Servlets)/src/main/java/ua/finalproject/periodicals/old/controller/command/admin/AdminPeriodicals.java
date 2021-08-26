@@ -5,7 +5,6 @@ import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.service.PeriodicalService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 public class AdminPeriodicals implements Command {
     private static final PeriodicalService periodicalService = new PeriodicalService();
@@ -13,9 +12,8 @@ public class AdminPeriodicals implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         int number = RequestUtil.getNumberParam(request);
-        HttpSession session = request.getSession();
-        session.setAttribute("periodicals", periodicalService.findAll(number));
-        session.setAttribute("number", number);
+        request.setAttribute("periodicals", periodicalService.findAll(number));
+        request.setAttribute("number", number);
         return "/WEB-INF/admin/periodicals.jsp";
     }
 }
