@@ -26,14 +26,11 @@ public class AuthenticationFilter implements Filter {
 
         if (isPublicPath && isLoggedIn){
             logger.info("public and logged");
-            RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher("/WEB-INF/index.jsp");
+            RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher("index.jsp");
             dispatcher.forward(servletRequest, servletResponse);
-            return;
         }
         else if (isLoggedIn || isPublicPath) {
-            logger.info("is logged or is public path");
             filterChain.doFilter(servletRequest, servletResponse);
-            return;
         } else {
             logger.info("not public and no credentials, redirect to login page");
             RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher("/login.jsp");

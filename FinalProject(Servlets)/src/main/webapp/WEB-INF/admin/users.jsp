@@ -17,6 +17,7 @@
 <div class="container" style="margin-top: 30px">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <%@include file ="../fragments/error-diagnostics.jsp"%>
             <%@include file ="../fragments/users-list.jsp" %>
             <%@include file ="../fragments/basic-page-nav.jsp" %>
         </div>

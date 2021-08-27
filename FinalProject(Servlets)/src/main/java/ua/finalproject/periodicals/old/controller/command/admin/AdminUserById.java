@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.old.controller.command.admin;
 
+import ua.finalproject.periodicals.old.controller.ErrorType;
 import ua.finalproject.periodicals.old.controller.RequestUtil;
 import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.entity.User;
@@ -19,7 +20,7 @@ public class AdminUserById implements Command {
             request.setAttribute("user", getUser(request));
         } catch (NoSuchElementException ex) {
             logger.severe(ex.getMessage());
-            request.setAttribute("resourceError", true);
+            request.setAttribute("error", ErrorType.RESOURCE);
         }
         return "/WEB-INF/admin/aUser.jsp";
     }

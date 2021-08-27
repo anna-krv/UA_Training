@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.old.controller.command.admin;
 
+import ua.finalproject.periodicals.old.controller.ErrorType;
 import ua.finalproject.periodicals.old.controller.RequestUtil;
 import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.entity.Periodical;
@@ -23,7 +24,7 @@ public class AdminPeriodicalById implements Command {
             request.setAttribute("periodical", periodical);
         } catch (NoSuchElementException ex) {
             logger.severe(ex.getMessage());
-            request.setAttribute("resourceError", true);
+            request.setAttribute("error", ErrorType.RESOURCE);
         }
         return "/WEB-INF/admin/editPeriodical.jsp";
     }

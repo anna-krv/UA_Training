@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>
-        <%
-            out.println(rb.getString("title"));
-        %>
+        <%=rb.getString("title")%>
     </title>
 </head>
 <body>
@@ -21,6 +19,7 @@
             <h1 >
                 <%=rb.getString("action.editPeriodical")%>
             </h1>
+            <%@include file ="../fragments/error-diagnostics.jsp"%>
             <form method="post" action="${pageContext.request.contextPath}/app/admin/periodicals/${periodical.id}/update">
                 <div class="form-group">
                     <label for="title">

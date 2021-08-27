@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.old.entity;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class User {
     private boolean enabled = true;
     private Role authority;
     private List<Role> authorities;
-    private int balance;
+    private BigDecimal balance;
     Set<Subscription> subscriptions;
 
     public List<Role> getAuthorities() {
@@ -125,11 +126,11 @@ public class User {
         this.authorities = authorities;
     }
 
-    public int getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

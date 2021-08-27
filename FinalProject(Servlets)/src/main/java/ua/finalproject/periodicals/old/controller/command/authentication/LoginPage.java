@@ -9,7 +9,6 @@ public class LoginPage implements Command {
     private static final Logger logger = Logger.getLogger(LoginPage.class.getName());
     @Override
     public String execute(HttpServletRequest request) {
-
         return "/login.jsp";
     }
 }

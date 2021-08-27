@@ -3,7 +3,7 @@
 
 <html>
 
-<%@include file="header.jsp"%>
+<%@include file="/WEB-INF/fragments/header.jsp"%>
 
 
 <head>

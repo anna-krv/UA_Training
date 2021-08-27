@@ -10,7 +10,7 @@ public class Criteria {
     private PeriodicalField fieldForSort;
     private int number;
     private String title;
-    private List<String> topics; // empty list means "any" topic
+    private List<String> topics;
     private Optional<Long> userId;
 
     public Criteria(String fieldForSort, int number, String title, List<String> topics, Optional<Long> userId) {
@@ -43,5 +43,11 @@ public class Criteria {
 
     public Optional<Long> getUserId() {
         return userId;
+    }
+    public void setTopics(List<String> topics) {
+        this.topics = topics;
+    }
+    public void setUserId(Optional<Long> userId) {
+        this.userId = userId;
     }
 }

@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.old.controller.command.authentication;
 
+import ua.finalproject.periodicals.old.controller.ErrorType;
 import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.entity.User;
 import ua.finalproject.periodicals.old.service.UserService;
@@ -23,10 +24,11 @@ public class Login implements Command {
         if (user.isPresent()){
             request.getSession().setAttribute("role", user.get().getAuthority());
             request.getSession().setAttribute("userId", user.get().getId());
-            return "/WEB-INF/index.jsp";
+            return "/index.jsp";
         }
 
         logger.info("invalid credentials for username: "+ username);
+        request.setAttribute("error", ErrorType.LOGIN);
         return "/login.jsp";
 
     }

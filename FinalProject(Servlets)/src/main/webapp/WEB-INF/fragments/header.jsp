@@ -9,9 +9,7 @@
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">
-        <%
-            out.println(rb.getString("title"));
-        %>
+        <%=rb.getString("title")%>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,18 +17,27 @@
     </button>
     <div class="navbar-collapse collapse" id="navbarNavAltMarkup">
         <ul class="navbar-nav mr-auto">
+            <c:if test="${role==null}">
+            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/app/loginPage" >
+                    <%=rb.getString("login.title")%>
+                </a>
+            </li>
+            <li  class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/app/registerPage" >
+                    <%=rb.getString("register")%>
+                </a>
+            </li>
+            </c:if>
+            <c:if test="${role!=null}">
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/app/periodicals/subscribed">
-                    <%
-                        out.println(rb.getString("menu.personalPage"));
-                    %>
+                    <%=rb.getString("menu.personalPage")%>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/app/periodicals">
-                    <%
-                        out.println(rb.getString("action.subscribe"));
-                    %>
+                    <%=rb.getString("action.subscribe")%>
                 </a>
             </li>
             <li class="nav-item">
@@ -38,6 +45,8 @@
                     <%=rb.getString("account")%>
                 </a>
             </li>
+            </c:if>
+
             <c:if test="${role=='ADMIN'}">
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/app/admin/users">
@@ -51,12 +60,15 @@
                 </li>
             </c:if>
         </ul>
+
         <ul class="navbar-nav ml-auto">
+            <c:if test="${role!=null}">
             <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/app/logout">
                     <%=rb.getString("action.logout")%>
                 </a>
             </li>
+            </c:if>
             <li class="nav-item">
                 <a class="nav-link" href="?localeData=ua">UA</a>
             </li>

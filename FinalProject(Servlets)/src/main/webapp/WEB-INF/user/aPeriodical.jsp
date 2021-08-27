@@ -36,16 +36,14 @@
                     %>
                         ${periodical.price}
                 </p>
-                <% Subscription subscription = (Subscription) request.getSession().getAttribute("subscription");
+                <% Subscription subscription = (Subscription) request.getAttribute("subscription");
                 %>
                 <c:if test="${subscription!=null}">
                     <p class="mb-1">
                         <%
                             out.println(rb.getString("payment.last") + ": "+
                                     subscription.getLastPaymentDateTime().format(DateTimeFormatter.ofPattern(
-                                            rb.getString("format.data")
-                                    ))
-                            );
+                                            rb.getString("format.data"))));
                         %>
                     </p>
                     <p class="mb-1">
@@ -80,6 +78,15 @@
                 </c:if>
             </div>
         </c:if>
+    </div>
+
+
+    <div class="row justify-content-center">
+        <div class="col-md-6" style="margin-top:30px">
+            <%@include file ="../fragments/error-diagnostics.jsp"%>
+        </div>
+        <div class="col-md-3"></div>
+
     </div>
 </div>
 </body>

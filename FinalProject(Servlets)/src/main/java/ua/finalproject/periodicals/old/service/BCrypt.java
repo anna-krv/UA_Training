@@ -1,4 +1,4 @@
-package ua.finalproject.periodicals.old.dao;
+package ua.finalproject.periodicals.old.service;
 
 // Copyright (c) 2006 Damien Miller <djm@mindrot.org>
 //

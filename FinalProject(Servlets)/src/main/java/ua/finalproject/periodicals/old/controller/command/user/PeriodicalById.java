@@ -1,6 +1,7 @@
 package ua.finalproject.periodicals.old.controller.command.user;
 
 
+import ua.finalproject.periodicals.old.controller.ErrorType;
 import ua.finalproject.periodicals.old.controller.RequestUtil;
 import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.dao.MoneyAccountException;
@@ -29,22 +30,23 @@ public class PeriodicalById implements Command {
         Long userId= (Long)request.getSession().getAttribute("userId");
 
         try {
-            User user = userService.findById(userId).orElseThrow(()->new NoSuchElementException("no user with id "+userId));
+            User user = userService.findById(userId).orElseThrow(
+                    ()->new NoSuchElementException("no user with id "+userId));
             Periodical periodical = periodicalService.findById(id).orElseThrow(
                     () -> new NoSuchElementException("no periodical with id " + id));
             request.setAttribute("periodical", periodical);
             Optional<Subscription> optional = getSubscription(request, user, periodical);
 
-            request.setAttribute("subscription", optional.orElse(null));
-            request.setAttribute("success", true);
+            request.setAttribute("subscription", optional.orElseThrow(()->new NoSuchElementException(
+                    "unable to find subscription for user "+userId+" and periodical "+id)));
+            request.setAttribute("error", ErrorType.NONE);
         } catch (MoneyAccountException ex) {
             logger.severe(ex.getMessage());
-            request.setAttribute("accountError", true);
+            request.setAttribute("error", ErrorType.ACCOUNT);
         } catch (NoSuchElementException ex) {
             logger.severe(ex.getMessage());
-            request.setAttribute("resourceError", true);
         } catch (SQLException ex) {
-            request.setAttribute("error", true);
+            request.setAttribute("error", ErrorType.OTHER);
         }
         return "/WEB-INF/user/aPeriodical.jsp";
     }

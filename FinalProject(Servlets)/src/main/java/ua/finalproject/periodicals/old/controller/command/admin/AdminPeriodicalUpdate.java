@@ -1,5 +1,6 @@
 package ua.finalproject.periodicals.old.controller.command.admin;
 
+import ua.finalproject.periodicals.old.controller.ErrorType;
 import ua.finalproject.periodicals.old.controller.RequestUtil;
 import ua.finalproject.periodicals.old.entity.Periodical;
 import ua.finalproject.periodicals.old.service.PeriodicalService;
@@ -13,11 +14,14 @@ public class AdminPeriodicalUpdate implements ua.finalproject.periodicals.old.co
     public String execute(HttpServletRequest request) {
         Long id = RequestUtil.extractId(request);
         try {
-            Periodical periodical = RequestUtil.extractPeriodicalParam(request);
+            Periodical periodical = RequestUtil.extractPeriodical(request);
             periodicalService.update(id, periodical);
-        } catch (IllegalArgumentException | SQLException ex) {
-            return "redirect:/admin/periodicals/"+id;
+            request.setAttribute("error", ErrorType.NONE);
+        } catch (IllegalArgumentException ex) {
+            request.setAttribute("error", ErrorType.FORMAT);
+        } catch(SQLException ex){
+            request.setAttribute("error", ErrorType.OTHER);
         }
-        return "redirect:/admin/periodicals";
+       return "redirect:/admin/periodicals/"+id;
     }
 }

@@ -21,7 +21,7 @@ public class AuthorizationFilter implements Filter {
         boolean isAdminRole = httpServletRequest.getSession().getAttribute("role") == Role.ADMIN;
 
         if (isAdminPath && !isAdminRole){
-            RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher("/WEB-INF/index.jsp");
+            RequestDispatcher dispatcher = httpServletRequest.getRequestDispatcher("index.jsp");
             dispatcher.forward(request, response);
         }
         else{

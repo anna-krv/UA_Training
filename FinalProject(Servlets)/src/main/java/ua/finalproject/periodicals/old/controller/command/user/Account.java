@@ -1,11 +1,12 @@
 package ua.finalproject.periodicals.old.controller.command.user;
 
+import ua.finalproject.periodicals.old.controller.ErrorType;
 import ua.finalproject.periodicals.old.controller.command.Command;
 import ua.finalproject.periodicals.old.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class Account implements Command {
@@ -31,13 +32,16 @@ public class Account implements Command {
             if (moneyToPut.compareTo(BigDecimal.ZERO)<=0){
                 throw new IllegalArgumentException("Money amount is negative: "+moneyToPut+", but should be >0.");
             }
-            request.setAttribute("success", userService.putMoney(userId, moneyToPut));
+            userService.putMoney(userId, moneyToPut);
+            request.setAttribute("error", ErrorType.NONE);
         } catch (NumberFormatException ex){
             logger.severe(ex.getMessage());
-            request.setAttribute("formatError", true);
+            request.setAttribute("error", ErrorType.FORMAT);
         } catch (IllegalArgumentException ex) {
             logger.severe(ex.getMessage());
-            request.setAttribute("moneyError", true);
+            request.setAttribute("error", ErrorType.MONEY);
+        } catch (SQLException ex) {
+            request.setAttribute("error", ErrorType.OTHER);
         }
     }
 }

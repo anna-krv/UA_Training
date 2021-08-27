@@ -77,6 +77,6 @@ public class Servlet extends HttpServlet {
                 .findFirst()
                 .orElse("");
         logger.info("command with key: "+commandKey);
-        return commands.getOrDefault(commandKey, (req) -> "index.jsp");
+        return commands.getOrDefault(commandKey, (req) -> "/index.jsp");
     }
 }

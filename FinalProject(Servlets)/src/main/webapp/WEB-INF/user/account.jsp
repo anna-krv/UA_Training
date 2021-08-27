@@ -41,6 +41,7 @@
                 <input type="submit" value="<%=rb.getString("account.putMoney")%>"
                        class="btn btn-success"/>
             </form>
+            <%@include file ="../fragments/error-diagnostics.jsp"%>
         </div>
     </div>
 </div>

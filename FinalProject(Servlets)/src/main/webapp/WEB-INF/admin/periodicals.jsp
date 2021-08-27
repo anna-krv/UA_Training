@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>
-        <%
-            out.println(rb.getString("title"));
-        %>
+        <%=rb.getString("title")%>
     </title>
 </head>
 <body>
@@ -23,6 +21,7 @@
             </a>
         </div>
         <div class="col-md-8">
+            <%@include file ="../fragments/error-diagnostics.jsp"%>
             <%@include file="../fragments/periodicals-list-admin.jsp"%>
             <%@include file="../fragments/basic-page-nav.jsp"%>
         </div>

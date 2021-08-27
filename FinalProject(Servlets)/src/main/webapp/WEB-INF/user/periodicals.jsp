@@ -35,12 +35,11 @@
     </div>
     <div class="row justify-content-center" style="margin-top: 30px">
         <div class="col-md-3">
-            <%@include file ="../fragments/search-filter-form.jsp" %>
+           <%@include file ="../fragments/search-filter-form.jsp" %>
         </div>
 
         <div class="col-md-8">
-            <!--<div th:replace="fragments/diagnostics :: error-or-success"></div>
-            -->
+            <%@include file ="../fragments/error-diagnostics.jsp"%>
             <%@include file ="../fragments/periodicals-list.jsp"%>
             <%@include file ="../fragments/periodicals-page-nav.jsp"%>
         </div>

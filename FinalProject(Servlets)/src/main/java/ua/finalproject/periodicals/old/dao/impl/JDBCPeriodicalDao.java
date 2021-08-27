@@ -108,7 +108,9 @@ public class JDBCPeriodicalDao implements PeriodicalDao {
             ResultSet rs = statement.executeQuery(QUERY_FIND_TOPICS);
             while (rs.next()) {
                 topics.add(rs.getString(1));
+                logger.info(rs.getString(1));
             }
+            logger.info("RESULT: "+topics+" size: "+topics.size());
         } catch (SQLException ex) {
             logger.severe(ex.getMessage());
         }

@@ -3,7 +3,7 @@ package ua.finalproject.periodicals.old.dao.impl;
 
 import ua.finalproject.periodicals.old.config.Configurations;
 import ua.finalproject.periodicals.old.config.Constants;
-import ua.finalproject.periodicals.old.dao.BCrypt;
+import ua.finalproject.periodicals.old.service.BCrypt;
 import ua.finalproject.periodicals.old.dao.UserDao;
 import ua.finalproject.periodicals.old.entity.Role;
 import ua.finalproject.periodicals.old.entity.User;
@@ -23,7 +23,9 @@ public class JDBCUserDao implements UserDao {
     private static final String QUERY_FIND_BY_USERNAME = "SELECT * FROM user WHERE username=?";
     private static final String QUERY_UPDATE_ACCOUNT_NON_LOCKED=
             "UPDATE user SET account_non_locked = NOT account_non_locked WHERE id=?";
-    private static final String QUERY_INSERT = "INSERT INTO user() VALUES ()";
+    private static final String QUERY_INSERT =
+            "INSERT INTO user(name, surname, email, username, password, authority, balance) "+
+            "VALUES (?,?,?,?,?,?,?)";
     private static final String QUERY_UPDATE_BALANCE="UPDATE user SET balance=balance+? WHERE id=?";
     private static final Logger logger = Logger.getLogger(JDBCUserDao.class.getName());
     private static final int PAGE_SIZE = Integer.valueOf(Configurations.getProperty(Constants.PAGE_SIZE));
@@ -36,6 +38,19 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void create(User entity) {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(QUERY_INSERT)){
+            preparedStatement.setString(1, entity.getName());
+            preparedStatement.setString(2, entity.getSurname());
+            preparedStatement.setString(3, entity.getEmail());
+            preparedStatement.setString(4, entity.getUsername());
+            preparedStatement.setString(5, entity.getPassword());
+            preparedStatement.setInt(6, entity.getAuthority().ordinal());
+            preparedStatement.setBigDecimal(7, entity.getBalance());
+
+            preparedStatement.execute();
+        }catch(SQLException ex){
+            logger.severe(ex.getMessage());
+        }
 
     }
     @Override
@@ -112,7 +127,7 @@ public class JDBCUserDao implements UserDao {
         entity.setCredentialsNonExpired(rs.getBoolean("credentials_non_expired"));
         entity.setEnabled(rs.getBoolean("enabled"));
         entity.setAuthority(Role.values()[rs.getInt("authority")]);
-        entity.setBalance(rs.getInt("balance"));
+        entity.setBalance(rs.getBigDecimal("balance"));
 
         return entity;
     }
@@ -140,15 +155,14 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public boolean updateBalance(Long userId, BigDecimal moneyToPut) {
+    public void updateBalance(Long userId, BigDecimal moneyToPut) throws SQLException {
         try(PreparedStatement preparedStatement = connection.prepareStatement(QUERY_UPDATE_BALANCE)){
             preparedStatement.setBigDecimal(1, moneyToPut);
             preparedStatement.setLong(2, userId);
             preparedStatement.executeUpdate();
-            return true;
         }catch(SQLException ex){
             logger.severe(ex.getMessage());
-            return false;
+            throw ex;
         }
     }
 

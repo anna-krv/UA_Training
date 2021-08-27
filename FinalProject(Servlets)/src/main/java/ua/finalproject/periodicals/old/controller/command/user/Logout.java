@@ -11,6 +11,6 @@ public class Logout implements Command {
     public String execute(HttpServletRequest request) {
         request.getSession().invalidate();
         logger.info("finish session "+request.getSession().getId());
-        return "/index.jsp";
+        return "redirect:/index.jsp";
     }
 }

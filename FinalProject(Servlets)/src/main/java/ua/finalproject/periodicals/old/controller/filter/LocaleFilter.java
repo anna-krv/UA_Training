@@ -19,13 +19,11 @@ public class LocaleFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         String localeData = request.getParameter("localeData");
         HttpSession session = ((HttpServletRequest)request).getSession();
-        if (session!=null){
             if (localeData!=null){
                 session.setAttribute("localeData", localeData);
             } else if (session.getAttribute("localeData")==null){
                 session.setAttribute("localeData", Configurations.getProperty(Constants.LOCALE));
             }
-        }
         chain.doFilter(request, response);
     }
 
